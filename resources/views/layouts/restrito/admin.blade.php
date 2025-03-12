@@ -8,16 +8,30 @@
         <meta name="author" content="" />
         <title>Dashboard - SB Admin</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+
+        {{-- Link CSS do SBADMIN --}}
         <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+
+        {{-- Inlcuindo o css e js do SELECT2 via CDN Obs: o jquery, deve ficar antes do JS do select2 --}}
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        {{-- Incluindo fontawesome --}}
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+        {{-- Incluindo o SweeterAlert2 --}}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     </head>
     <body class="sb-nav-fixed">
         {{-- TopBar--}}
-        @include('layouts.topbar')
+        @include('layouts.restrito.topbar')
 
         <div id="layoutSidenav">
             {{-- SideBar --}}
-            @include('layouts.sidebar')
+            @include('layouts.restrito.sidebar')
 
             <div id="layoutSidenav_content">
                 <main>
@@ -28,7 +42,7 @@
                 </main>
 
                 {{-- Footer --}}
-                @include('layouts.footer')
+                @include('layouts.restrito.footer')
             </div>
         </div>
 
@@ -45,6 +59,12 @@
         {{-- Datatable --}}
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
+
+        <!--Plugin jQuery para máscaras de campos -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+
+        <!-- Scripts Customizados, criados por mim mesmo ou para configuração de outras bibliotecas e plugins -->
+        <script src="{{ asset('js/scriptsmrc.js') }}"></script>
 
         {{-- Scripts a serem colocados no final do Conteúdo das páginas quando necessário --}}
         @yield('scripts')

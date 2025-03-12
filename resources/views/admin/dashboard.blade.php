@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.restrito.admin')
 
 @section('content-page')
     <div class="container-fluid px-4">
