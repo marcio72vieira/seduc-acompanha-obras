@@ -1,14 +1,9 @@
-@extends('layout.admin')
+@extends('layouts.restrito.admin')
 
-@section('content')
+@section('content-page')
     <div class="container-fluid px-4">
         <div class="mb-1 hstack gap-2">
             <h2 class="mt-3">USUÁRIO -  edição</h2>
-            {{-- <ol class="breadcrumb mb-3 mt-3 ms-auto">
-                <li class="breadcrumb-item"><a href="">Dashboard</a></li>
-                <li class="breadcrumb-item"><a class="text-decoration-none" href="">Usuários</a></li>
-                <li class="breadcrumb-item active">Usuário</li>
-            </ol> --}}
         </div>
 
         <div class="card mb-4 border-light shadow">
@@ -26,7 +21,7 @@
                     @method('PUT')
 
                     {{-- preservando a antiga senha do usuario --}}
-                    <input type="hidden" name="old_password_hidden" value="{{$user->password}}">
+                    <input type="hidden" name="old_password_hidden" value="{{ $user->password }}">
 
                     {{-- nomecompleto --}}
                     <div class="mb-4 row">
@@ -64,90 +59,6 @@
                     </div>
 
 
-                    {{-- municipio --}}
-                    <div class="mb-4 row">
-                        <label for="municipio_id" class="col-sm-2 col-form-label">Município <span class="small text-danger">*</span></label>
-                        <div class="col-sm-4">
-                            <select name="municipio_id" id="municipio_id" class="form-control select2">
-                                <option value="" selected disabled>Escolha...</option>
-                                @foreach($municipios as $municipio)
-                                    <option value="{{ $municipio->id }}" {{ old('municipio_id', $user->municipio->id) == $municipio->id ? 'selected' : '' }}>{{ $municipio->nome }}</option>
-                                @endforeach
-                            </select>
-                            @error('municipio_id')
-                                <small style="color: red">{{$message}}</small>
-                                @error('municpio_id')
-                              <small style="color: red">{{$message}}</small>
-                            @enderror
-                            @enderror
-                        </div>
-                    </div>
-
-
-                    {{-- unidadeatendimento_id --}}
-                    <div class="mb-4 row">
-                        <label for="unidadeatendimento_id" class="col-sm-2 col-form-label">Unidade de Atendimento <span class="small text-danger">*</span></label>
-                        <div class="col-sm-4">
-                            @if (count($errors) > 0)
-                                <select name="unidadeatendimento_id" id="unidadeatendimento_id" class="form-control select2">
-                                    <option value="" selected disabled>Escolha...</option>
-                                    @foreach($unidadesatendimentos  as $unidadeatendimento)
-                                        @if($unidadeatendimento->municipio_id == old('municipio_id'))
-                                            <option value="{{$unidadeatendimento->id}}" {{old('unidadeatendimento_id') == $unidadeatendimento->id ? 'selected' : ''}}>{{$unidadeatendimento->nome}}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            @else
-                                <select name="unidadeatendimento_id" id="unidadeatendimento_id" class="form-control select2">
-                                    <option value="" selected disabled>Escolha...</option>
-                                    @foreach($unidadesatendimentos  as $unidadeatendimento)
-                                        {{-- Só mostra as Unidades de Atendimento cujo id do Município das Unidades de Atendimentos seja igual ao id do Município do Usuário --}}
-                                        @if($unidadeatendimento->municipio_id == $user->municipio->id)
-                                            <option value="{{$unidadeatendimento->id}}" {{old('unidadeatendimento_id', $user->unidadeatendimento_id) == $unidadeatendimento->id ? 'selected' : ''}}>{{$unidadeatendimento->nome}}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            @endif
-                            @error('unidadeatendimento_id')
-                                <small style="color: red">{{ $message }}</small>
-                            @enderror
-                        </div>
-                    </div>
-
-                    {{-- nutricionista_id
-                    <div class="col-lg-3">
-                        <div class="form-group focused">
-                            <label class="form-control-label" for="nutricionista_id">Nutricionista da Empresa<span class="small text-danger">*</span></label>
-
-                            @if(count($errors) > 0)
-                                <select name="nutricionista_id" id="nutricionista_id" class="form-control" required>
-                                    <option value="" selected disabled>Escolha nutricionista...</option>
-                                    @foreach($nutricionistas  as $nutricionista)
-                                        @if($nutricionista->municipio_id == old('municipio_id'))
-                                            <option value="{{$nutricionista->id}}" {{old('nutricionista_id') == $nutricionista->id ? 'selected' : ''}}>{{$nutricionista->nomecompleto}}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            @else
-                                <select name="nutricionista_id" id="nutricionista_id" class="form-control" required>
-                                    <option value="" selected disabled>Escolha nutricionista...</option>
-                                    @foreach($nutricionistas  as $nutricionista)
-                                        {{--Só mostra os nutricionistas cujo id da empresa do nutricionista é igual ao id da empresa do restaurante }}
-                                        @if($nutricionista->empresa_id == $restaurante->empresa_id)
-                                            <option value="{{$nutricionista->id}}" {{old('nutricionista_id', $restaurante->nutricionista->id) == $nutricionista->id ? 'selected' : ''}}>{{$nutricionista->nomecompleto}}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            @endif
-
-                            @error('bairro_id')
-                                <small style="color: red">{{$message}}</small>
-                            @enderror
-                        </div>
-                    </div>
-                    --}}
-
-
                     {{-- cargo --}}
                     <div class="mb-4 row">
                         <label for="cargo" class="col-sm-2 col-form-label">Cargo <span class="small text-danger">*</span></label>
@@ -179,8 +90,8 @@
                             <select name="perfil" id="perfil" class="form-control" >
                                 <option value="" selected disabled>Escolha...</option>
                                 <option value="adm" {{old('perfil', $user->perfil) == 'adm' ? 'selected' : ''}}>Administrador</option>
-                                <option value="srv" {{old('perfil', $user->perfil) == 'srv' ? 'selected' : ''}}>Analista</option>
-                                <option value="ass" {{old('perfil', $user->perfil) == 'ass' ? 'selected' : ''}}>Operador</option>
+                                <option value="con" {{old('perfil', $user->perfil) == 'con' ? 'selected' : ''}}>Consultor</option>
+                                <option value="ope" {{old('perfil', $user->perfil) == 'ope' ? 'selected' : ''}}>Operador</option>
                             </select>
                             @error('perfil')
                                 <small style="color: red">{{ $message }}</small>
@@ -260,31 +171,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-@section('scripts')
-    <script>
-        //Recuperação dinâmica das Unidades de Atendimento de um Município
-        $('#municipio_id').on('change', function() {
-                var municipio_id = this.value;
-                $("#unidadeatendimento_id").html('');
-
-                $.ajax({
-                    url:"{{ route('getunidadesatendimentomunicipio') }}",
-                    type: "GET",
-                    data: {
-                        municipio_id: municipio_id,
-                    },
-                    dataType : 'json',
-                    success: function(result){
-                        $('#unidadeatendimento_id').html('<option value="">Escolha...</option>');
-                        $.each(result.unidadesatendimento,function(key,value){
-                            $("#unidadeatendimento_id").append('<option value="'+ value.id +'">'+ value.nome +'</option>');
-                        });
-                    }
-                });
-            });
-
-    </script>
-
 @endsection

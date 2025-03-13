@@ -54,6 +54,65 @@ class UserController extends Controller
     }
 
 
+    public function show(User $user)
+    {
+        // Exibe os detalhes do usuário
+        return view('admin.users.show', ['user' => $user]);
+
+    }
+
+
+    public function edit(User $user)
+    {
+        return view('admin.users.edit', [ 'user' => $user]);
+    }
+
+
+    // Atualizar no banco de dados o usuário
+    public function update(UserRequest $request, User $user)
+    {
+        // Validar o formulário
+        $request->validated();
+
+        try{
+            // Se a senha não foi alterada, mantém a senha antiga e preserva o tipo de acesso 0 ou 1(primeiro acesso)
+            if($request->password == ''){
+                $passwordUser = $request->old_password_hidden;
+                $defAcesso = 0;
+            }else{
+                $passwordUser = bcrypt($request->password);
+                $defAcesso = 1;
+            }
+
+            $user->update([
+                'nomecompleto' => $request->nomecompleto,
+                'nome' => $request->nome,
+                'cpf' => $request->cpf,
+                'cargo' => $request->cargo,
+                'fone' => $request->fone,
+                'perfil' => $request->perfil,
+                'email' => $request->email,
+                'password' => $passwordUser,
+                'ativo' => $request->ativo,
+                'primeiroacesso' => $defAcesso
+            ]);
+
+            return  redirect()->route('user.index')->with('success', 'Usuário editado com sucesso!');
+
+        } catch(Exception $e) {
+
+            // Mantém o usuário na mesma página(back), juntamente com os dados digitados(withInput) e enviando a mensagem correspondente.
+            return back()->withInput()->with('error-exception', 'Usuário não editado. Tente mais tarde!'.$e);
+
+        }
+
+    }
+    
+    
+
+
+
+
     // Excluir o usuário do banco de dados
     public function destroy(User $user)
     {

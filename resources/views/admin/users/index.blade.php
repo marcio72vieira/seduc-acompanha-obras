@@ -10,7 +10,7 @@
         <div class="mb-4 shadow card border-light">
             <div class="card-header hstack gap-2">
                 <span class="ms-auto d-sm-flex flex-row mt-1 mb-1">
-                    <a href="{{ route('user.create') }}" class="btn btn-success btn-sm me-1"><i class="fa-regular fa-square-plus"></i> Cadastrar </a>
+                    <a href="{{ route('user.create') }}" class="btn btn-success btn-sm me-1"><i class="fa-regular fa-square-plus"></i> Novo </a>
                     <a href="{{ route('user.pdflistusers') }}" class="btn btn-danger btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i> pdf</a>
                 </span>
             </div>
@@ -47,15 +47,15 @@
                                 <td>{{ $user->ativo == 1 ? "Sim" : "Não" }}</td>
 
                                 <td class="flex-row d-md-flex justify-content-start">
-                                    <a href="{{ route('user.show', ['user' => $user->id]) }}" class="mb-1 btn btn-primary btn-sm me-1" title="visualizar"> <i class="fa-regular fa-eye"></i> </a>
+                                    <a href="{{ route('user.show', ['user' => $user->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1" title="visualizar"> <i class="fa-regular fa-eye"></i> visualizar </a>
 
-                                    <a href="{{ route('user.edit', ['user' => $user->id]) }}" class="mb-1 btn btn-warning btn-sm me-1" title="editar"> <i class="fa-solid fa-pen-to-square"></i> </a>
+                                    <a href="{{ route('user.edit', ['user' => $user->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1" title="editar"> <i class="fa-solid fa-pen-to-square"></i> editar </a>
 
                                     <form id="formDelete{{ $user->id }}" method="POST" action="{{ route('user.destroy', ['user' => $user->id]) }}">
                                         @csrf
                                         @method('delete')
-                                        <button type="submit" class="mb-1 btn btn-danger btn-sm me-1 btnDelete" data-delete-entidade="Usuário" data-delete-id="{{ $user->id }}"  data-value-record="{{ $user->nome }}" title="deletar">
-                                            <i class="fa-regular fa-trash-can"></i>
+                                        <button type="submit" class="mb-1 btn btn-secondary btn-sm me-1 btnDelete" data-delete-entidade="Usuário" data-delete-id="{{ $user->id }}"  data-value-record="{{ $user->nome }}" title="deletar">
+                                            <i class="fa-regular fa-trash-can"></i> deletar
                                         </button>
                                     </form>
                                 </td>

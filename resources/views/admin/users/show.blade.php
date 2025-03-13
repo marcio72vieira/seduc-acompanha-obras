@@ -1,14 +1,9 @@
-@extends('layout.admin')
+@extends('layouts.restrito.admin')
 
-@section('content')
+@section('content-page')
     <div class="container-fluid px-4">
         <div class="mb-1 hstack gap-2">
             <h2 class="mt-3">USUÁRIO -  visualizar</h2>
-            {{-- <ol class="breadcrumb mb-3 mt-3 ms-auto">
-                <li class="breadcrumb-item"><a href="">Dashboard</a></li>
-                <li class="breadcrumb-item"><a class="text-decoration-none" href="">Usuários</a></li>
-                <li class="breadcrumb-item active">Usuário</li>
-            </ol> --}}
         </div>
 
         <div class="card mb-4 border-light shadow">
@@ -32,15 +27,6 @@
                     <dt class="col-sm-2">CPF</dt>
                     <dd class="col-sm-10">{{ $user->cpf }}</dd>
 
-                    <dt class="col-sm-2">Regional</dt>
-                    <dd class="col-sm-10">{{ $user->municipio->regional->nome }}</dd>
-
-                    <dt class="col-sm-2">Município</dt>
-                    <dd class="col-sm-10">{{ $user->municipio->nome }}</dd>
-
-                    <dt class="col-sm-2">Unidade de Atendimento</dt>
-                    <dd class="col-sm-10">({{ $user->tipounidade->nome}}) {{ $user->unidadeatendimento->nome }}</dd>
-
                     <dt class="col-sm-2">Cargo</dt>
                     <dd class="col-sm-10">{{ $user->cargo }}</dd>
 
@@ -49,7 +35,7 @@
 
                     <dt class="col-sm-2">Perfil</dt>
                     {{-- <dd class="col-sm-10">{{ ($user->perfil == "adm" ? "Administrador" : ($user->perfil == "srv" ? "Servidor" : "Assistente Social")) }}</dd> --}}
-                    <dd class="col-sm-10">{{ ($user->perfil == "adm" ? "Administrador" : ($user->perfil == "srv" ? "Analista" : "Operador")) }}</dd>
+                    <dd class="col-sm-10">{{ ($user->perfil == "adm" ? "Administrador" : ($user->perfil == "con" ? "Consultor" : "Operador")) }}</dd>
 
                     <dt class="col-sm-2">E-mail</dt>
                     <dd class="col-sm-10">{{ $user->email }}</dd>
