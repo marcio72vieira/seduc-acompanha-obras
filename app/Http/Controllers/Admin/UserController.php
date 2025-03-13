@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserPerfilRequest;
 use App\Models\User;
 use Exception;
 
@@ -105,10 +106,57 @@ class UserController extends Controller
             return back()->withInput()->with('error-exception', 'Usuário não editado. Tente mais tarde!'.$e);
 
         }
-
     }
-    
-    
+
+
+
+    public function editprofile(User $user)
+    {
+        return view('admin.users.profile', [ 'user' => $user]);
+    }
+
+
+    // Atualizar no banco de dados o usuário
+    public function updateprofile(UserPerfilRequest $request, User $user)
+    {
+
+        // Validar o formulário
+        $request->validated();
+
+        try{
+            // Se a senha não foi alterada, mantém a senha antiga e preserva o tipo de acesso 0 ou 1(primeiro acesso)
+            if($request->password == ''){
+                $passwordUser = $request->old_password_hidden;
+                $defAcesso = 0;
+            }else{
+                $passwordUser = bcrypt($request->password);
+                $defAcesso = 0;
+            }
+
+            $user->update([
+                'nomecompleto' => $request->nomecompleto,
+                'nome' => $request->nome,
+                'cpf' => $request->cpf,
+                'cargo' => $request->cargo,
+                'fone' => $request->fone,
+                'perfil' => $request->old_perfil_hidden,
+                'email' => $request->email,
+                'password' => $passwordUser,
+                'ativo' => $request->old_ativo_hidden,
+                'primeiroacesso' => $defAcesso
+            ]);
+
+            return  redirect()->route('user.editprofile', ['user' => $user->id])->with('success', 'Seu Perfil foi editado com sucesso!');
+
+        } catch(Exception $e) {
+
+            // Mantém o usuário na mesma página(back), juntamente com os dados digitados(withInput) e enviando a mensagem correspondente.
+            return back()->withInput()->with('error-exception', 'Usuário não editado. Tente mais tarde!'.$e);
+
+        }
+    }
+
+
 
 
 

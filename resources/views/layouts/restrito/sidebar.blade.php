@@ -52,14 +52,17 @@
                 </div>
                 <div class="sb-sidenav-menu-heading">Addons</div>
                 <a class="nav-link" href="{{ route('user.index')}}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
                     Usuários
+                </a>
+                <a class="nav-link" href="{{ route('login.logout') }}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+                    Sair
                 </a>
             </div>
         </div>
         <div class="sb-sidenav-footer">
-            <div class="small">Logged in as:</div>
-            Start Bootstrap
+            <div class="small">Perfil: {{ (Auth::user()->perfil == "adm" ? "ADMINISTRADOR" : (Auth::user()->perfil == "con" ? "CONSULTOR" : "OPERADOR")) }}</div>
         </div>
     </nav>
 </div>
