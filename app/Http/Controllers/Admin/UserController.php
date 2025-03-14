@@ -8,6 +8,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserPerfilRequest;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -110,8 +111,11 @@ class UserController extends Controller
 
 
 
-    public function editprofile(User $user)
+    public function editprofile()
     {
+        // Obtendo-se o usuário autenticado
+        $user = Auth::user();
+
         return view('admin.users.profile', [ 'user' => $user]);
     }
 

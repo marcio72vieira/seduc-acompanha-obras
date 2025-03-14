@@ -1,0 +1,111 @@
+// Configuração da API de envio de E-mail da SEATI/ATI
+1   -   No arquivo: /home/marcio/projetosdocker/semu-aluguel-mp/config/mail.php configurar chaves conforme abaixo:
+
+        'smtp' => [
+            'transport' => 'smtp',
+            'url' => env('MAIL_URL'),
+            'host' => env('MAIL_HOST', '127.0.0.1'),
+            'port' => env('MAIL_PORT', 2525),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'username' => env('MAIL_USERNAME'),
+            'password' => env('MAIL_PASSWORD'),
+            'timeout' => null,
+            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+        ],
+
+        'seatimail' => [
+            'transport' => 'seatimail',
+        ],
+
+2   -   Criar o provider SeatiMailServiceProvider em App/Provider com o comando abaixo
+        php artisan make:provider SeatiMailServiceProvider
+        OU
+        ./vendor/bin/sail artisan make:provider SeatiMailServiceProvider
+
+3   -   Acrescentar o conteúdo abaixo no corpo do arquivo semu-aluguel-mp/app/Providers/SeatiMailServiceProvider.php
+
+        <?php
+
+        namespace App\Providers;
+
+        use App\SeatiMail\SeatiMailManager;
+        use Illuminate\Support\ServiceProvider;
+        use Illuminate\Mail\MailServiceProvider;
+
+        class SeatiMailServiceProvider extends ServiceProvider
+        {
+
+            public function register(): void
+            {
+                //
+            }
+
+            public function boot(): void
+            {
+                //
+            }
+
+            protected function registerIlluminateMailer()
+            {
+                $this->app->singleton('mail.manager', function ($app) {
+                    return new SeatiMailManager($app);
+                });
+
+                // Copied from Illuminate\Mail\MailServiceProvider
+                $this->app->bind('mailer', function ($app) {
+                    return $app->make('mail.manager')->mailer();
+                });
+            }
+        }
+
+4   -   Acrescentar o provider criado acima no arquivo: seduc-acompanha-obras/bootstrap/providers.php, conforme abaixo:
+        return [
+            App\Providers\AppServiceProvider::class,
+            App\Providers\SeatiMailServiceProvider::class,
+        ];
+
+5   -   Acrescentar no arquivo: semu-aluguel-mp/config/services.php o trecho de código abaixo:
+
+        'seatimail' => [
+                'url' => env('SEATI_MAIL_URL'),
+                'key' => env('SEATI_MAIL_API_KEY'),
+                'guzzle' => [
+                    // 'verify' => base_path() . '/certificado/cacert.pem',
+                    'verify' => false,
+                    'connect_timeout' => 300,
+                ],
+            ],
+
+6   -   Comentar as linhas de códiog do arquiov .env referente ao envio de email
+        # MAIL_MAILER=smtp
+        # MAIL_SCHEME=null
+        # MAIL_HOST=mailpit
+        # MAIL_PORT=1025
+        # MAIL_USERNAME=null
+        # MAIL_PASSWORD=null
+        # MAIL_FROM_ADDRESS="hello@example.com"
+        # MAIL_FROM_NAME="${APP_NAME}"
+
+
+7   -   Acrescentar as linhas de código ao arquiovo .env referente a API de envio de email
+        MAIL_MAILER=seatimail
+        SEATI_MAIL_URL="https://ext.api.email.seati.ma.gov.br/api/mensagens/enviar"
+        SEATI_MAIL_API_KEY="c2VtdS5hbHVndWVsOiQyYSQxMiRaR29XZWxuaC9XazhRMUQwT1gzS0YuL0NPUFEwdDlBZFlVN3A4QnZtdjZMRHFPVmJnSlFVVw=="
+
+8   -   Criar a rota de teste de Envio de E-maio no arquivo: seduc-acompanha-obras/routes/web.php conforme abaixo:
+        Route::get('enviaremail', function() {
+            $destinatario = 'diego.cicero@seati.ma.gov.br';
+            $mensagem = "Olá, este é um e-mail de teste apenas em texto!";
+
+            Mail::raw($mensagem, function ($message) use ($destinatario) {
+                $message->to($destinatario)
+                        ->subject('Assunto do E-mail');
+            });
+
+        });
+
+9   -   Copiar a pasta SeatiMail e todo seu conteúdo, arquivos e pastas para a pasta app
+        a) arquivos: app/SeatiMail/SeatiMailManager.php
+        b) pasta: app/SeatiMail/Transport
+            b.1) Arquivos desta pasta: app/SeatiMail/Transport/SeatiMailTransport.php
+

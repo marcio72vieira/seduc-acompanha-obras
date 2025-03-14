@@ -2,10 +2,26 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Publico\LoginController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 
 
-Route::get('/dashboard', function() { return view('admin.dashboard'); });
+
+//---------------------------------------
+//     ROTAS TESTE ENVIO DE EMAIL      //
+//---------------------------------------
+Route::get('enviaremail', function() {
+    $destinatario = 'diego.cicero@seati.ma.gov.br';
+    $mensagem = "Olá, este é um e-mail de teste apenas em texto!";
+
+    Mail::raw($mensagem, function ($message) use ($destinatario) {
+        $message->to($destinatario)
+                ->subject('Assunto do E-mail');
+    });
+
+});
+
+
 
 //---------------------------------------
 //           ROTAS PÚBLICAS            //
@@ -32,6 +48,11 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'submitResetPas
 //---------------------------------------
 //           ROTAS RESTRITAS           //
 //---------------------------------------
+
+// DASHBOARD
+Route::get('/index-dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
+
 // USUÁRIO
 Route::get('/index-user', [UserController::class, 'index'])->name('user.index');
 Route::get('/create-user', [UserController::class, 'create'])->name('user.create');
@@ -40,7 +61,7 @@ Route::get('/show-user/{user}', [UserController::class, 'show'])->name('user.sho
 Route::get('/edit-user/{user}', [UserController::class, 'edit'])->name('user.edit');
 Route::put('/update-user/{user}', [UserController::class, 'update'])->name('user.update');
 Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-Route::get('/edit-profile-user/{user}', [UserController::class, 'editprofile'])->name('user.editprofile');
+Route::get('/edit-profile-user', [UserController::class, 'editprofile'])->name('user.editprofile');
 Route::put('/update-profile-user/{user}', [UserController::class, 'updateprofile'])->name('user.updateprofile');
 
 Route::get('pdf-user/relpdflistusers', [UserController::class, 'relpdflistusers'])->name('user.pdflistusers');
