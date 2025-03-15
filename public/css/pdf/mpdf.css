@@ -1,0 +1,249 @@
+  td.titulo-rel{
+    text-align: right;
+    vertical-align: bottom;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  td.titulo-secao{
+    background-color: #a9a9a9;
+    border: 0.5px solid #000000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding: 5px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    padding: 10px;
+  }
+
+  td.col-header-table {
+    background-color: #e3e3e3;
+    border: 0.5px solid #000000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding: 5px;
+  }
+
+  td.dados-lista {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding: 5px;
+  }
+
+  td.dados-declaracao {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    padding: 5px;
+    line-height: 1.5;
+  }
+
+  td.dados-normal {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding: 5px;
+    border-left: 0.5px solid #000000;
+    border-top: 0.5px solid #000000;
+    border-right: 0.5px solid #000000;
+    border-bottom: 0.5px solid #000000;
+  }
+
+  td.dados-lista-titulo {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    padding: 5px;
+  }
+
+  td.label-ficha {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 7px;
+    padding: 5px;
+    border-left: 0.5px solid #000000;
+    border-top: 0.5px solid #000000;
+    border-right: 0.5px solid #000000;
+  }
+
+  .numeracao {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 5px;
+  }
+
+  td.dados-ficha {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 3px;
+    border-left: 0.5px solid #000000;
+    border-right: 0.5px solid #000000;
+  }
+
+  td.close-ficha {
+    border-top: 0.5px solid #000000;
+  }
+
+  td.label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding: 5px;
+  }
+
+  .spanlabel {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8px;
+    padding: 5px;
+    margin-top: 3px;
+  }
+
+  .spandata {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding: 5px;
+    margin-top: 5px;
+  }
+
+
+  td.label-ficha {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 7px;
+    padding: 5px;
+    border-left: 0.5px solid #000000;
+    border-top: 0.5px solid #000000;
+    border-right: 0.5px solid #000000;
+  }
+
+  td.dados-ficha {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 3px;
+    border-left: 0.5px solid #000000;
+    border-right: 0.5px solid #000000;
+  }
+
+  td.close-ficha {
+    border-top: 0.5px solid #000000;
+  }
+
+  td.dados-box-top {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 3px;
+    border-left: 0.5px solid #000000;
+    border-top: 0.5px solid #000000;
+    border-right: 0.5px solid #000000;
+  }
+
+  td.dados-box-middle {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 3px;
+    border-left: 0.5px solid #000000;
+    border-right: 0.5px solid #000000;
+  }
+
+  td.dados-box-bottom {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 3px;
+    border-left: 0.5px solid #000000;
+    border-bottom: 0.5px solid #000000;
+    border-right: 0.5px solid #000000;
+  }
+
+
+/*CONFIGURAÇÕES CSS PARA RELATÓRIOS MONITOR */
+td.col-header-table-monitor {
+  background-color: #e3e3e3;
+  border: 0.1px solid #b1aeae;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+td.label-monitor{
+font-family: Arial, Helvetica, sans-serif;
+font-size: 10px;
+padding-left: 5px;
+padding-top: 4px;
+padding-bottom: 4px;
+border: 0.5px solid #000000;
+background-color: #d7d5d5;
+}
+
+td.dados-monitor{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  padding-left: 5px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border: 0.5px solid #000000;
+}
+
+td.dados-lista-monitor {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 6px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  vertical-align: top;
+  border-right: 0.1px solid #b1aeae;
+}
+
+td.dados-lista-valor-monitor {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 6px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  vertical-align: top;
+  text-align: right;
+  border-right: 0.1px solid #b1aeae;
+}
+
+
+/*FORMATAÇÃO DOS RELATÓRIOS PDFS MENSAIS*/
+td.titulo-rel-mensal{
+    text-align: right;
+    vertical-align: bottom;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+td.col-header-table-monitor-mensal {
+    background-color: #e3e3e3;
+    border: 0.1px solid #b1aeae;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+td.dados-lista-monitor-mensal {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    vertical-align: top;
+    border-right: 0.1px solid #b1aeae;
+  }
+
+  td.dados-lista-valor-monitor-mensal {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    vertical-align: top;
+    text-align: right;
+    border-right: 0.1px solid #b1aeae;
+  }

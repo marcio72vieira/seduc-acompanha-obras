@@ -1,4 +1,231 @@
-// Configuração da API de envio de E-mail da SEATI/ATI
+***************************************************************************
+*    GERANDO RELATÓRIOS EXCEL CSV COM A BIBLIOTECA SPATIE SIMPLE EXCEL    *
+***************************************************************************
+1   -   No terminal, na pasta do seu projeto, instale a biblioteca com o comando abaixo:
+        ./vendor/bin/sail composer require spatie/simple-excel
+
+2   -   Crir a rota no arquivo routes/web.php para referenciar o método no controller DashboardController que ira executar a geração do Excel/CSV
+        Route::get('/index-dashboard/gerarexcel', [DashboardController::class, 'gerarexcel'])->name('dashboard.gerarexcel');
+
+3   -   Importar as classes no controller DashboardController, conforme abaixo:
+        use Illuminate\Support\Facades\DB;
+        use Spatie\SimpleExcel\SimpleExcelWriter;
+
+4   -   Definir as variáveis de pesquisa (mês, ano, tipo de arquivo a ser gerado) bem como ano de implementação da aplicação no corpo do método index()
+        do controller DashboardController conforme abaixo
+        public function index()
+        {
+            // Definindo mês para computo dos dados OK!
+            // $mes_corrente = date('m');   // número do mês no formato 01, 02, 03, 04 ..., 09, 10, 11, 12
+            $mes_corrente = date('n');      // número do mês no formato 1, 2, 3, 4 ..., 9, 10, 11, 12
+            $ano_corrente = date('Y');
+
+            // Meses e anos para popular campos selects.
+            // Obs: os índices do array não pode ser: 01, 02, 03, etc... por isso a configuração acima: $mes_corrente = date('n');
+            //      caso os índices pudesser ser: 01, 02, 03, etc..., seria nno formato: $mes_corrente = date('m');
+            $mesespesquisa = [
+                '1' => 'janeiro', '2' => 'fevereiro', '3' => 'março', '4' => 'abril', '5' => 'maio', '6' => 'junho',
+                '7' => 'julho', '8' => 'agosto', '9' => 'setembro', '10' => 'outubro', '11' => 'novembro', '12' => 'dezembro'
+            ];
+
+            $anoimplantacao = 2025;
+            $anoatual = date("Y");
+            $anospesquisa = [];
+            $anos = [];
+
+            if($anoimplantacao >= $anoatual){
+                $anospesquisa[] = $anoatual;
+            }else{
+                $qtdanosexibicao = $anoatual - $anoimplantacao;
+                for($a = $qtdanosexibicao; $a >= 0; $a--){
+                    $anos[] = $anoatual - $a;   // $anoatual - 0 (quando $a for igual a zero) será igual ao ano corrente.
+                }
+                $anospesquisa = array_reverse($anos);
+            }
+
+            return view('admin.dashboards.dashboard', compact('mes_corrente','ano_corrente','mesespesquisa', 'anospesquisa'));
+        }
+
+5   -   Acresentar o método gerarexcel() ao corpo do controller DashboardController, como abaixo
+
+
+
+
+*****************************************************
+*   GERANDO RELATÓRIOS PDFS COM A BIBLIOTECA MPDF   *
+*****************************************************
+1   -   No terminal, na pasta do seu projeto, instale a biblioteca com o comando abaixo:
+        ./vendor/bin/sail composer require mpdf/mpdf
+
+2   -   Crie no arquivo de rotas (routes/web.php) a rota para o método no controller que exibirá o relatório 'PDF', como abaixo:
+        Route::get('pdf-user/relpdflistusers', [UserController::class, 'relpdflistusers'])->name('user.pdflistusers');
+
+3   -   Crie o método relpdflistusers no controller UserController para testar a rota, como abaixo:
+        public function relpdflistusers()
+        {
+            return "Relatório PDF";
+        }
+
+4    -  Crie o link na view index (ou onde desejar) para vincular à rota criada acima, como abaixo. Teste a rota clicando no link.
+        <a href="{{ route('user.pdflistusers') }}" class="btn btn-secondary btn-sm me-1" target="_blank">
+            <i class="fa-solid fa-file-pdf"></i> pdf
+        </a>
+
+5   -   Crie a pasta view/admin/users/pdfs. Nesta pasta será colocad todos os arquivos referente a relatórios PDF's referente a USUÁRIOS
+
+6   -   Substitua o conteúdo do método "relpdflistusers()" do controller "UserController" pelo conteúdo abaixo
+        public function relpdflistusers()
+        {
+            // Obtendo os dados
+            $users = User::orderBy('nomecompleto')->get();
+
+            // Definindo o nome do arquivo a ser baixado
+            $fileName = ('Usuarios_lista.pdf');
+
+            // Invocando a biblioteca mpdf e definindo as margens do arquivo
+            $mpdf = new \Mpdf\Mpdf([
+                'orientation' => 'L',
+                'margin_left' => 10,
+                'margin_right' => 10,
+                'margin_top' => 30,
+                'margin_bottom' => 15,
+                'margin-header' => 10,
+                'margin_footer' => 5
+            ]);
+
+            // Configurando o cabeçalho da página
+            $mpdf->SetHTMLHeader('
+                <table style="width:1080px; border-bottom: 1px solid #000000; margin-bottom: 3px;">
+                    <tr>
+                        <td style="width: 140px">
+                            <img src="images/logo_seduc2.png" width="120"/>
+                        </td>
+                        <td style="width: 400px; font-size: 10px; font-family: Arial, Helvetica, sans-serif;">
+                            Governo do Estado do Maranhão<br>
+                            Secretaria de Estado da Educação / SEDUC<br>
+                            Agência de Tecnologia da Informação / ATI<br>
+                            Acompanhamento de Execução de Obras
+                        </td>
+                        <td style="width: 540px;" class="titulo-rel">
+                            USUÁRIOS
+                        </td>
+                    </tr>
+                </table>
+                <table style="width:1080px; border-collapse: collapse">
+                    <tr>
+                        <td width="40px" class="col-header-table">ID</td>
+                        <td width="275px" class="col-header-table">NOME</td>
+                        <td width="100px" class="col-header-table">PERFIL</td>
+                        <td width="315px" class="col-header-table">CAGO</td>
+                        <td width="200px" class="col-header-table">E-mal</td>
+                        <td width="100px" class="col-header-table">Telefone</td>
+                        <td width="50px" class="col-header-table">ATIVO</td>
+                    </tr>
+                </table>
+            ');
+
+            // Configurando o rodapé da página
+            $mpdf->SetHTMLFooter('
+                <table style="width:1080px; border-top: 1px solid #000000; font-size: 10px; font-family: Arial, Helvetica, sans-serif;">
+                    <tr>
+                        <td width="200px">São Luis(MA) {DATE d/m/Y}</td>
+                        <td width="830px" align="center"></td>
+                        <td width="50px" align="right">{PAGENO}/{nbpg}</td>
+                    </tr>
+                </table>
+            ');
+
+            // Definindo a view que deverá ser renderizada como arquivo .pdf e passando os dados da pesquisa
+            $html = \View::make('admin.users.pdfs.pdf_list_users', compact('users'));
+            $html = $html->render();
+
+            // Definindo o arquivo .css que estilizará o arquivo blade na view ('admin.users.pdfs.pdf_users')
+            $stylesheet = file_get_contents('css/pdf/mpdf.css');
+            $mpdf->WriteHTML($stylesheet, 1);
+
+            // Transformando a view blade em arquivo .pdf e enviando a saida para o browse (I); 'D' exibe e baixa para o pc
+            $mpdf->WriteHTML($html);
+            $mpdf->Output($fileName, 'I');
+        }
+
+
+
+7   -   Crie o arquivo pdf_list_users.blade.php dentro da pasta view/admin/users/pdfs com o conteúdo abaixo:
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <title>SEDUC - Obras</title>
+        </head>
+
+        <body>
+            <table style="width: 1080px; border-collapse: collapse;">
+
+                @foreach ($users as $user)
+                    <tr @if($loop->even) style="background-color: #e3e3e3;" @endif>
+                        <td style="width: 40px;" class="dados-lista">{{$user->id}}</td>
+                        <td style="width: 275px;" class="dados-lista">{{$user->nomecompleto}}</td>
+                        <td style="width: 100px;" class="dados-lista">
+                            @if($user->perfil == 'adm') 
+                                <b>ADMINISTRADOR</b> 
+                            @elseif($user->perfil == 'con') 
+                                <b>Consultor</b>
+                            @elseif($user->perfil == 'ope') 
+                                <b>Operador</b>
+                            @endif 
+                        </td>
+                        <td style="width: 315px;" class="dados-lista">{{ $user->cargo }}</td>
+                        <td style="width: 200px;" class="dados-lista">{{ $user->email }}</td>
+                        <td style="width: 100px;" class="dados-lista">{{ $user->fone}} </td>
+                        <td style="width: 50px;" class="dados-lista">@if($user->ativo == 1 ) sim @else não @endif </td>
+                    </tr>
+                @endforeach
+
+            </table>
+        </body>
+        </html>
+
+        OBSERVAÇÃO: 
+        O tamanho das colunas da tabela no arquivo /views/admin/users/pdfs/pdf_list_users.blade.php deve coincidir com o
+        tamanho das colunas definidas no cabeçalho no método "relpdflistusers()" do controller UsrerController 
+
+8   -   Crie o arquivo public/css/pdf/mpdf.css para definir os estilos que o arquiovo pdf_list_users.blade.php irá adotar para formatar o relatório PDF.
+
+9   -   Clinck no link para gerar o arquivo .pdf e veja o arquivo .pdf ser gerado.
+
+
+****************************************
+*  AGRUPANDO ROTAS NO MIDDLEWARE AUTH  *
+****************************************
+1   -   Criar a rota do tipo "group", para agrupar as rotas em que o usuário deve está autenticado com o middleware "auth"
+        Route::group(['middleware' => 'auth'], function(){
+            ...
+            // aqui, rotas que deva pertencer a este middleware
+            ...
+        });
+
+2   -   Redirecionar o usuário para uma róta específica, caso o mesmo não esteja autenticado e queira acessar uma rota que exija autenticação.
+        Modifique o método no arquivo: bootstrap/app.php, conforme abaixo:
+            ...
+            ->withMiddleware(function (Middleware $middleware) {
+                $middleware->redirectGuestsTo('/');
+            })
+            ...
+
+        OBSERVAÇÃO: 
+        Neste caso específico, a rota para a qual o usuário será redirecionado, caso não esteja autenticado será a rota raiz ('/')
+             que representa a página de "login", conforme podemos observar no arquivo de rota routes/web.php
+            ...
+            Route::get('/', [LoginController::class, 'index'])->name('login.index');
+            ...
+            Se a mesma possuisse o nome login, deveriamos colocar o nome dela  acima (->withMiddleware(function (Middleware $middleware) {$middleware->redirectGuestsTo('/login');)
+
+
+********************************************************
+*  CONFIGURAÇÃO DA API DE ENVIO DE E-MAIL DA SEATI/ATI *
+********************************************************
 1   -   No arquivo: /home/marcio/projetosdocker/semu-aluguel-mp/config/mail.php configurar chaves conforme abaixo:
 
         'smtp' => [

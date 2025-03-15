@@ -11,7 +11,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Rota para a qual o usuário não autenticado deve ser redirecionado
+        $middleware->redirectGuestsTo('/'); 
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
