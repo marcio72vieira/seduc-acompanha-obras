@@ -28,8 +28,8 @@
                             <th>ID</th>
                             <th>Nome</th>
                             <th>Perfil</th>
+                            <th>Cargo</th>
                             <th>Telefone</th>
-
                             <th>Cadastrado</th>
                             <th>Ativo</th>
                             <th width="18%">Ações</th>
@@ -42,6 +42,7 @@
                                 <td>{{ $user->id }}</th>
                                 <td>{{ $user->nomecompleto }}</th>
                                 <td>{{ ($user->perfil == "adm" ? "ADMINISTRADOR" : ($user->perfil == "con" ? "CONSULTOR" : "OPERADOR")) }}</th>
+                                <td>{{ $user->cargo }}</td>
                                 <td>{{ $user->fone }}</td>
                                 <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }}</td>
                                 <td>{{ $user->ativo == 1 ? "Sim" : "Não" }}</td>

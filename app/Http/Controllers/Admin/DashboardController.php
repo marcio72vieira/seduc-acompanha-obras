@@ -75,7 +75,7 @@ class DashboardController extends Controller
 
             }else{
 
-                $records = DB::table('processos')->selectRaw(
+                $records = DB::table('users')->selectRaw(
                     'id, nomecompleto, nome, cpf, cargo, fone, perfil, email, ativo, DATE_FORMAT(created_at,"%d/%m/%Y") AS cadastrado')
                 ->whereMonth('created_at', $mes)
                 ->whereYear('created_at', $ano)
@@ -83,8 +83,8 @@ class DashboardController extends Controller
             }
 
             // Definindo o cabeçalho das colunas no arquivo Excel gerado.
-            $writer = SimpleExcelWriter::streamDownload("semualuguelmp_$referencia.$tipoextensao")->addHeader([
-                'Registro', 'Nome Completo', 'Usuário', 'CPF', 'Cargo', 'Fone', 'Pefil', 'E-mail', 'Ativo', 'Data Nascimento'
+            $writer = SimpleExcelWriter::streamDownload("seducobras_$referencia.$tipoextensao")->addHeader([
+                'Registro', 'Nome Completo', 'Usuário', 'CPF', 'Cargo', 'Fone', 'Pefil', 'E-mail', 'Ativo', 'Cadastrado'
             ]);
 
 
@@ -99,10 +99,10 @@ class DashboardController extends Controller
                     'cpf' => $record->cpf,
                     'cargo' => $record->cargo,
                     'fone' => $record->fone,
-
                     'perfil' => $record->perfil,
                     'email' => $record->email,
                     'ativo' => ($record->ativo == 1 ? 'sim' : 'não'),
+                    'created_at' => $record->cadastrado,
                 ]);
 
                 // Limpa o buffer a cada mil linhas
@@ -118,7 +118,6 @@ class DashboardController extends Controller
         } else {
             return redirect()->route('dashboard.index')->with('error', 'Escolha um tipo de arquivo: Excel ou CSV, para ser gerado!');;
         }
-
 
     }
 

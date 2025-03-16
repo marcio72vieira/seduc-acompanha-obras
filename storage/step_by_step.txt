@@ -1,3 +1,67 @@
+*************************************************************
+*    CRIANDO MIDDLEWARE PERSONALIZADOS COM GATES/POLICES    *
+*************************************************************
+1   -   No arquivo: app/Providers/AppServiceProvider.php importar as seguinte classe
+        ...
+        use Illuminate\Pagination\Paginator;
+        use Illuminate\Support\ServiceProvider;
+        use Illuminate\Auth\Access\Response;
+        use Illuminate\Support\Facades\Gate;
+        use Illuminate\Support\Facades\URL;
+        ...
+
+2   -   No método boot() da classe AppServiceProvider, aplicar as seguintes regras
+        class AppServiceProvider extends ServiceProvider
+        {
+            ...
+            public function boot(): void
+            {
+                // Define o acesso apenas de quem é Administrdor
+                Gate::define('onlyAdm', function($user) {
+                    return $user->perfil == 'adm'
+                        ? Response::allow()
+                        : Response::deny('Acesso não autorizado!');
+                });
+
+
+                // Define o acesso apenas de quem é Administrador ou Consultor
+                Gate::define('onlyAdmCon', function($user) {
+                    return $user->perfil == 'adm' || $user->perfil == 'con'
+                        ? Response::allow()
+                        : Response::deny('Acesso não autorizado!');
+                });
+
+
+                // Define o acesso apenas de quem é Administrador ou Operador.
+                Gate::define('onlyAdmOpe', function($user) {
+                    return $user->perfil == 'adm' || $user->perfil == 'ope'
+                        ? Response::allow()
+                        : Response::deny('Acesso não autorizado!');
+                });
+            }
+        }
+
+3   -   Aplicar os Gates(middleware) nas rotas desejadas, como no exemplo abaixo:
+        // Rotas para quem deve está autenticado com o middleware "auth"
+        Route::group(['middleware' => 'auth'], function(){
+            // DASHBOARD
+            Route::get('/index-dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+            // PROFILE
+            Route::get('/edit-profile-user', [UserController::class, 'editprofile'])->name('user.editprofile');
+
+            // Rotas para quem possui o perfil de Administrador (onlyAdm)
+            Route::group(['middleware' => 'can:onlyAdm'], function(){
+                // USUÁRIO
+                Route::get('/index-user', [UserController::class, 'index'])->name('user.index');
+            });
+            // Rotas para quem possui o perfil de Administrador e Consultor (onlyAdmCon)
+            Route::group(['middleware' => 'can:onlyAdmCon'], function(){
+                // USUÁRIO
+                Route::get('pdf-user/relpdflistusers', [UserController::class, 'relpdflistusers'])->name('user.pdflistusers');
+            });
+        });
+
+
 ***************************************************************************
 *    GERANDO RELATÓRIOS EXCEL CSV COM A BIBLIOTECA SPATIE SIMPLE EXCEL    *
 ***************************************************************************
@@ -46,9 +110,134 @@
             return view('admin.dashboards.dashboard', compact('mes_corrente','ano_corrente','mesespesquisa', 'anospesquisa'));
         }
 
-5   -   Acresentar o método gerarexcel() ao corpo do controller DashboardController, como abaixo
+5   -   Implementar o formulário para gerar o arquivo Excel/CSV na view resources/views/admin/dashboards/dashboard.blade.php
+        ...
+
+        <div class="mb-4 d-sm-flex align-items-center justify-content-between">
+            <h1 class="mt-3">Dashboard</h1>
+
+            {{-- inicio formulario baixar arquivo excel csv--}}
+            <div class="col-md-5">
+                <form action="{{ route('dashboard.gerarexcel') }}"  method="GET" class="form-inline" style="border-radius: 5px; margin-bottom: -15px;">
+                    
+                    <div class="row">
+                        <div class="col-md-2" style="margin-left: 180px;">
+                            <select id="selectMesExcel" name="mesexcel"  class="form-control col-form-label-sm" style="margin-left: 5px;">
+                                <option value="0">Mês...</option>
+                                @foreach($mesespesquisa as $key => $value)
+                                    <option value="{{ $key }}" {{date('n') == $key ? 'selected' : ''}} class="optionMesPesquisa"> {{ $value }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <select id="selectAnoExcel"  name="anoexcel" class="form-control col-form-label-sm" style="margin-left: 5px;">
+                                <option value="0" selected disabled>Ano...</option>
+                                @foreach($anospesquisa as $value)
+                                    <option value="{{ $value }}" {{date('Y') == $value ? 'selected' : ''}} class="optionAnoPesquisa"> {{ $value }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <select id="selectTipoExcelCsv"  name="tipoexcelcsv" class="form-control" style="margin-left: 5px;">
+                                <option value="0" selected>Tipo...</option>
+                                <option value="1" class="optionAnoPesquisa"><b>EXCEL</b> </option>
+                                <option value="2" class="optionAnoPesquisa"><b>CSV</b> </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <button type="submit" class="mb-2 btn btn-success btn-sm form-control col-form-label-sm" style="margin-top: 3px;">
+                                <i class="fas fa-download"></i>
+                                <b>Gerar arquivo</b>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {{--    fim formulario baixar arquivo excel csv--}}
+        </div>
+
+        ...
+
+6   -   Implementar o método gerarexcel() ao corpo do controller DashboardController, como abaixo
+        // Método utilizado com Biblioteca Spatie-Simple-Excel
+        public function gerarexcel(Request $request)
+        {
+
+            $mes = $request->mesexcel;
+            $ano = $request->anoexcel;
+            $tipo = $request->tipoexcelcsv;
 
 
+            // Testa se todos os parâmetros são válidos
+            // if($mes != 0 && $ano != 0 && $tipo != 0){
+            if($tipo != 0){
+
+                // Adiciona um 0 (zero) na frente do mês de 01 a 09
+                $mes = ($mes < 10) ? "0".$mes : $mes;
+
+                // Define o nome do arquivo(formado por mês e ano ou apenas o ano)
+                $referencia = ($mes == "00") ? $ano : $mes."_".$ano;
+
+                // Define o tipo de arquivo a ser gerado
+                $tipoextensao = ($tipo == 1) ? 'xlsx' : 'csv';
+
+                // Definindo a query para recuperar os registros
+                if($mes == 0){
+                    $records = DB::table('users')->selectRaw(
+                        'id, nomecompleto, nome, cpf, cargo, fone, perfil, email, ativo, DATE_FORMAT(created_at,"%d/%m/%Y") AS cadastrado')
+                    ->whereYear('created_at', $ano)
+                    ->get();
+
+                }else{
+
+                    $records = DB::table('users')->selectRaw(
+                        'id, nomecompleto, nome, cpf, cargo, fone, perfil, email, ativo, DATE_FORMAT(created_at,"%d/%m/%Y") AS cadastrado')
+                    ->whereMonth('created_at', $mes)
+                    ->whereYear('created_at', $ano)
+                    ->get();
+                }
+
+                // Definindo o cabeçalho das colunas no arquivo Excel gerado.
+                $writer = SimpleExcelWriter::streamDownload("seducobras_$referencia.$tipoextensao")->addHeader([
+                    'Registro', 'Nome Completo', 'Usuário', 'CPF', 'Cargo', 'Fone', 'Pefil', 'E-mail', 'Ativo', 'Cadastrado'
+                ]);
+
+
+                // Contador para esvaziar buffer com flush()
+                $countbuffer = 1;
+
+                foreach ($records as $record ) {
+                    $writer->addRow([
+                        'id' => $record->id,
+                        'nomecompleto' => $record->nomecompleto,
+                        'nome' => $record->nome,
+                        'cpf' => $record->cpf,
+                        'cargo' => $record->cargo,
+                        'fone' => $record->fone,
+                        'perfil' => $record->perfil,
+                        'email' => $record->email,
+                        'ativo' => ($record->ativo == 1 ? 'sim' : 'não'),
+                        'created_at' => $record->cadastrado,
+                    ]);
+
+                    // Limpa o buffer a cada mil linhas
+                    $countbuffer++;
+
+                    if($countbuffer % 1000 === 0){
+                        flush();
+                    }
+                }
+
+                $writer->toBrowser();
+
+            } else {
+                return redirect()->route('dashboard.index')->with('error', 'Escolha um tipo de arquivo: Excel ou CSV, para ser gerado!');;
+            }
+
+        }
 
 
 *****************************************************

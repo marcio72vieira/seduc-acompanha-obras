@@ -45,26 +45,45 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'submitResetPas
 
 
 
-//------------------------------------------------------------
-//           ROTAS RESTRITAS  COM O MIDDLEWARE AUTH         //
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
+//           ROTAS RESTRITAS  PARA AUTENTICADOS COM O MIDDLEWARE AUTH         //
+//------------------------------------------------------------------------------
 Route::group(['middleware' => 'auth'], function(){
-    
+
+
+    // Acesso a todos que estiverem autenticados: Administradores, Consultores e Operadores. Todos poderão alterar seus respectivos perfis
     // DASHBOARD
     Route::get('/index-dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::get('/index-dashboard/gerarexcel', [DashboardController::class, 'gerarexcel'])->name('dashboard.gerarexcel');
-
-    // USUÁRIO
-    Route::get('/index-user', [UserController::class, 'index'])->name('user.index');
-    Route::get('/create-user', [UserController::class, 'create'])->name('user.create');
-    Route::post('/store-user', [UserController::class, 'store'])->name('user.store');
-    Route::get('/show-user/{user}', [UserController::class, 'show'])->name('user.show');
-    Route::get('/edit-user/{user}', [UserController::class, 'edit'])->name('user.edit');
-    Route::put('/update-user/{user}', [UserController::class, 'update'])->name('user.update');
-    Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::get('/index-dashboard/gerarexcel', [DashboardController::class, 'gerarexcel'])->name('dashboard.gerarexcel');    
+    
     Route::get('/edit-profile-user', [UserController::class, 'editprofile'])->name('user.editprofile');
     Route::put('/update-profile-user/{user}', [UserController::class, 'updateprofile'])->name('user.updateprofile');
-    Route::get('pdf-user/relpdflistusers', [UserController::class, 'relpdflistusers'])->name('user.pdflistusers');
-});
+
+
+    // Acesso apenas a usuários Admnistradores (onlyAdm)
+    Route::group(['middleware' => 'can:onlyAdm'], function(){
+
+        // USUÁRIO
+        Route::get('/index-user', [UserController::class, 'index'])->name('user.index');
+        Route::get('/create-user', [UserController::class, 'create'])->name('user.create');
+        Route::post('/store-user', [UserController::class, 'store'])->name('user.store');
+        Route::get('/show-user/{user}', [UserController::class, 'show'])->name('user.show');
+        Route::get('/edit-user/{user}', [UserController::class, 'edit'])->name('user.edit');
+        Route::put('/update-user/{user}', [UserController::class, 'update'])->name('user.update');
+        Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+        Route::get('pdf-user/relpdflistusers', [UserController::class, 'relpdflistusers'])->name('user.pdflistusers');
+
+    });// Final das rotas de acesso a usuários administradores (onlyAdm)
+
+
+    // Acesso apenas a usuários Admnistradores e Consultores (onlyAdmCon)
+    Route::group(['middleware' => 'can:onlyAdmCon'], function(){
+
+        
+
+    });// Final das rotas de acesso a usuários administradores e consultores (onlyAdmCon)
+
+
+}); // Final das rotas de quem deve está autenticado
 
 
