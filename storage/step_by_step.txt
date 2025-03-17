@@ -1,3 +1,242 @@
+
+************************************************************************************
+*    TRADUZINDO MENSAGENS DO LARAVEL PARA O PORTUGUES INCLUSIVE A DO RESET SENHA   *
+************************************************************************************
+1   -   Acessar página abaixo:
+            https://github.com/lucascudo/laravel-pt-BR-localization
+
+2   -   Na documentação da página utilizar os comandos abaixo:
+            a   -   ./vendor/bin/sail artisan artisan lang:publish OU php artisan lang:publish
+            b   -   ./vendor/bin/sail artisan composer require lucascudo/laravel-pt-br-localization --dev OU composer require lucascudo/laravel-pt-br-localization --dev
+            c   -   ./vendor/bin/sail artisan vendor:publish --tag=laravel-pt-br-localization OU php artisan vendor:publish --tag=laravel-pt-br-localization
+
+3   -   Configure o Framework para utilizar 'pt_BR' como linguagem padrão
+            // Altere Linha 81 do arquivo config/app.php
+            de:
+                'locale' => env('APP_LOCALE', 'en'),
+            para:
+                'locale' => 'pt_BR'
+
+            // Para versões >= 11.x altere a linha 8 do arquivo .env
+            de:
+                APP_LOCALE=en
+            para:
+                APP_LOCALE=pt_BR
+
+
+
+
+*************************
+*    MÓDULO DE LOGIN    *
+*************************
+1   -   Criar rotas no arquivo routes/web.php para manipulação do login, conforme descrito abaixo:
+            Route::get('/', [LoginController::class, 'index'])->name('login.index');
+            Route::post('/login', [LoginController::class, 'processalogin'])->name('login.processalogin');
+            Route::get('/logout', [LoginController::class, 'logout'])->name('login.logout');
+
+2   -   Criar os seguintes arquivos pra processar o login:
+            app/Http/Controllers/Publico/LoginController.php
+            app/Http/Requests/LoginRequest.php
+            resources/views/publico/login/index.blade.php
+
+3 -     Criar método index() no controler LoginController para exibir view (/views/publico/login/index.blade.php) com o formulŕio para entrar com dados do login
+            public function index()
+            {
+                // Carregar a view
+                return view('publico.login.index');
+            }
+
+4   -   Criar método processalogin no controller LoginController par autenticar usuŕio na apalicação
+            public function processalogin(LoginRequest $request)
+            {
+                // Validar o formulário
+                $request->validated();
+
+                ....
+            }
+
+5   -   Crir o método primeiroacesso caso haja necessidade ou a aplicação assim o exigir
+            // Carregar o formulário recadastrar senha no caso do primeiro acesso
+            public function createprimeiroacesso(User $user)
+            {
+                // Carregr a view
+                return view('publico.login.primeiroacesso', ['user' => $user]);
+            }
+
+6   -   Criar o método logout() no controler LoginController
+                public function logout()
+                {
+                    // Deslogar o usuário
+                    Auth::logout();
+
+                    // Redireciona o usuário enviando a mensagem de sucesso
+                    return redirect()->route('login.index')->with('success', 'Deslogado com sucesso!');
+
+                }
+
+7   -   Redirecionar o usuário para uma róta específica, caso o mesmo não esteja autenticado e queira acessar uma rota que exija autenticação.
+            Modifique o método no arquivo: bootstrap/app.php, conforme abaixo:
+                ...
+                ->withMiddleware(function (Middleware $middleware) {
+                    $middleware->redirectGuestsTo('/');
+                })
+                ...
+
+
+
+******************************************
+*    CRIANDO MÓDULO FORGOT PASSWORD      *
+******************************************
+1   -   Criar rotas no arquivo routes/web.php para manipulação do esquecimento de senha, conforme descrito abaixo:
+            Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPassword'])->name('forgot-password.show');
+            Route::post('/forgot-password', [ForgotPasswordController::class, 'submitForgotPassword'])->name('forgot-password.submit');
+            Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetPassword'])->name('password.reset');
+            Route::post('/reset-password', [ForgotPasswordController::class, 'submitResetPassword'])->name('reset-password.submit');
+
+
+
+
+********************************************************
+*     ENVIANDO E-MAIL RESETAR SENHA PASSO A PASSO      *
+********************************************************
+1   -   Crie o layout do e-mail através dos comandos abaixo:
+            ./vendor/bin/sail artisan vendor:publish --tag=laravel-mail
+            OU
+            php artisan vendor:publish --tag=laravel-mail
+
+2   -   No arquivo: resources/views/vendor/mail/html/header.blade.php (criado pelo comando acima), substitua o trecho de código conforme abaixo para exibir a logo da aplicação correspondente
+            Trecho original:
+                @props(['url'])
+                <tr>
+                <td class="header">
+                <a href="{{ $url }}" style="display: inline-block;">
+                @if (trim($slot) === 'Laravel')
+                <img src="https://laravel.com/img/notification-logo.png" class="logo" alt="Laravel Logo">
+                @else
+                {{ $slot }}
+                @endif
+                </a>
+                </td>
+                </tr>
+
+            Trecho a ser substituido
+                @props(['url'])
+                <tr>
+                <td class="header">
+                <a href="{{ $url }}" style="display: inline-block;">
+                @if (trim($slot) === 'Laravel')
+                <img src="https://laravel.com/img/notification-logo.png" class="logo" alt="Laravel Logo">
+                @else
+                {{-- {{ $slot }} --}}
+                <img src="{{ asset('images/logo_seduc.png') }}" width="200" alt="SEDUC Logo">
+                @endif
+                </a>
+                </td>
+                </tr>
+
+Re: Texto gerado no e-mail
+
+Publicado 05 de julho de 2024, 11:09 - Cesar
+Bom dia, Sergio,
+
+Complementando a minha resposta anterior, o diretório "resources/views/vendor/email" contém apenas o layout; o conteúdo do e-mail é gerado pela função do próprio Laravel.
+
+Nos meus projetos, não utilizo esse e-mail padrão. Prefiro personalizar, seguindo a ideia deste vídeo: https://www.youtube.com/watch?v=PN7p9dzwjqw
+
+Como fazer o deploy do projeto para produção: https://www.youtube.com/watch?v=DxHZNBdurvI&list=PLmY5AEiqDWwDOQa-j8lPAdWDUvN6Rbyqo&index=35
+
+Enviar e-mail em produção: https://www.youtube.com/watch?v=Cp6Nn0u3ND8&list=PLmY5AEiqDWwDOQa-j8lPAdWDUvN6Rbyqo&index=36
+
+Configurar domínio personalizado: https://www.youtube.com/watch?v=TywTQAbOw_k&list=PLmY5AEiqDWwDOQa-j8lPAdWDUvN6Rbyqo&index=37
+
+
+
+
+
+
+
+******************************************************
+*    CRIANDO UMA VALIDAÇÃO DE CPF PERSONALIZADA      *
+******************************************************
+1   -   Crie a validação com o comando abaixo:
+            ./vendor/bin/sail artisan make:rule CpfValidadeRule
+
+2   -   Copiar o código abaixo no arquivo gerado em: app/Rules/CpfValidateRule.php com o comando acima:
+            <?php
+
+            namespace App\Rules;
+
+            use Closure;
+            use Illuminate\Contracts\Validation\ValidationRule;
+
+            class CpfValidateRule implements ValidationRule
+            {
+                /**
+                * Run the validation rule.
+                *
+                * @param  \Closure(string, ?string=): \Illuminate\Translation\PotentiallyTranslatedString  $fail
+                */
+                public function validate(string $attribute, mixed $value, Closure $fail): void
+                {
+                    // Atribuindo à variável cpf o valor recebido
+                    $cpf = $value;
+
+
+                    // Extrai somente os números
+                    $cpf = preg_replace( '/[^0-9]/is', '', $cpf );
+
+                    // Verifica se foi informado todos os digitos corretamente
+                    if (strlen($cpf) != 11) {
+                        $fail('CPF inválido');
+                    }
+
+                    // Verifica se foi informada uma sequência de digitos repetidos. Ex: 111.111.111-11
+                    if (preg_match('/(\d)\1{10}/', $cpf)) {
+                        $fail('CPF inválido');
+                    }
+
+                    // Faz o calculo para validar o CPF
+                    if(strlen($cpf) == 11) {
+                        for ($t = 9; $t < 11; $t++) {
+                            for ($d = 0, $c = 0; $c < $t; $c++) {
+                                $d += $cpf[$c] * (($t + 1) - $c);
+                            }
+                            $d = ((10 * $d) % 11) % 10;
+                            if ($cpf[$c] != $d) {
+                                $fail('CPF inválido');
+                            }
+                        }
+                    } else {
+                        $fail('CPF inválido');
+                    }
+                }
+            }
+
+3   -   Fazer uso da validação na request app/Http/Requests/UserRequest.php ou onde mais se fizer necessário, conforme abaixo:
+            ...
+            use App\Rules\CpfValidateRule;
+            ...
+
+            $rules = [
+                'nomecompleto'          => 'required',
+                'nome'                  => 'required',
+                'cpf'                   => ['required', 'unique:users,cpf,'. ($userId ? $userId->id : null), new CpfValidateRule()],
+            ...
+            ]
+
+
+            $messages = [
+                        'nomecompleto.required'             => 'O campo Nome Completo é obrigatório!',
+                        'nome.required'                     => 'O campo Nome é obrigatório!',
+                        'cpf.required'                      => 'O campo CPF é obrigatório!',
+                        'cpf.unique'                        => 'Este CPF já está cadastrado!',
+            ...
+            ]
+
+
+
+
+
 *************************************************************
 *    CRIANDO MIDDLEWARE PERSONALIZADOS COM GATES/POLICES    *
 *************************************************************
@@ -119,7 +358,7 @@
             {{-- inicio formulario baixar arquivo excel csv--}}
             <div class="col-md-5">
                 <form action="{{ route('dashboard.gerarexcel') }}"  method="GET" class="form-inline" style="border-radius: 5px; margin-bottom: -15px;">
-                    
+
                     <div class="row">
                         <div class="col-md-2" style="margin-left: 180px;">
                             <select id="selectMesExcel" name="mesexcel"  class="form-control col-form-label-sm" style="margin-left: 5px;">
@@ -357,13 +596,13 @@
                         <td style="width: 40px;" class="dados-lista">{{$user->id}}</td>
                         <td style="width: 275px;" class="dados-lista">{{$user->nomecompleto}}</td>
                         <td style="width: 100px;" class="dados-lista">
-                            @if($user->perfil == 'adm') 
-                                <b>ADMINISTRADOR</b> 
-                            @elseif($user->perfil == 'con') 
+                            @if($user->perfil == 'adm')
+                                <b>ADMINISTRADOR</b>
+                            @elseif($user->perfil == 'con')
                                 <b>Consultor</b>
-                            @elseif($user->perfil == 'ope') 
+                            @elseif($user->perfil == 'ope')
                                 <b>Operador</b>
-                            @endif 
+                            @endif
                         </td>
                         <td style="width: 315px;" class="dados-lista">{{ $user->cargo }}</td>
                         <td style="width: 200px;" class="dados-lista">{{ $user->email }}</td>
@@ -376,9 +615,9 @@
         </body>
         </html>
 
-        OBSERVAÇÃO: 
+        OBSERVAÇÃO:
         O tamanho das colunas da tabela no arquivo /views/admin/users/pdfs/pdf_list_users.blade.php deve coincidir com o
-        tamanho das colunas definidas no cabeçalho no método "relpdflistusers()" do controller UsrerController 
+        tamanho das colunas definidas no cabeçalho no método "relpdflistusers()" do controller UsrerController
 
 8   -   Crie o arquivo public/css/pdf/mpdf.css para definir os estilos que o arquiovo pdf_list_users.blade.php irá adotar para formatar o relatório PDF.
 
@@ -403,7 +642,7 @@
             })
             ...
 
-        OBSERVAÇÃO: 
+        OBSERVAÇÃO:
         Neste caso específico, a rota para a qual o usuário será redirecionado, caso não esteja autenticado será a rota raiz ('/')
              que representa a página de "login", conforme podemos observar no arquivo de rota routes/web.php
             ...

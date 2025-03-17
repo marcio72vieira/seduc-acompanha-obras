@@ -2,7 +2,7 @@
     <!-- Navbar Brand-->
     <a class="navbar-brand ps-3" href="index.html">SEDUC - ACOMPANHAMENTO DE OBRAS</a>
     <!-- Sidebar Toggle-->
-    <button class="order-1 btn btn-link btn-sm order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+    <button class="order-1 btn btn-link btn-sm order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars" style="margin-left: 165px;"></i></button>
     <!-- Navbar Search-->
     <form class="my-2 d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-md-0">
         {{--

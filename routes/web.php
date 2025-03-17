@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Publico\LoginController;
+use App\Http\Controllers\Publico\ForgotPasswordController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 
@@ -54,8 +55,8 @@ Route::group(['middleware' => 'auth'], function(){
     // Acesso a todos que estiverem autenticados: Administradores, Consultores e Operadores. Todos poderão alterar seus respectivos perfis
     // DASHBOARD
     Route::get('/index-dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::get('/index-dashboard/gerarexcel', [DashboardController::class, 'gerarexcel'])->name('dashboard.gerarexcel');    
-    
+    Route::get('/index-dashboard/gerarexcel', [DashboardController::class, 'gerarexcel'])->name('dashboard.gerarexcel');
+
     Route::get('/edit-profile-user', [UserController::class, 'editprofile'])->name('user.editprofile');
     Route::put('/update-profile-user/{user}', [UserController::class, 'updateprofile'])->name('user.updateprofile');
 
@@ -79,7 +80,7 @@ Route::group(['middleware' => 'auth'], function(){
     // Acesso apenas a usuários Admnistradores e Consultores (onlyAdmCon)
     Route::group(['middleware' => 'can:onlyAdmCon'], function(){
 
-        
+
 
     });// Final das rotas de acesso a usuários administradores e consultores (onlyAdmCon)
 
