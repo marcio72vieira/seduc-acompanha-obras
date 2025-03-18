@@ -1,3 +1,147 @@
+***********************************************
+*    ENVIANDO EMAIL COM DADOS DO FORMULÁRIO   *
+***********************************************
+1   -   Criar a classe de email com o comando abaixo.
+            ./vendor/bin/sail artisan make:mail EmailAcesso
+            OU
+            php artisan make:mail EmailAcesso
+
+2   -   O comando acima, irá criar a classe de email na seguinte pasta:
+            app/Mail/EmailAcesso.php
+
+3   -   Implemente a classe "app/Mail/EmailAcesso.php" conforme modelo abaixo, observando os comentários
+            <?php
+
+            namespace App\Mail;
+
+            use Illuminate\Bus\Queueable;
+            use Illuminate\Contracts\Queue\ShouldQueue;
+            use Illuminate\Mail\Mailable;
+            use Illuminate\Mail\Mailables\Address;
+            use Illuminate\Mail\Mailables\Content;
+            use Illuminate\Mail\Mailables\Envelope;
+            use Illuminate\Queue\SerializesModels;
+
+            class EmailAcesso extends Mailable
+            {
+                use Queueable, SerializesModels;
+
+
+                public function __construct(public readonly array $dados)
+                {
+                    //dd($dados);
+                    //Obs: $dados é acessivel na view de email(admin.users.emailacesso), nativamente
+                    //     Não há a necessidade de se criar um variavel do tipo private $dados e atribuir seu valor com $this->dados = $dados.
+                    //     A nova função "promotion" do Php 8.3 faz isso de forma automática.
+                }
+
+
+                public function envelope(): Envelope
+                {
+                    return new Envelope(
+                        from: new Address('seduc@email.ma.gov.br', 'SEDUC'),
+                        subject: 'Credenciais de Acesso ao Sistema de Acompanhamento de Obras da SEDUC',
+                    );
+                }
+
+
+                // View que irá conter o corpo do email a ser enviado para o usuário
+                public function content(): Content
+                {
+                    return new Content(
+                        view: 'admin.users.mailacesso',
+                    );
+                }
+
+                public function attachments(): array
+                {
+                    return [];
+                }
+            }
+
+
+
+4   -   Implemente a view de email localizada em: resources/views/admin/users/mailacesso.blade.php conforme abaixo:
+            <h3>CREDENCIAIS PARA ACESSAR SISTEMA</h3>
+            <br>
+
+            Olá {{ $dados['nome']}}!<br>
+            Você foi cadastrado(a) para acessar o <strong>Sistema de Acompanhmaento de Obras da SEDUC</strong>, da Secretaria de Estado da Educação / SEDUC, com o perfil de <strong>"{{ $dados['perfil']}}"</strong> no Sistema.<br><br>
+            <strong>Observações Importantes:</strong><br>
+            1 - Efetue seu "login(acesso)" com as credenciais(e-mail e senha) fornecidas aqui. <br>
+            2 - Em seu primeiro acesso, por questões de segurança, você será solicitado a substituir a senha atual por uma nova senha.<br>
+            3 - Efetue seu login com a nova senha cadastrada.<br><br>
+
+            <strong>Segue suas credenciais:</strong><br>
+            <strong>E-mail:</strong> {{ $dados['email'] }}<br>
+            <strong>Senha:</strong> {{ $dados['senha'] }}<br><br><br>
+
+            Acesse o sistema clicando <a href="{{ \Config::get('app.url'); }}">aqui!</a>
+            <br><br>
+            Se o link acima não funcionar, copie e cole esta URL: {{ \Config::get('app.url'); }} em seu navegador preferido.<br><br>
+
+            <strong>Atenciosamente!</strong> <br>
+            Administrador do Sistema de Acompanhmento de Obras/SEDUC.
+
+
+
+5   -   Implemente o "trecho de código de envio de e-maiil", logo após cadastrar o usuario conforme descrito abaixo no método "store" do controller UserController.
+            a   -   Importar as classes:
+                        use App\Mail\EmailAcesso;
+                        use Illuminate\Support\Facades\Mail;
+
+            b   -   Acrescentar o trecho de código de envio de e-mail, como abaixo, logo após salvar o usuário no banco de dados
+                    // Cadastrar no banco de dados na tabela usuários
+                    User::create([
+                        'nomecompleto' => $request->nomecompleto,
+                        'nome' => $request->nome,
+                        'cpf' => $request->cpf,
+                        'cargo' => $request->cargo,
+                        'fone' => $request->fone,
+                        'perfil' => $request->perfil,
+                        'email' => $request->email,
+                        'password' => $request->password,
+                        'ativo' => $request->ativo,
+                        'primeiroacesso' => 1
+                    ]);
+
+                    // Dados que serão enviados ao construtor da classe EmailAcesso
+                    $dados = [
+                        'nome' => $request->nomecompleto,
+                        'email' => $request->email,
+                        'senha' => $request->password,
+                        'perfil' => ($request->perfil == "adm" ? "Administrador" : ($request->perfil == "con" ? "Consultor" : "Operador"))
+                    ];
+
+                    // Dados que serão enviados ao construtor da classe EmailAcesso
+                    $dados = [
+                        'nome' => $request->nomecompleto,
+                        'email' => $request->email,
+                        'senha' => $request->password,
+                        'perfil' => ($request->perfil == "adm" ? "Administrador" : ($request->perfil == "con" ? "Consultor" : "Operador"))
+                    ];
+
+                    $envioEmail = Mail::to($request->email, $request->nome)->send(new EmailAcesso($dados));
+
+                    if($envioEmail){
+                        // Redirecionar o usuário, enviar a mensagem de sucesso
+                        return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
+                    } else {
+                        // Redirecionar o usuário, enviar a mensagem de sucesso
+                        return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso, mas houve falha no envio do E-mail!');
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 ************************************************************************************
 *    TRADUZINDO MENSAGENS DO LARAVEL PARA O PORTUGUES INCLUSIVE A DO RESET SENHA   *
@@ -84,6 +228,8 @@
 
 
 
+
+
 ******************************************
 *    CRIANDO MÓDULO FORGOT PASSWORD      *
 ******************************************
@@ -92,6 +238,20 @@
             Route::post('/forgot-password', [ForgotPasswordController::class, 'submitForgotPassword'])->name('forgot-password.submit');
             Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetPassword'])->name('password.reset');
             Route::post('/reset-password', [ForgotPasswordController::class, 'submitResetPassword'])->name('reset-password.submit');
+
+2   -   Criar controller ForgotPasswordController e implementar os seguintes métodos, conforme apliação anoatual
+
+3   -   Criar as view invocadas nos métodos do passo anterior, coforme modelo da aplicação anoatual
+
+        OBSERVAÇÃO:
+            O método "showResetPassword", que exibe a view "resetPassword" é invocado a partir do botão que é enviado no corpo do email para o usuário que esqueceu a senha
+            public function showResetPassword(Request $request)
+            {
+                // Carregar a view
+                return view('publico.login.resetPassword', ['token' => $request->token]);
+
+            }
+
 
 
 
@@ -104,7 +264,7 @@
             OU
             php artisan vendor:publish --tag=laravel-mail
 
-2   -   No arquivo: resources/views/vendor/mail/html/header.blade.php (criado pelo comando acima), substitua o trecho de código conforme abaixo para exibir a logo da aplicação correspondente
+2   -   No arquivo: resources/views/vendor/mail/html/header.blade.php (criado pelo comando acima), substitua o trecho de código conforme abaixo para exibir a logo da aplicação correspondente no corpo do e-mail
             Trecho original:
                 @props(['url'])
                 <tr>
@@ -134,20 +294,18 @@
                 </td>
                 </tr>
 
-Re: Texto gerado no e-mail
 
-Publicado 05 de julho de 2024, 11:09 - Cesar
-Bom dia, Sergio,
 
-Complementando a minha resposta anterior, o diretório "resources/views/vendor/email" contém apenas o layout; o conteúdo do e-mail é gerado pela função do próprio Laravel.
-
-Nos meus projetos, não utilizo esse e-mail padrão. Prefiro personalizar, seguindo a ideia deste vídeo: https://www.youtube.com/watch?v=PN7p9dzwjqw
-
-Como fazer o deploy do projeto para produção: https://www.youtube.com/watch?v=DxHZNBdurvI&list=PLmY5AEiqDWwDOQa-j8lPAdWDUvN6Rbyqo&index=35
-
-Enviar e-mail em produção: https://www.youtube.com/watch?v=Cp6Nn0u3ND8&list=PLmY5AEiqDWwDOQa-j8lPAdWDUvN6Rbyqo&index=36
-
-Configurar domínio personalizado: https://www.youtube.com/watch?v=TywTQAbOw_k&list=PLmY5AEiqDWwDOQa-j8lPAdWDUvN6Rbyqo&index=37
+        OBSERVAÇÃO:
+            Links de aulas referente ao módulo de forgotpasswor do curso do Celke
+                Re: Texto gerado no e-mail
+                Publicado 05 de julho de 2024, 11:09 - Cesar
+                Bom dia, Sergio,
+                Complementando a minha resposta anterior, o diretório "resources/views/vendor/email" contém apenas o layout; o conteúdo do e-mail é gerado pela função do próprio Laravel.
+                Nos meus projetos, não utilizo esse e-mail padrão. Prefiro personalizar, seguindo a ideia deste vídeo: https://www.youtube.com/watch?v=PN7p9dzwjqw
+                Como fazer o deploy do projeto para produção: https://www.youtube.com/watch?v=DxHZNBdurvI&list=PLmY5AEiqDWwDOQa-j8lPAdWDUvN6Rbyqo&index=35
+                Enviar e-mail em produção: https://www.youtube.com/watch?v=Cp6Nn0u3ND8&list=PLmY5AEiqDWwDOQa-j8lPAdWDUvN6Rbyqo&index=36
+                Configurar domínio personalizado: https://www.youtube.com/watch?v=TywTQAbOw_k&list=PLmY5AEiqDWwDOQa-j8lPAdWDUvN6Rbyqo&index=37
 
 
 

@@ -9,6 +9,8 @@ use App\Http\Requests\UserPerfilRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\EmailAcesso;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -46,8 +48,26 @@ class UserController extends Controller
                 'primeiroacesso' => 1
             ]);
 
+            // Dados que serão enviados ao construtor da classe EmailAcesso
+            $dados = [
+                'nome' => $request->nomecompleto,
+                'email' => $request->email,
+                'senha' => $request->password,
+                'perfil' => ($request->perfil == "adm" ? "Administrador" : ($request->perfil == "con" ? "Consultor" : "Operador"))
+            ];
+
+            $envioEmail = Mail::to($request->email, $request->nome)->send(new EmailAcesso($dados));
+
+            if($envioEmail){
+                // Redirecionar o usuário, enviar a mensagem de sucesso
+                return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
+            } else {
+                // Redirecionar o usuário, enviar a mensagem de sucesso
+                return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso, mas houve falha no envio do E-mail!');
+            }
+
             // Redirecionar o usuário, enviar a mensagem de sucesso
-            return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
+            // return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
 
         } catch (Exception $e) {
             // Mantém o usuário na mesma página(back), juntamente com os dados digitados(withInput) e enviando a mensagem correspondente.
