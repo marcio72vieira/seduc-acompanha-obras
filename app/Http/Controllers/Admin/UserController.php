@@ -10,6 +10,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\EmailAcesso;
+use App\Mail\EmailcomMarkdown;
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
@@ -181,6 +182,47 @@ class UserController extends Controller
     }
 
 
+        // Envia e-mail com informações do usuário, utilizando "markdown" ao invés de uma view comum
+        public function sendemail(User $user)
+        {
+
+            // Dados que serão enviados ao construtor da classe EmailcomMarkdown (app/Mail/EmailcomMarkdown.php)
+            $dados = [
+                'id'            => $user->id,
+                'nomecompleto'  => $user->nomecompleto,
+                'nome'          => $user->nome,
+                'cpf'           => $user->cpf,
+                'cargo'         => $user->cargo,
+                'fone'          => $user->fone,
+                'perfil'        => ($user->perfil == "adm" ? "Administrador" : ($user->perfil == "con" ? "Consultor" : "Operador")),
+                'email'         => $user->email,
+                //'urlapp'        => Config('app.url'), acessando  a variável app.url definida em config/app.php
+            ];
+
+
+            try {
+
+                // Envio de e-mail  com cópia: $envioEmail = Mail::to([$user->email, 'marcio@email.com.br'])->send(new EmailcomMarkdown($dados));
+
+                // Envio de e-email para um único destinatário
+                $envioEmail = Mail::to($user->email, $user->nome)->send(new EmailcomMarkdown($dados));
+
+                if($envioEmail){
+                    // Redirecionar o usuário, enviar a mensagem de sucesso
+                    return redirect()->route('user.index')->with('success', 'E-mail enviado com sucesso!');
+                } else {
+                    // Redirecionar o usuário, enviar a mensagem de sucesso
+                    return redirect()->route('user.index')->with('error', 'Não foi possível enviar o e-mail no momento, tente mais tarde ou contact o administrador do sistema!');
+                }
+
+            } catch (Exception $e) {
+
+                // Redirecionar o usuário, enviar a mensagem de erro
+                return redirect()->route('user.index')->with('error-exception', 'E-mail não enviado. Tente mais tarde!'.$e->getMessage());
+            }
+        }
+
+
     // Excluir o usuário do banco de dados
     public function destroy(User $user)
     {
@@ -197,6 +239,7 @@ class UserController extends Controller
             return redirect()->route('user.index')->with('error-exception', 'Usuário não excluído. Tente mais tarde!');
         }
     }
+
 
 
     public function relpdflistusers()

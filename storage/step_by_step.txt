@@ -1,6 +1,119 @@
-***********************************************
-*    ENVIANDO EMAIL COM DADOS DO FORMULÁRIO   *
-***********************************************
+*********************************************
+*    EXEMPLO DE ENVIO DE EMAIL COM CÓPIA    *
+*********************************************
+1   -   Para enviar e-mail com cópias para duas ou mais caixas de e-mail, copie o trecho de código abaixo no método de envio de amail no controller como segue abaixo
+
+
+
+************************************************************
+*    ENVIANDO EMAIL COM DADOS DO FORMULÁRIO VIA MARKDOWN   *
+************************************************************
+1   -   Criar a classe de email com o "markdonw" com o comando abaixo:
+            ./vendor/bin/sail artisan artisan make:mail EmailcomMarkdown --markdown=emails.emailcommarkdown
+            php artisan make:mail EmailcomMarkdown --markdown=emails.emailcommarkdown
+
+            onde:
+                EmailcomMarkdown = é o nome da classe a ser criada no diretório app/Mail
+                --markdown =  é o parâmetro que irá crir o markdown (ou seja, uma pseudo view com parâmetros pré-configurados)
+                emails = é a pasta que será criada na pasta resources/views para conter os emails com markdown
+                emailcommarkdown = é o nome do markdown (pseudo view) que será criada de fato no diretório resources/views/emails
+
+2   -   Após o execução do comando acima, será criado a classe: app/Mail/EmailcomMarkdown.php. Para seu uso adequado, importa a classe:
+            use Illuminate\Mail\Mailables\Address;
+
+        OBSERVAÇÃO: Nesta classe, o trecho de código que irá fazer referência ao arquivo de markdown, está localizado em:
+            ...
+            public function content(): Content
+            {
+                return new Content(
+                    markdown: 'emails.emailcommarkdown',
+                );
+            }
+            ...
+
+3   -   Sinta-se à vontade para utilizar a classe app/Mail/EmailcomMarkdown.php, como se estivesse enviando um e-mail com uma view normalmente.
+
+
+4   -   Após a execução do comando acima, será criado o arquivo: resources/views/emails/emailcommarkdown.blade.php, com o seguinte conteúdo:
+            <x-mail::message>
+            # Introduction
+
+            The body of your message.
+
+            <x-mail::button :url="''">
+            Button Text
+            </x-mail::button>
+
+            Thanks,<br>
+            {{ config('app.name') }}
+            </x-mail::message>
+
+            OBSERVAÇÃO:
+                Na seção do trecho de código acima: "The body of your message." Você pode colocar qualquer marcação HTML que você desejar, pois é um arquivo blade normal.
+                Sinta-se vontade para alterá-lo como desejar.
+
+            OBSERVAÇÃO:
+                Sites de referência: https://www.youtube.com/watch?v=sH_eEEGlEjE
+                                     https://www.youtube.com/watch?v=nxUoA9K74lQ
+
+
+4   -   Criar rota para envio de email com informações do usuário, como descrito abaixo:
+            ...
+            Route::get('/sendemail-user', [UserController::class, 'sendemail'])->name('user.sendemail');
+            ...
+
+5   -   Criar método para envio de email no controller UserController, como descrito abaixo:
+            // Envia e-mail com informações do usuário, utilizando "markdown" ao invés de uma view comum
+            public function sendemail(User $user)
+            {
+
+                // Dados que serão enviados ao construtor da classe EmailcomMarkdown (app/Mail/EmailcomMarkdown.php)
+                $dados = [
+                    'id'            => $user->id,
+                    'nomecompleto'  => $user->nomecompleto,
+                    'nome'          => $user->nome,
+                    'cpf'           => $user->cpf,
+                    'cargo'         => $user->cargo,
+                    'fone'          => $user->fone,
+                    'perfil'        => ($user->perfil == "adm" ? "Administrador" : ($user->perfil == "con" ? "Consultor" : "Operador")),
+                    'email'         => $user->email,
+                ];
+
+
+                try {
+
+                    $envioEmail = Mail::to($user->email, $user->nome)->send(new EmailcomMarkdown($dados));
+
+                    if($envioEmail){
+                        // Redirecionar o usuário, enviar a mensagem de sucesso
+                        return redirect()->route('user.index')->with('success', 'E-mail enviado com sucesso!');
+                    } else {
+                        // Redirecionar o usuário, enviar a mensagem de sucesso
+                        return redirect()->route('user.index')->with('error', 'Não foi possível enviar o e-mail no momento, tente mais tarde ou contact o administrador do sistema!');
+                    }
+
+                } catch (Exception $e) {
+
+                    // Redirecionar o usuário, enviar a mensagem de erro
+                    return redirect()->route('user.index')->with('error-exception', 'E-mail não enviado. Tente mais tarde!');
+                }
+            }
+
+
+        OBSERVAÇÃO:
+            Para acessar uma variável de configuração em um VIEW utilize a sgintaxe:
+                "Se o link acima não funcionar, copie e cole esta URL: {{ \Config::get('app.url'); }} em seu navegador preferido.<br><br>
+            Para acessar uma variável de configuração em qualquer outra parte (controllers, models, markdonw etc..) do sistema no Laravel, utilize a sintax:
+                em um array: ['urlapp' => Config('app.url')], acessando  a variável app.url definida em config/app.php diretamente
+                em um markdown: <x-mail::button :url="Config('app.url')">
+                como uma variável: $my_varible_url =  Config('app.url);
+
+
+
+
+********************************************************
+*    ENVIANDO EMAIL COM DADOS DO FORMULÁRIO VIA VIEW   *
+********************************************************
 1   -   Criar a classe de email com o comando abaixo.
             ./vendor/bin/sail artisan make:mail EmailAcesso
             OU

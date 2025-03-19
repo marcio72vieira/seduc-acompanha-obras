@@ -52,6 +52,8 @@
 
                                     <a href="{{ route('user.edit', ['user' => $user->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1" title="editar"> <i class="fa-solid fa-pen-to-square"></i> editar </a>
 
+                                    <a href="{{ route('user.sendemail', ['user' => $user->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1" title="enviar email"> <i class="fa-solid fa-envelope"></i> e-mail </a>
+
                                     <form id="formDelete{{ $user->id }}" method="POST" action="{{ route('user.destroy', ['user' => $user->id]) }}">
                                         @csrf
                                         @method('delete')
