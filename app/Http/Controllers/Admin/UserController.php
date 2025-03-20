@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Mail\EmailAcesso;
 use App\Mail\EmailcomMarkdown;
 use Illuminate\Support\Facades\Mail;
+use App\Jobs\JobSendEmailAcesso;
+
 
 class UserController extends Controller
 {
@@ -36,7 +38,7 @@ class UserController extends Controller
 
         try {
             // Cadastrar no banco de dados na tabela usuários
-            User::create([
+            $user = User::create([
                 'nomecompleto' => $request->nomecompleto,
                 'nome' => $request->nome,
                 'cpf' => $request->cpf,
@@ -49,7 +51,10 @@ class UserController extends Controller
                 'primeiroacesso' => 1
             ]);
 
-            // Dados que serão enviados ao construtor da classe EmailAcesso
+
+            /*
+            // ENVIO DE EMAIL DIRETAMENTE
+            Dados que serão enviados ao construtor da classe EmailAcesso
             $dados = [
                 'nome' => $request->nomecompleto,
                 'email' => $request->email,
@@ -66,9 +71,13 @@ class UserController extends Controller
                 // Redirecionar o usuário, enviar a mensagem de sucesso
                 return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso, mas houve falha no envio do E-mail!');
             }
+            */
+
+            // ENVIO DE EMAIL INDIRETAMENTE, VIA FILA
+            JobSendEmailAcesso::dispatch($user->id, $request->password)->onQueue('default');
 
             // Redirecionar o usuário, enviar a mensagem de sucesso
-            // return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
+            return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
 
         } catch (Exception $e) {
             // Mantém o usuário na mesma página(back), juntamente com os dados digitados(withInput) e enviando a mensagem correspondente.
@@ -313,8 +322,8 @@ class UserController extends Controller
 
         // Transformando a view blade em arquivo .pdf e enviando a saida para o browse (I); 'D' exibe e baixa para o pc
         $mpdf->WriteHTML($html);
-        $mpdf->Output($fileName, 'I');
-    }
+        $mpdf->Output($fileName, 'I');  // Exibe o arquivo no browse   || $mpdf->Output($fileName, 'F');  Gera o arquivo na pasta pública
 
+    }
 
 }

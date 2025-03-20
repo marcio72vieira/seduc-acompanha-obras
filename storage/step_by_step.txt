@@ -1,7 +1,129 @@
 *********************************************
+*    ENVIO DE EMAIL COM SISTEMA DE FILAS    *
+*********************************************
+1   -   Criar o Jobs com o comando abaixo:
+            php artisan make:job JobSendEmailAcesso
+            OU
+            ./vendor/bin/sail artisan make:job JobSendEmailAcesso
+
+2   -   O comando acima, irá criar o arquivo app/Jobs/JobSendEmailAcesso.php
+
+3   -   Na classe UserController, ao inves de enviar diretamnte o e-maiil ao cadastrar um usuário, colocar o envio em "fila", no método "store"
+            a) Importar a classe de jobs recém criada:
+                ...
+                use App\Jobs\JobSendEmailAcesso;
+
+            b) No método "store", após salvar o usuario, substituir:
+                O envio de email abaixo:
+                    $envioEmail = Mail::to($request->email, $request->nome)->send(new EmailAcesso($dados));
+                Pelo envio do Job recém criado:
+                    // Aagendar o envio de email via jobs,
+                    JobSendEmailAcesso::dispatch($user->id)->onQueue('default')
+
+4   -   Modificar a classe JobSendEmailAcesso, conforme abaixo:
+            <?php
+
+                namespace App\Jobs;
+
+                use Illuminate\Contracts\Queue\ShouldQueue;
+                use Illuminate\Foundation\Queue\Queueable;
+                use App\Mail\EmailAcesso;
+                use App\Models\User;
+                use Illuminate\Support\Facades\Mail;
+
+                class JobSendEmailAcesso implements ShouldQueue
+                {
+                    use Queueable;
+
+                    /**
+                    * Create a new job instance.
+                    */
+                    public function __construct(private $userId)
+                    {
+                        //
+                    }
+
+                    /**
+                    * Execute the job.
+                    */
+                    public function handle(): void
+                    {
+                        // Recuperar os dados do usuário
+                        $user = User::find($this->userId);
+
+                        // Dados que serão enviados ao construtor da classe EmailAcesso
+                        $dados = [
+                            'nome' => $user->nomecompleto,
+                            'email' => $user->email,
+                            'senha' => $user->password,
+                            'perfil' => ($user->perfil == "adm" ? "Administrador" : ($user->perfil == "con" ? "Consultor" : "Operador"))
+                        ];
+
+                        // Enviar o email de acesso para o usuário daqui a um minuto(now()->addMinute())
+                        Mail::to($user->email, $user->nome)->later(now()->addMinute(), new EmailAcesso($dados));
+                    }
+                }
+
+
+5   -   Executar o supervision com o nome da fila (default), conforme abaixo:
+            ./vendor/bin/sail artisan queue:work --queue=default
+            OU
+            php artisan queue:work --queue=default
+
+*********************************************************************
+*    SALVANDO O ARQUIVO GERADO PELO MPDF EM UMA PASTA ESPECÍFICA    *
+*********************************************************************
+... use Illuminate\Support\Facades\Storage;
+
+...
+    // Definindo a view que deverá ser renderizada como arquivo .pdf e passando os dados da pesquisa
+        $html = \View::make('admin.users.pdfs.pdf_list_users', compact('users'));
+        $html = $html->render();
+
+        // Definindo o arquivo .css que estilizará o arquivo blade na view ('admin.users.pdfs.pdf_users')
+        $stylesheet = file_get_contents('css/pdf/mpdf.css');
+        $mpdf->WriteHTML($stylesheet, 1);
+
+        // Transformando a view blade em arquivo .pdf e enviando a saida para o browse (I); 'D' exibe e baixa para o pc
+        $mpdf->WriteHTML($html);
+        $mpdf->Output($fileName, 'I');  // Exibe o arquivo no browse   || $mpdf->Output($fileName, 'F');  Gera o arquivo na pasta pública
+
+
+    // INICIO CHATGPT
+            // SALVANDO O ARQIVO GERADO EM UMA PASTA QUALQUER NA PASTA PUBLICA
+            // Definindo o caminho onde o arquivo será salvo PASTA PUBLICA
+            // $path = public_path('pdfs'); // ou qualquer outra pasta que você desejar
+            // Verifique se a pasta existe, se não, crie-a
+            // if (!file_exists($path)) {
+            //    mkdir($path, 0755, true);
+            // }
+            // Salve o arquivo PDF
+            // $filePath = $path . '/'.$fileName;
+            // $mpdf->Output($filePath, 'F');
+            // return response()->download($filePath);
+
+            // SALVANDO O ARQIVO GERADO EM UMA PASTA QUALQUER NA PASTA STORAGE
+            // Definindo o caminho onde o arquivo será salvo PASTA STORAGE
+            // Defina o link simbólico com o comando "artisan storage:link"
+            // Cria um diretório "listas", caso o diretório não exista.
+            // if(!Storage::exists("listas")){
+            //     //Storage::makeDirectory($path, 0777, true, true);
+            //     Storage::disk('public')->makeDirectory("listas");
+            // }
+            // $caminho = storage_path('app/public/listas/'.$fileName);
+            // // Salve o arquivo PDF
+            // $mpdf->Output($caminho, 'F');   // Gera o arquivo na pasta especificada
+            // return response()->download($caminho);
+            // FIM CHATGPT
+
+
+
+*********************************************
 *    EXEMPLO DE ENVIO DE EMAIL COM CÓPIA    *
 *********************************************
 1   -   Para enviar e-mail com cópias para duas ou mais caixas de e-mail, copie o trecho de código abaixo no método de envio de amail no controller como segue abaixo
+            // Envio de e-mail  com cópia:
+            $envioEmail = Mail::to([$user->email, 'marcio@email.com.br'])->send(new EmailcomMarkdown($dados));
 
 
 
@@ -63,6 +185,10 @@
             ...
 
 5   -   Criar método para envio de email no controller UserController, como descrito abaixo:
+            ...
+            use App\Mail\EmailcomMarkdown;
+            ...
+
             // Envia e-mail com informações do usuário, utilizando "markdown" ao invés de uma view comum
             public function sendemail(User $user)
             {
