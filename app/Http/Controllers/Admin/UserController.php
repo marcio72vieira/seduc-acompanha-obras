@@ -52,9 +52,9 @@ class UserController extends Controller
             ]);
 
 
-            /*
+
             // ENVIO DE EMAIL DIRETAMENTE
-            Dados que serão enviados ao construtor da classe EmailAcesso
+            // Dados que serão enviados ao construtor da classe EmailAcesso
             $dados = [
                 'nome' => $request->nomecompleto,
                 'email' => $request->email,
@@ -71,13 +71,12 @@ class UserController extends Controller
                 // Redirecionar o usuário, enviar a mensagem de sucesso
                 return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso, mas houve falha no envio do E-mail!');
             }
-            */
 
-            // ENVIO DE EMAIL INDIRETAMENTE, VIA FILA
-            JobSendEmailAcesso::dispatch($user->id, $request->password)->onQueue('default');
 
+            // ENVIO DE EMAIL INDIRETAMENTE, VIA FILA (Passando o Id do Usuário e sua senha não criptografada)
+            // JobSendEmailAcesso::dispatch($user->id, $request->password)->onQueue('default');
             // Redirecionar o usuário, enviar a mensagem de sucesso
-            return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
+            // return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
 
         } catch (Exception $e) {
             // Mantém o usuário na mesma página(back), juntamente com os dados digitados(withInput) e enviando a mensagem correspondente.

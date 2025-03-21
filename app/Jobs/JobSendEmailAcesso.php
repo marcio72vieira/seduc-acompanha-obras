@@ -32,7 +32,7 @@ class JobSendEmailAcesso implements ShouldQueue
         $dados = [
             'nome' => $user->nomecompleto,
             'email' => $user->email,
-            'senha' => $this->passwordperson,
+            'senha' => $this->passwordperson,   // Enviio da senha sem ser criptografada. Se 'senha' => $user->password, a senha é enviada ciptografada
             'perfil' => ($user->perfil == "adm" ? "Administrador" : ($user->perfil == "con" ? "Consultor" : "Operador"))
         ];
 
