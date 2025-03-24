@@ -292,7 +292,7 @@ class UserController extends Controller
                     <td width="40px" class="col-header-table">ID</td>
                     <td width="275px" class="col-header-table">NOME</td>
                     <td width="100px" class="col-header-table">PERFIL</td>
-                    <td width="315px" class="col-header-table">CAGO</td>
+                    <td width="315px" class="col-header-table">CARGO</td>
                     <td width="200px" class="col-header-table">E-mal</td>
                     <td width="100px" class="col-header-table">Telefone</td>
                     <td width="50px" class="col-header-table">ATIVO</td>

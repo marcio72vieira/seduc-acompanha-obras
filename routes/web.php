@@ -5,7 +5,8 @@ use App\Http\Controllers\Publico\LoginController;
 use App\Http\Controllers\Publico\ForgotPasswordController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
-
+use App\Http\Controllers\Admin\RegionalController;
+use App\Http\Controllers\Admin\MunicipioController;
 
 
 //---------------------------------------
@@ -74,6 +75,25 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/sendemail-user/{user}', [UserController::class, 'sendemail'])->name('user.sendemail');
         Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
         Route::get('pdf-user/relpdflistusers', [UserController::class, 'relpdflistusers'])->name('user.pdflistusers');
+
+        // REGIONAL
+        Route::get('/index-regional', [RegionalController::class, 'index'])->name('regional.index');
+        Route::get('/create-regional', [RegionalController::class, 'create'])->name('regional.create');
+        Route::post('/store-regional', [RegionalController::class, 'store'])->name('regional.store');
+        Route::get('/edit-regional/{regional}', [RegionalController::class, 'edit'])->name('regional.edit');
+        Route::put('/update-regional/{regional}', [RegionalController::class, 'update'])->name('regional.update');
+        Route::delete('/destroy-regional/{regional}', [RegionalController::class, 'destroy'])->name('regional.destroy');
+        Route::get('pdf-regional/relpdflistregionais', [RegionalController::class, 'relpdflistregionais'])->name('regional.pdflistregionais');
+
+        // MUNICIPIO
+        Route::get('/index-municipio', [MunicipioController::class, 'index'])->name('municipio.index');
+        Route::get('/create-municipio', [MunicipioController::class, 'create'])->name('municipio.create');
+        Route::post('/store-municipio', [MunicipioController::class, 'store'])->name('municipio.store');
+        Route::get('/edit-municipio/{municipio}', [MunicipioController::class, 'edit'])->name('municipio.edit');
+        Route::put('/update-municipio/{municipio}', [MunicipioController::class, 'update'])->name('municipio.update');
+        Route::delete('/destroy-municipio/{municipio}', [MunicipioController::class, 'destroy'])->name('municipio.destroy');
+        Route::get('pdf-municipio/relpdflistmunicipios', [MunicipioController::class, 'relpdflistmunicipios'])->name('municipio.pdflistmunicipios');
+
 
     });// Final das rotas de acesso a usuários administradores (onlyAdm)
 

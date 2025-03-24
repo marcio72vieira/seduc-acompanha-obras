@@ -67,8 +67,8 @@
                 </a>
                 <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="">Regionais</a>
-                        <a class="nav-link" href="">Municípios</a>
+                        <a class="nav-link" href="{{ route('regional.index') }}">Regionais</a>
+                        <a class="nav-link" href="{{ route('municipio.index') }}">Municípios</a>
                         <a class="nav-link" href="">Escolas</a>
                     </nav>
                 </div>
