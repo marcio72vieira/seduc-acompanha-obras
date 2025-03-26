@@ -38,8 +38,7 @@
                             <td>{{ $municipio->nome }}</td>
                             <td>{{ $municipio->regional->nome }}</td>
                             <td>{{ $municipio->ativo == 1 ? "Sim" : "Não" }}</td>
-                            {{-- <td>{{ $municipio->qtdunidadeatendimentovinc($municipio->id) > 0 ? $municipio->qtdunidadeatendimentovinc($municipio->id) : ''  }}</td> --}}
-                            <td>{{ 0 }}</td>
+                            <td>{{ $municipio->escolas()->count() > 0 ? $municipio->escolas()->count() : ''  }}</td>
                             <td>{{ \Carbon\Carbon::parse($municipio->created_at)->format('d/m/Y') }}</td>
                             <td class="flex-row d-md-flex justify-content-start">
 
@@ -47,7 +46,7 @@
                                     <i class="fa-solid fa-pen-to-square"></i> Editar
                                 </a>
 
-                                {{-- @if($municipio->qtdunidadeatendimentovinc($municipio->id) == 0) --}}
+                                @if($municipio->escolas()->count() == 0)
                                     <form id="formDelete{{ $municipio->id }}" method="POST" action="{{ route('municipio.destroy', ['municipio' => $municipio->id]) }}">
                                         @csrf
                                         @method('delete')
@@ -55,9 +54,9 @@
                                             <i class="fa-regular fa-trash-can"></i> Apagar
                                         </button>
                                     </form>
-                                {{-- @else
-                                    <button type="button" class="btn btn-outline-secondary btn-sm me-1 mb-1"  title="há unidades vinculadas!"> <i class="fa-solid fa-ban"></i> Apagar </button>
-                                @endif --}}
+                                @else
+                                    <button type="button" class="btn btn-outline-secondary btn-sm me-1 mb-1"  title="há escolas vinculadas!"> <i class="fa-solid fa-ban"></i> Apagar </button>
+                                @endif
                             </td>
                         </tr>
                     @empty

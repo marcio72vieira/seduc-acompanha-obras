@@ -23,12 +23,12 @@ class Municipio extends Model
         return $this->belongsTo(Regional::class);
     }
 
-    public function escolas ()
+    public function escolas()
     {
-        return $this->hasMany(Escolas::class);
+        return $this->hasMany(Escola::class);
     }
 
-    public function users ()
+    public function users()
     {
         return $this->hasMany(User::class);
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegionalRequest;
 use App\Models\Regional;
+use App\Models\Municipio;
 use Exception;
 use Illuminate\Support\Str;
 
@@ -19,6 +20,36 @@ class RegionalController extends Controller
 
         return view('admin.regionais.index', ['regionais' => $regionais]);
     }
+
+    public function escolasregional(Regional $regional)
+    {
+        // Recupera a reginal, para que depois na view sejam recuperada as escolas da regional
+        // $regional = Regional::findOrFail($regional->id);
+        // return view('admin.regionais.index_regionaisescolas', ['regional' => $regional]);
+        //
+        // na view, para recuperar as escolas deve-se proceder como abaixo:
+        // @forelse ($regional->escolasDaRegional as $escola)
+        //    {{ $escola->nome }}
+        // @endforelse
+        
+        $regional = Regional::findOrFail($regional->id);
+        // $escolas = $regional->escolasDaRegional()->get();
+        $escolas = $regional->escolasDaRegional()->paginate(10);
+        return view('admin.regionais.escolasregional', ['regional' => $regional, 'escolas' => $escolas]);
+
+    }
+
+
+    public function municipiosregional(Regional $regional)
+    {   
+        $regional = Regional::findOrFail($regional->id);
+     
+        //$municipios = Municipio::where('regional_id', '=', $regional->id)->paginate(10);
+        $municipios = $regional->municipios()->orderBy('nome')->paginate(10);
+
+        return view('admin.regionais.municipiosregional', ['regional' => $regional, 'municipios' => $municipios]);
+
+    }    
 
 
     public function create()
@@ -143,9 +174,10 @@ class RegionalController extends Controller
             <table style="width:1080px; border-collapse: collapse">
                 <tr>
                     <td width="40px" class="col-header-table">ID</td>
-                    <td width="790px" class="col-header-table">NOME</td>
+                    <td width="690px" class="col-header-table">NOME</td>
                     <td width="50px" class="col-header-table">ATIVO</td>
                     <td width="100px" class="col-header-table">MUNICÍPIOS</td>
+                    <td width="100px" class="col-header-table">ESCOLAS</td>
                     <td width="100px" class="col-header-table">CADASTRO</td>
                 </tr>
             </table>

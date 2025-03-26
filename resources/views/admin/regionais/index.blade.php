@@ -25,8 +25,9 @@
                         <th>Nome</th>
                         <th>Ativo</th>
                         <th>Municípios</th>
+                        <th>Escolas</th>
                         <th>Cadastrado</th>
-                        <th width="18%">Ações</th>
+                        <th width="25%">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,11 +37,21 @@
                             <td>{{ $regional->nome }}</td>
                             <td>{{ $regional->ativo == 1 ? "Sim" : "Não" }}</td>
                             <td>{{ $regional->qtdmunicipiosvinc($regional->id) > 0 ? $regional->qtdmunicipiosvinc($regional->id) : ''  }}</td>
+                            <td>{{ $regional->qtdEscolasDaRegional() }}</td>
+                            {{-- <td>@foreach ( $regional->escolasDaRegional as $nomeescola ) {{ $nomeescola->nome}} @endforeach </td> --}}
                             <td>{{ \Carbon\Carbon::parse($regional->created_at)->format('d/m/Y H:i') }}</td>
                             <td class="flex-row d-md-flex justify-content-start">
 
                                 <a href="{{ route('regional.edit', ['regional' => $regional->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
                                     <i class="fa-solid fa-pen-to-square"></i> Editar
+                                </a>
+
+                                <a href="{{ route('regional.municipios', ['regional' => $regional->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
+                                    <i class="fa-solid fa-location-dot"></i> Municípios
+                                </a>
+                                
+                                <a href="{{ route('regional.escolas', ['regional' => $regional->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
+                                    <i class="fa-solid fa-school"></i> Escolas 
                                 </a>
 
                                 @if($regional->qtdmunicipiosvinc($regional->id) == 0)
@@ -54,6 +65,7 @@
                                 @else
                                     <button type="button" class="btn btn-outline-secondary btn-sm me-1 mb-1"  title="há municípios vinculados!"> <i class="fa-solid fa-ban"></i> Apagar </button>
                                 @endif
+
                             </td>
                         </tr>
                     @empty

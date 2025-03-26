@@ -22,6 +22,18 @@ class MunicipioController extends Controller
 
     }
 
+
+    public function escolasmunicipio(Municipio $municipio)
+    {   
+        $municipio = Municipio::findOrFail($municipio->id);
+     
+        //$escolas = Municipio::where('regional_id', '=', $regional->id)->paginate(10);
+        $escolas = $municipio->escolas()->orderBy('nome')->paginate(10);
+
+        return view('admin.municipios.escolasmunicipio', ['municipio' => $municipio, 'escolas' => $escolas]);
+
+    }    
+
     public function create()
     {
         $regionais = Regional::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
