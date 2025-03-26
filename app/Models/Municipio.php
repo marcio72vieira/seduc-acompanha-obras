@@ -23,9 +23,9 @@ class Municipio extends Model
         return $this->belongsTo(Regional::class);
     }
 
-    public function unidadesatendimentos ()
+    public function escolas ()
     {
-        return $this->hasMany(Unidadeatendimento::class);
+        return $this->hasMany(Escolas::class);
     }
 
     public function users ()

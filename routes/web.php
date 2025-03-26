@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RegionalController;
 use App\Http\Controllers\Admin\MunicipioController;
+use App\Http\Controllers\Admin\EscolaController;
 
 
 //---------------------------------------
@@ -93,6 +94,16 @@ Route::group(['middleware' => 'auth'], function(){
         Route::put('/update-municipio/{municipio}', [MunicipioController::class, 'update'])->name('municipio.update');
         Route::delete('/destroy-municipio/{municipio}', [MunicipioController::class, 'destroy'])->name('municipio.destroy');
         Route::get('pdf-municipio/relpdflistmunicipios', [MunicipioController::class, 'relpdflistmunicipios'])->name('municipio.pdflistmunicipios');
+
+        // ESCOLA
+        Route::get('/index-escola', [EscolaController::class, 'index'])->name('escola.index');
+        Route::get('/create-escola', [EscolaController::class, 'create'])->name('escola.create');
+        Route::post('/store-escola', [EscolaController::class, 'store'])->name('escola.store');
+        Route::get('/show-escola/{escola}', [EscolaController::class, 'show'])->name('escola.show');
+        Route::get('/edit-escola/{escola}', [EscolaController::class, 'edit'])->name('escola.edit');
+        Route::put('/update-escola/{escola}', [EscolaController::class, 'update'])->name('escola.update');
+        Route::delete('/destroy-escola/{escola}', [EscolaController::class, 'destroy'])->name('escola.destroy');
+        Route::get('pdf-escola/relpdflistescolas', [EscolaController::class, 'relpdflistescolas'])->name('escola.pdflistescolas');
 
 
     });// Final das rotas de acesso a usuários administradores (onlyAdm)

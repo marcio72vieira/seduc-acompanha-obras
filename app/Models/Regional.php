@@ -23,10 +23,10 @@ class Regional extends Model
     }
 
 
-   /*  public function unidadesatendimentos ()
+    public function escolas ()
     {
-        return $this->hasMany(Unidadeatendimento::class);
-    } */
+        return $this->hasMany(Escolas::class);
+    }
 
     public function users ()
     {
