@@ -1,4 +1,106 @@
 *********************************************
+*    USO DO LARAVEL COM DATATABLE    *
+*********************************************
+1   -   Acessar página do link abaixo:
+            https://cdn.datatables.net/
+
+2   -   Na página acessada, ir para a seção:
+            DataTables CDN
+
+3   -   Na secão anterior(DataTables CDN), dentre os vários botões apresentado, clicar no botão 
+            [DataTables]. 
+
+4   -   Escolha qualquer outro botão conforme sua necessidade:
+            [Bootstrap3] [Bootstrap5] [Bootstrap5] [Bulman] [Fundation] [JQuery UI] [SemanticUI]
+
+5   -   Depois de escolhido o botão conforme sua necessidade (A nossa é a mais simples possível) botão [DataTables].
+        Na seção Release, click nos links que exibiraão os códigos fontes dos arquvios CSS e JS do botão selecionado.
+
+6   -   Selecione todo o código-fonte exibido na pagina HTML (CTRL + A) e cole em um arquivo nomeado com a sua 
+        preferência na public/csse  e public/js. Exemplo:
+            public/css/datatablelocalcss/datatable_local_simple.css
+            public/js/datatablelocaljs/datatable_local_simple.js
+
+7   -   No arquivo do layout principal, invoque os arquivos em seus respectivos locais, como abaixo:
+        ...
+         <head>
+         <link href="{{ asset('css/datatablelocalcss/datatable_local_simple.css') }}" rel="stylesheet" />
+        ...
+        ...
+        <script src="{{ asset('js/datatablelocaljs/datatable_local_simple.js') }}"></script>
+        </body>
+
+8   -   Utilize o datatable conforme abaixo na página desejada:
+            <table id="datatablesSimple" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Office</th>
+                        <th>Age</th>
+                        <th>Start date</th>
+                        <th>Salary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Tiger Nixon</td>
+                        <td>System Architect</td>
+                        <td>Edinburgh</td>
+                        <td>61</td>
+                        <td>2011/04/25</td>
+                        <td>$320,800</td>
+                    </tr>
+                    <tr>
+                        <td>Rhona Davidson</td>
+                        <td>Integration Specialist</td>
+                        <td>Tokyo</td>
+                        <td>55</td>
+                        <td>2010/10/14</td>
+                        <td>$327,900</td>
+                    </tr>
+                </tbody>
+            </table>
+
+9   -   Faça as configurações necessárias conforme abaixo na seção scripts da página desejada.
+            @section('scripts')
+                <script>
+                    $('#datatablesSimple').DataTable({});
+                </script>
+            @endsection
+
+10  -   Caso deseje agregar funcionalidades ao sua tabela com datatables, siga as recomendações descritas
+        na seções Extensions da página: https://cdn.datatables.net/
+        Exemplo:
+            AutoFill
+            Buttons
+            ColReorder
+            etc...
+
+
+11  -   TRADUZINDO O DATATABLE PARA O PORTUGUÊS
+        a)  -   No google pesquisar por:
+                    datatable portugues
+
+        b)  -   Acessar o link: 
+                    https://datatables.net/forums/discussion/73203/data-table-translate
+
+        c)  -   Insira o trecho de código abaixo nas configurações de seua datatable, para que a tradução seja via CDN
+                    @section('scripts')
+                    <script>
+                        $('#datatablesSimple').DataTable({
+                            language: {
+                                url: "https://cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+                            },
+                        });
+                    </script>
+                    @endsection
+
+        
+
+
+
+*********************************************
 *    ENVIO DE EMAIL COM SISTEMA DE FILAS    *
 *********************************************
 1   -   Criar o Jobs com o comando abaixo:

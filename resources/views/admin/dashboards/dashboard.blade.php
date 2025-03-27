@@ -118,117 +118,16 @@
                 DataTable Example
             </div>
             <div class="card-body">
-                <table id="datatablesSimple">
-                    <thead>
+                <table id="datatablesSimple" class="table table-striped table-hover table-bordered display" style="width:100%">
+                    <thead class="table-light">
                         <tr>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Office</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th>
+                            <th>ID</th>
+                            <th>Nome Completo</th>
+                            <th>CPF</th>
+                            <th>CARGO</th>
+                            <th>PERFIL</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Office</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                        </tr>
-                        <tr>
-                            <td>Garrett Winters</td>
-                            <td>Accountant</td>
-                            <td>Tokyo</td>
-                            <td>63</td>
-                            <td>2011/07/25</td>
-                            <td>$170,750</td>
-                        </tr>
-                        <tr>
-                            <td>Ashton Cox</td>
-                            <td>Junior Technical Author</td>
-                            <td>San Francisco</td>
-                            <td>66</td>
-                            <td>2009/01/12</td>
-                            <td>$86,000</td>
-                        </tr>
-                        <tr>
-                            <td>Cedric Kelly</td>
-                            <td>Senior Javascript Developer</td>
-                            <td>Edinburgh</td>
-                            <td>22</td>
-                            <td>2012/03/29</td>
-                            <td>$433,060</td>
-                        </tr>
-                        <tr>
-                            <td>Airi Satou</td>
-                            <td>Accountant</td>
-                            <td>Tokyo</td>
-                            <td>33</td>
-                            <td>2008/11/28</td>
-                            <td>$162,700</td>
-                        </tr>
-                        <tr>
-                            <td>Brielle Williamson</td>
-                            <td>Integration Specialist</td>
-                            <td>New York</td>
-                            <td>61</td>
-                            <td>2012/12/02</td>
-                            <td>$372,000</td>
-                        </tr>
-                        <tr>
-                            <td>Herrod Chandler</td>
-                            <td>Sales Assistant</td>
-                            <td>San Francisco</td>
-                            <td>59</td>
-                            <td>2012/08/06</td>
-                            <td>$137,500</td>
-                        </tr>
-                        <tr>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                        <tr>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                        <tr>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                        <tr>
-                            <td>Rhona Davidson</td>
-                            <td>Integration Specialist</td>
-                            <td>Tokyo</td>
-                            <td>55</td>
-                            <td>2010/10/14</td>
-                            <td>$327,900</td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
         </div>
@@ -236,5 +135,34 @@
 @endsection
 
 @section('scripts')
+    <script>
+        $('#datatablesSimple').DataTable({
+            // ordering: true,  // Habilita/Desabilita a ordenação. Defult: true
+            // scrollY: 300,    //Define a altura da tabela para rolagem vertical
+
+            // Menu da quantidade de registros a serem exibidos. O valor default é 10
+            // lengthMenu: [5, 10, 15, 20],
+            lengthMenu: [1, 2, 3],
+
+            // Exibe/Esconde o botão de filtro Default true
+            // bFilter: true,
+
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+            },
+
+            // Indica a mensagem de processamento e que os dados virão de um servidor
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('user.ajaxgetusers') }}",
+            columns: [
+                    { data: 'id' },
+                    { data: 'nomecompleto'},
+                    { data: 'cpf' },
+                    { data: 'cargo' },
+                    { data: 'perfil' },
+            ],
+        });
+    </script>
 
 @endsection

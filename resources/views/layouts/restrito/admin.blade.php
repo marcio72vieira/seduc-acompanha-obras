@@ -7,10 +7,19 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Dashboard - SB Admin</title>
-        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
 
         {{-- Link CSS do SBADMIN --}}
         <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+
+        {{-- Link do estilo CSS do datatable via CDN --}}
+        {{-- <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" /> --}}
+        
+        {{-- Link do estilo CSS do datatable local padrão --}}
+        {{-- <link href="{{ asset('css/datatable/datatable_padrao.css') }}" rel="stylesheet" /> --}}
+
+        {{-- Link do estilo CSS do datatable local bootstrap5 --}}
+        <link href="{{ asset('css/datatable/datatable_bootstrap5.css') }}" rel="stylesheet" />
+
 
         {{-- Inlcuindo o css e js do SELECT2 via CDN Obs: o jquery, deve ficar antes do JS do select2 --}}
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -53,12 +62,20 @@
 
         {{-- ChartJS --}}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/chart-area-demo.js"></script>
-        <script src="assets/demo/chart-bar-demo.js"></script>
+        {{-- <script src="assets/demo/chart-area-demo.js"></script> --}}
+        {{-- <script src="assets/demo/chart-bar-demo.js"></script> --}}
 
-        {{-- Datatable --}}
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
+
+        {{-- Link do script JS do datatable via CDN --}}
+        {{-- <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    
+        {{-- Link do script JS do datatable local padrão --}}
+        {{-- <script src="{{ asset('js/datatable/datatable_padrao.js') }}"></script> --}}
+
+        {{-- Link do script JS do datatable local bootstrap5 --}}
+        <script src="{{ asset('js/datatable/datatable_bootstrap5a.js') }}"></script>
+        <script src="{{ asset('js/datatable/datatable_bootstrap5b.js') }}"></script>
+
 
         <!--Plugin jQuery para máscaras de campos -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserPerfilRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\EmailAcesso;
@@ -323,6 +324,75 @@ class UserController extends Controller
         $mpdf->WriteHTML($html);
         $mpdf->Output($fileName, 'I');  // Exibe o arquivo no browse   || $mpdf->Output($fileName, 'F');  Gera o arquivo na pasta pública
 
+    }
+
+    public function ajaxgetusers(Request $request)
+    {
+        ## Read value
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $rowperpage = $request->get("length"); // Rows display per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+        $columnIndex = $columnIndex_arr[0]['column']; // Column index
+        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+        $searchValue = $search_arr['value']; // Search value
+
+        $totalRecords = User::select('count(*) as allcount')->count();
+        $totalRecordswithFilter = DB::table('users')
+            ->select('count(*) as allcount')
+            ->where('users.nomecompleto', 'like', '%' .$searchValue . '%')
+            ->orWhere('users.cpf', 'like', '%' . $searchValue . '%' )
+            ->orWhere('users.cargo', 'like', '%' . $searchValue . '%' )
+            ->orWhere('users.perfil', 'like', '%' . $searchValue . '%' )
+            ->count();
+
+        // Fetch records (restaurantes)
+        $users = DB::table('users')
+        ->select('users.id', 'users.nomecompleto', 'users.cpf', 'users.cargo', 'users.perfil')
+        ->where('users.nomecompleto', 'like', '%' .$searchValue . '%')
+        ->orWhere('users.cpf', 'like', '%' .$searchValue . '%')
+        ->orWhere('users.cargo', 'like', '%' . $searchValue . '%' )
+        ->orWhere('users.perfil', 'like', '%' . $searchValue . '%' )
+        ->orderBy($columnName,$columnSortOrder)
+        ->skip($start)
+        ->take($rowperpage)
+        ->get();
+
+        $data_arr = array();
+
+        foreach($users as $user){
+            // campos a serem exibidos
+            $id = $user->id;
+            $nomecompleto = $user->nomecompleto;
+            $cpf = $user->cpf;
+            $cargo = $user->cargo;
+            $perfil = ($user->perfil == 'adm' ? 'Administrador' : ($user->perfil == 'con' ? 'Consultor' : 'Operador'));
+            
+            $data_arr[] = array(
+                "id" => $id,
+                "nomecompleto" => $nomecompleto,
+                "cpf" => $cpf,
+                "cargo" => $cargo,
+                "perfil" => $perfil,
+            );
+        }
+
+        // Obs: iTotalRecordes o "i" é referente a information. aaData o "a" é referente a Ajax
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => intval($totalRecords),
+            "iTotalDisplayRecords" => intval($totalRecordswithFilter),
+            "aaData" => $data_arr
+        );
+
+        echo json_encode($response);
+        exit;
     }
 
 }

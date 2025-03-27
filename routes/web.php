@@ -76,6 +76,8 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/sendemail-user/{user}', [UserController::class, 'sendemail'])->name('user.sendemail');
         Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
         Route::get('pdf-user/relpdflistusers', [UserController::class, 'relpdflistusers'])->name('user.pdflistusers');
+        Route::get('pdf-user/relpdflistusers', [UserController::class, 'relpdflistusers'])->name('user.pdflistusers');
+        Route::get('/ajaxgetusers-user', [UserController::class, 'ajaxgetusers'])->name('user.ajaxgetusers');
 
         // REGIONAL
         Route::get('/index-regional', [RegionalController::class, 'index'])->name('regional.index');
