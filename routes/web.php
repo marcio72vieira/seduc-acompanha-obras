@@ -86,9 +86,10 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/edit-regional/{regional}', [RegionalController::class, 'edit'])->name('regional.edit');
         Route::put('/update-regional/{regional}', [RegionalController::class, 'update'])->name('regional.update');
         Route::delete('/destroy-regional/{regional}', [RegionalController::class, 'destroy'])->name('regional.destroy');
-        Route::get('pdf-regional/relpdflistregionais', [RegionalController::class, 'relpdflistregionais'])->name('regional.pdflistregionais');
+        Route::get('pdf-regional/relpdflistregionais', [RegionalController::class, 'relpdflistregionais'])->name('regional.relpdflistregionais');
         Route::get('/escolas-regional/{regional}', [RegionalController::class, 'escolasregional'])->name('regional.escolas');
         Route::get('/municipios-regional/{regional}', [RegionalController::class, 'municipiosregional'])->name('regional.municipios');
+        Route::get('pdf-regional/relpdflistmunicipiosregional/{regional}', [RegionalController::class, 'relpdflistmunicipiosregional'])->name('regional.relpdflistmunicipiosregional');
 
 
         // MUNICIPIO

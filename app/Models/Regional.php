@@ -25,7 +25,7 @@ class Regional extends Model
 
     public function escolas ()
     {
-        return $this->hasMany(Escolas::class);
+        return $this->hasMany(Escola::class);
     }
 
     public function users ()

@@ -10,7 +10,7 @@
         <div class="card-header hstack gap-2">
             <span class="ms-auto d-sm-flex flex-row mt-2 mb-2">
                 <a href="{{ route('regional.index') }}" class="btn  btn-outline-secondary btn-sm me-1">Retornar</a>
-                {{-- <a href="{{ route('municipio.pdflistregionais') }}" class="btn btn-secondary btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i> pdf</a> --}}
+                <a href="{{ route('regional.relpdflistmunicipiosregional', ['regional' => $regional->id]) }}" class="btn btn-secondary btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i> pdf</a>
             </span>
         </div>
 
@@ -37,10 +37,14 @@
                             <td>{{ $municipio->ativo == 1 ? "Sim" : "Não" }}</td>
                             <td>{{ $municipio->escolas()->count() > 0 ? $municipio->escolas()->count() : '' }}</td>
                             <td>{{ \Carbon\Carbon::parse($municipio->created_at)->format('d/m/Y H:i') }}</td>
-                            <td class="flex-row d-md-flex justify-content-start">            
-                                <a href="{{ route('municipio.escolas', ['municipio' => $municipio->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
-                                    <i class="fa-solid fa-school"></i> Escolas
-                                </a>
+                            <td class="flex-row d-md-flex justify-content-start">
+                                @if($municipio->escolas->count() != 0)           
+                                    <a href="{{ route('municipio.escolas', ['municipio' => $municipio->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
+                                        <i class="fa-solid fa-school"></i> Escolas
+                                    </a>
+                                @else
+                                    <a href="" class="mb-1 btn btn-outline-secondary  btn-sm me-1"><i class="fa-solid fa-ban"></i> Escolas</a>
+                                @endif
                             </td>
                         </tr>
                     @empty

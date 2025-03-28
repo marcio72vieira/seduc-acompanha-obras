@@ -10,7 +10,7 @@
         <div class="card-header hstack gap-2">
             <span class="ms-auto d-sm-flex flex-row mt-2 mb-2">
                 <a href="{{ route('regional.create') }}" class="btn btn-primary btn-sm me-1"><i class="fa-regular fa-square-plus"></i> Novo</a>
-                <a href="{{ route('regional.pdflistregionais') }}" class="btn btn-secondary btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i> pdf</a>
+                <a href="{{ route('regional.relpdflistregionais') }}" class="btn btn-secondary btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i> pdf</a>
             </span>
         </div>
 
@@ -36,8 +36,8 @@
                             <td>{{ $regional->id }}</th>
                             <td>{{ $regional->nome }}</td>
                             <td>{{ $regional->ativo == 1 ? "Sim" : "Não" }}</td>
-                            <td>{{ $regional->qtdmunicipiosvinc($regional->id) > 0 ? $regional->qtdmunicipiosvinc($regional->id) : ''  }}</td>
-                            <td>{{ $regional->qtdEscolasDaRegional() }}</td>
+                            <td>{{ $regional->municipios->count() > 0 ? $regional->municipios->count() : '' }}</td>
+                            <td>{{ $regional->escolas->count() > 0 ? $regional->escolas->count() : '' }}</td>
                             {{-- <td>@foreach ( $regional->escolasDaRegional as $nomeescola ) {{ $nomeescola->nome}} @endforeach </td> --}}
                             <td>{{ \Carbon\Carbon::parse($regional->created_at)->format('d/m/Y H:i') }}</td>
                             <td class="flex-row d-md-flex justify-content-start">
@@ -46,13 +46,21 @@
                                     <i class="fa-solid fa-pen-to-square"></i> Editar
                                 </a>
 
-                                <a href="{{ route('regional.municipios', ['regional' => $regional->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
-                                    <i class="fa-solid fa-location-dot"></i> Municípios
-                                </a>
-                                
-                                <a href="{{ route('regional.escolas', ['regional' => $regional->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
-                                    <i class="fa-solid fa-school"></i> Escolas 
-                                </a>
+                                @if($regional->municipios->count() != 0)
+                                    <a href="{{ route('regional.municipios', ['regional' => $regional->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
+                                        <i class="fa-solid fa-location-dot"></i> Municípios
+                                    </a>
+                                @else
+                                    <a href="" class="mb-1 btn btn-outline-secondary  btn-sm me-1"><i class="fa-solid fa-ban"></i> Municípios</a>
+                                @endif
+
+                                @if($regional->escolas->count() != 0)
+                                    <a href="{{ route('regional.escolas', ['regional' => $regional->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
+                                        <i class="fa-solid fa-school"></i> Escolas 
+                                    </a>
+                                @else
+                                    <a href="" class="mb-1 btn btn-outline-secondary  btn-sm me-1"><i class="fa-solid fa-ban"></i> Escolas</a>
+                                @endif
 
                                 @if($regional->qtdmunicipiosvinc($regional->id) == 0)
                                     <form id="formDelete{{ $regional->id }}" method="POST" action="{{ route('regional.destroy', ['regional' => $regional->id]) }}">
