@@ -10,6 +10,7 @@
         <div class="card-header hstack gap-2">
             <span class="ms-auto d-sm-flex flex-row mt-2 mb-2">
                 <a href="{{ url()->previous() }}" class="btn  btn-outline-secondary btn-sm me-1">Retornar</a>
+                <a href="{{ route('municipio.relpdflistescolasmunicipio', ['municipio' => $municipio->id]) }}" class="btn btn-secondary btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i> pdf</a>
             </span>
         </div>
 
@@ -24,6 +25,8 @@
                         <th>Nome</th>
                         <th>Ativo</th>
                         <th>Endereço</th>
+                        <th>Município</th>
+                        <th>Regional</th>
                         <th>Cadastrado</th>
                     </tr>
                 </thead>
@@ -34,6 +37,8 @@
                             <td>{{ $escola->nome }}</td>
                             <td>{{ $escola->ativo == 1 ? "Sim" : "Não" }}</td>
                             <td>{{ $escola->endereco }}, {{ $escola->numero }}, Bairro: {{ $escola->bairro }} CEP: {{ $escola->cep }} telefone: {{ $escola->fone }}</td>
+                            <td>{{ $escola->municipio->nome }}</td>
+                            <td>{{ $escola->municipio->regional->nome }}</td>
                             <td>{{ \Carbon\Carbon::parse($escola->created_at)->format('d/m/Y H:i') }}</td>
                         </tr>
                     @empty

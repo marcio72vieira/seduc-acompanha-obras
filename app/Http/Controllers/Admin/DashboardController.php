@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\SimpleExcel\SimpleExcelWriter;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -120,6 +121,79 @@ class DashboardController extends Controller
         }
 
     }
+
+
+
+    public function ajaxgetusers(Request $request)
+    {
+        ## Read value
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $rowperpage = $request->get("length"); // Rows display per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+        $columnIndex = $columnIndex_arr[0]['column']; // Column index
+        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+        $searchValue = $search_arr['value']; // Search value
+
+        $totalRecords = User::select('count(*) as allcount')->count();
+        $totalRecordswithFilter = DB::table('users')
+            ->select('count(*) as allcount')
+            ->where('users.nomecompleto', 'like', '%' .$searchValue . '%')
+            ->orWhere('users.cpf', 'like', '%' . $searchValue . '%' )
+            ->orWhere('users.cargo', 'like', '%' . $searchValue . '%' )
+            ->orWhere('users.perfil', 'like', '%' . $searchValue . '%' )
+            ->count();
+
+        // Fetch records (restaurantes)
+        $users = DB::table('users')
+        ->select('users.id', 'users.nomecompleto', 'users.cpf', 'users.cargo', 'users.fone', 'users.perfil', 'users.email')
+        ->where('users.nomecompleto', 'like', '%' .$searchValue . '%')
+        ->orWhere('users.cpf', 'like', '%' .$searchValue . '%')
+        ->orWhere('users.cargo', 'like', '%' . $searchValue . '%' )
+        ->orWhere('users.perfil', 'like', '%' . $searchValue . '%' )
+        ->orderBy($columnName,$columnSortOrder)
+        ->skip($start)
+        ->take($rowperpage)
+        ->get();
+
+        $data_arr = array();
+
+        foreach($users as $user){
+            // campos a serem exibidos no DataTable (Os nomes devem correspoder à propriedde Column:[] da requisição Ajax)
+            $id = $user->id;
+            $nomecompleto = $user->nomecompleto;
+            $cpf = $user->cpf;
+            $cargo = $user->cargo;
+            $perfil = ($user->perfil == 'adm' ? 'Administrador' : ($user->perfil == 'con' ? 'Consultor' : 'Operador'));
+            $contato = $user->fone." / ".$user->email;
+
+            $data_arr[] = array(
+                "id" => $id,
+                "nomecompleto" => $nomecompleto,
+                "cpf" => $cpf,
+                "cargo" => $cargo,
+                "perfil" => $perfil,
+                "contato" => $contato,
+            );
+        }
+
+        // Obs: iTotalRecordes o "i" é referente a information. aaData o "a" é referente a Ajax
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => intval($totalRecords),
+            "iTotalDisplayRecords" => intval($totalRecordswithFilter),
+            "aaData" => $data_arr
+        );
+
+        echo json_encode($response);
+        exit;
+    }    
 
     
 

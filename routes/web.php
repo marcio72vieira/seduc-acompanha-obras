@@ -62,6 +62,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/edit-profile-user', [UserController::class, 'editprofile'])->name('user.editprofile');
     Route::put('/update-profile-user/{user}', [UserController::class, 'updateprofile'])->name('user.updateprofile');
 
+    Route::get('/ajaxgetusers-dashboard', [DashboardController::class, 'ajaxgetusers'])->name('dashboard.ajaxgetusers');
+
 
     // Acesso apenas a usuários Admnistradores (onlyAdm)
     Route::group(['middleware' => 'can:onlyAdm'], function(){
@@ -77,7 +79,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
         Route::get('pdf-user/relpdflistusers', [UserController::class, 'relpdflistusers'])->name('user.pdflistusers');
         Route::get('pdf-user/relpdflistusers', [UserController::class, 'relpdflistusers'])->name('user.pdflistusers');
-        Route::get('/ajaxgetusers-user', [UserController::class, 'ajaxgetusers'])->name('user.ajaxgetusers');
+
 
         // REGIONAL
         Route::get('/index-regional', [RegionalController::class, 'index'])->name('regional.index');
@@ -90,6 +92,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/escolas-regional/{regional}', [RegionalController::class, 'escolasregional'])->name('regional.escolas');
         Route::get('/municipios-regional/{regional}', [RegionalController::class, 'municipiosregional'])->name('regional.municipios');
         Route::get('pdf-regional/relpdflistmunicipiosregional/{regional}', [RegionalController::class, 'relpdflistmunicipiosregional'])->name('regional.relpdflistmunicipiosregional');
+        Route::get('pdf-regional/relpdflistescolasregional/{regional}', [RegionalController::class, 'relpdflistescolasregional'])->name('regional.relpdflistescolasregional');
 
 
         // MUNICIPIO
@@ -101,6 +104,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::delete('/destroy-municipio/{municipio}', [MunicipioController::class, 'destroy'])->name('municipio.destroy');
         Route::get('pdf-municipio/relpdflistmunicipios', [MunicipioController::class, 'relpdflistmunicipios'])->name('municipio.pdflistmunicipios');
         Route::get('/escolas-municipio/{municipio}', [MunicipioController::class, 'escolasmunicipio'])->name('municipio.escolas');
+        Route::get('pdf-municipio/relpdflistescolasmunicipio/{municipio}', [MunicipioController::class, 'relpdflistescolasmunicipio'])->name('municipio.relpdflistescolasmunicipio');
 
         // ESCOLA
         Route::get('/index-escola', [EscolaController::class, 'index'])->name('escola.index');
