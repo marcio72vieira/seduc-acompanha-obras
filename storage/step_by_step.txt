@@ -1263,3 +1263,28 @@
         b) pasta: app/SeatiMail/Transport
             b.1) Arquivos desta pasta: app/SeatiMail/Transport/SeatiMailTransport.php
 
+
+
+
+
+
+***********************************
+PEDAÇOS DE SCRIPT PARA USO FUTURO
+***********************************
+@if (count($errors) >0)
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{$error}}</li>
+                    @endforeach
+
+                </ul>
+            </div>
+        @endif
+
+        @if (\Session::has('success'))
+            <div class="alert alert-success">
+                <p>{{ \Session::get('success') }}</p>
+
+            </div>
+        @endif

@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RegionalController;
 use App\Http\Controllers\Admin\MunicipioController;
 use App\Http\Controllers\Admin\EscolaController;
-
+use App\Http\Controllers\Admin\DatatableController;
 
 //---------------------------------------
 //     ROTAS TESTE ENVIO DE EMAIL      //
@@ -115,6 +115,20 @@ Route::group(['middleware' => 'auth'], function(){
         Route::put('/update-escola/{escola}', [EscolaController::class, 'update'])->name('escola.update');
         Route::delete('/destroy-escola/{escola}', [EscolaController::class, 'destroy'])->name('escola.destroy');
         Route::get('pdf-escola/relpdflistescolas', [EscolaController::class, 'relpdflistescolas'])->name('escola.pdflistescolas');
+
+        // DATATABLE
+        Route::get('/index-datatable', [DatatableController::class, 'index'])->name('datatable.index');
+        Route::get('/create-datatable', [DatatableController::class, 'create'])->name('datatable.create');
+        Route::post('/store-datatable', [DatatableController::class, 'store'])->name('datatable.store');
+        /* 
+        Route::get('/show-user/{user}', [DatatableController::class, 'show'])->name('user.show');
+        Route::get('/edit-user/{user}', [DatatableController::class, 'edit'])->name('user.edit');
+        Route::put('/update-user/{user}', [DatatableController::class, 'update'])->name('user.update');
+        Route::get('/sendemail-user/{user}', [DatatableController::class, 'sendemail'])->name('user.sendemail');
+        Route::delete('/destroy-user/{user}', [DatatableController::class, 'destroy'])->name('user.destroy');
+        Route::get('pdf-user/relpdflistusers', [DatatableController::class, 'relpdflistusers'])->name('user.pdflistusers');
+        Route::get('pdf-user/relpdflistusers', [DatatableController::class, 'relpdflistusers'])->name('user.pdflistusers'); 
+        */        
 
 
     });// Final das rotas de acesso a usuários administradores (onlyAdm)
