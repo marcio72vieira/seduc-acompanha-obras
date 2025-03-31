@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
@@ -13,7 +14,7 @@
 
         {{-- Link do estilo CSS do datatable via CDN --}}
         {{-- <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" /> --}}
-        
+
         {{-- Link do estilo CSS do datatable local padrão --}}
         {{-- <link href="{{ asset('css/datatable/datatable_padrao.css') }}" rel="stylesheet" /> --}}
 
@@ -68,7 +69,7 @@
 
         {{-- Link do script JS do datatable via CDN --}}
         {{-- <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-    
+
         {{-- Link do script JS do datatable local padrão --}}
         {{-- <script src="{{ asset('js/datatable/datatable_padrao.js') }}"></script> --}}
 

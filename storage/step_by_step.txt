@@ -7,8 +7,8 @@
 2   -   Na página acessada, ir para a seção:
             DataTables CDN
 
-3   -   Na secão anterior(DataTables CDN), dentre os vários botões apresentado, clicar no botão 
-            [DataTables]. 
+3   -   Na secão anterior(DataTables CDN), dentre os vários botões apresentado, clicar no botão
+            [DataTables].
 
 4   -   Escolha qualquer outro botão conforme sua necessidade:
             [Bootstrap3] [Bootstrap5] [Bootstrap5] [Bulman] [Fundation] [JQuery UI] [SemanticUI]
@@ -16,7 +16,7 @@
 5   -   Depois de escolhido o botão conforme sua necessidade (A nossa é a mais simples possível) botão [DataTables].
         Na seção Release, click nos links que exibiraão os códigos fontes dos arquvios CSS e JS do botão selecionado.
 
-6   -   Selecione todo o código-fonte exibido na pagina HTML (CTRL + A) e cole em um arquivo nomeado com a sua 
+6   -   Selecione todo o código-fonte exibido na pagina HTML (CTRL + A) e cole em um arquivo nomeado com a sua
         preferência na public/csse  e public/js. Exemplo:
             public/css/datatablelocalcss/datatable_local_simple.css
             public/js/datatablelocaljs/datatable_local_simple.js
@@ -82,7 +82,7 @@
         a)  -   No google pesquisar por:
                     datatable portugues
 
-        b)  -   Acessar o link: 
+        b)  -   Acessar o link:
                     https://datatables.net/forums/discussion/73203/data-table-translate
 
         c)  -   Insira o trecho de código abaixo nas configurações de seua datatable, para que a tradução seja via CDN
@@ -96,7 +96,7 @@
                     </script>
                     @endsection
 
-        
+
 
 
 
@@ -1288,3 +1288,52 @@ PEDAÇOS DE SCRIPT PARA USO FUTURO
 
             </div>
         @endif
+
+
+
+// Obtém os dados do usuário
+        const formNovoUsuario =  document.getElementById("formCadastrarUsuario");
+        if(formNovoUsuario){
+            formNovoUsuario.addEventListener("submit", async(e)  => {
+                e.preventDefault();
+                const formDadosFormularioCadastrarUsuario =  new FormData(formNovoUsuario);
+                //alert(formDadosFormularioCadastrarUsuario);
+            })
+        }
+
+
+
+/*------------------------------------------
+        --------------------------------------------
+        Create Product Code
+        --------------------------------------------
+        --------------------------------------------
+        $('#formCadastrarUsuario').submit(function(e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+            $('#saveBtn').html('Sending...');
+
+            $.ajax({
+                    type:'POST',
+                    url: "{{ route('datatable.store') }}",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: (response) => {
+                        $('#saveBtn').html('Submit');
+                        $('#productForm').trigger("reset");
+                        $('#ajaxModel').modal('hide');
+                        table.draw();
+                    },
+                    error: function(response){
+                        $('#saveBtn').html('Submit');
+                        $('#productForm').find(".print-error-msg").find("ul").html('');
+                        $('#productForm').find(".print-error-msg").css('display','block');
+                        $.each( response.responseJSON.errors, function( key, value ) {
+                            $('#productForm').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                        });
+                    }
+            });
+
+        });*/
