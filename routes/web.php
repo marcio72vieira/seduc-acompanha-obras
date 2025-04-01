@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RegionalController;
 use App\Http\Controllers\Admin\MunicipioController;
 use App\Http\Controllers\Admin\EscolaController;
+use App\Http\Controllers\Admin\ObjetoController;
 use App\Http\Controllers\Admin\DatatableController;
 
 //---------------------------------------
@@ -116,19 +117,30 @@ Route::group(['middleware' => 'auth'], function(){
         Route::delete('/destroy-escola/{escola}', [EscolaController::class, 'destroy'])->name('escola.destroy');
         Route::get('pdf-escola/relpdflistescolas', [EscolaController::class, 'relpdflistescolas'])->name('escola.pdflistescolas');
 
+
+        // OBJETO
+        Route::get('/index-objeto', [ObjetoController::class, 'index'])->name('objeto.index');
+        Route::get('/create-objeto', [ObjetoController::class, 'create'])->name('objeto.create');
+        Route::post('/store-objeto', [ObjetoController::class, 'store'])->name('objeto.store');
+        Route::get('/edit-objeto/{objeto}', [ObjetoController::class, 'edit'])->name('objeto.edit');
+        Route::put('/update-objeto/{objeto}', [ObjetoController::class, 'update'])->name('objeto.update');
+        Route::delete('/destroy-objeto/{objeto}', [ObjetoController::class, 'destroy'])->name('objeto.destroy');
+        Route::get('pdf-objeto/relpdflistobjetos', [ObjetoController::class, 'relpdflistobjetos'])->name('objeto.relpdflistobjetos');
+
+
         // DATATABLE
         Route::get('/index-datatable', [DatatableController::class, 'index'])->name('datatable.index');
         Route::get('/create-datatable', [DatatableController::class, 'create'])->name('datatable.create');
         Route::post('/store-datatable', [DatatableController::class, 'store'])->name('datatable.store');
-        /* 
+        /*
         Route::get('/show-user/{user}', [DatatableController::class, 'show'])->name('user.show');
         Route::get('/edit-user/{user}', [DatatableController::class, 'edit'])->name('user.edit');
         Route::put('/update-user/{user}', [DatatableController::class, 'update'])->name('user.update');
         Route::get('/sendemail-user/{user}', [DatatableController::class, 'sendemail'])->name('user.sendemail');
         Route::delete('/destroy-user/{user}', [DatatableController::class, 'destroy'])->name('user.destroy');
         Route::get('pdf-user/relpdflistusers', [DatatableController::class, 'relpdflistusers'])->name('user.pdflistusers');
-        Route::get('pdf-user/relpdflistusers', [DatatableController::class, 'relpdflistusers'])->name('user.pdflistusers'); 
-        */        
+        Route::get('pdf-user/relpdflistusers', [DatatableController::class, 'relpdflistusers'])->name('user.pdflistusers');
+        */
 
 
     });// Final das rotas de acesso a usuários administradores (onlyAdm)
