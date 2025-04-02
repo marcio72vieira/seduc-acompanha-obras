@@ -1337,3 +1337,10 @@ PEDAÇOS DE SCRIPT PARA USO FUTURO
             });
 
         });*/
+
+
+
+AJAX
+error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                }

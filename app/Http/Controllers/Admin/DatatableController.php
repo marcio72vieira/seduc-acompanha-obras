@@ -77,9 +77,12 @@ class DatatableController extends Controller
         $dados_validados = $request->validated();
 
         if(!$dados_validados){
+        // if($dados_validados->fails()){
+        // if(!$dados_validados->passes()){
             return response()->json([
                 'status' => 400,
                 'errors' => $dados_validados->messages()
+                //'error' => $dados_validados->errors()->toArray()
             ]);
         } else {
             // Cadastrar no banco de dados na tabela usuários
@@ -98,7 +101,7 @@ class DatatableController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'errors' => "Usuário cadastrado com sucesso!"
+                'msg' => "Usuário cadastrado com sucesso!"
             ]);
 
         }

@@ -61,10 +61,9 @@
                                     <div class="mb-4 row">
                                         <label for="nomecompleto" class="col-sm-2 col-form-label">Nome Completo <span class="small text-danger">*</span></label>
                                         <div class="col-sm-10">
-                                        <input type="text" name="nomecompleto" value="{{ old('nomecompleto') }}" class="form-control" id="nomecompleto" placeholder="Nome completo" >
-                                        @error('nomecompleto')
-                                            <small style="color: red">{{$message}}</small>
-                                        @enderror
+                                            <input type="text" name="nomecompleto" value="{{ old('nomecompleto') }}" class="form-control" id="nomecompleto" placeholder="Nome completo" >
+                                            {{-- <small id="nomecompleto_error" style="color: red"></small> --}}
+                                            <span class="text-danger error-text nomecompleto_error"></span>
                                         </div>
                                     </div>
 
@@ -275,9 +274,18 @@
                 dataType : "json",
                 data: data,
                 success: function(response){
+                    if(response.status == 400){
+                        // $.each(response.error, function(key, value){
+                        //     $("span."+key+"_error").text(value[0]);
+                        // });
+                        //console.log(response.errors);
+                        console.log("Error de Validacao");
+                    }
                     console.log(response);
                     $("#modalCadastrarUsuario").modal('hide');
-                }
+                },
+
+
             });
 
         });
