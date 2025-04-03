@@ -1344,3 +1344,20 @@ AJAX
 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     alert("Status: " + textStatus); alert("Error: " + errorThrown);
                 }
+
+OBTENDO O VALOR DAS MENSAGEM DE RETORNO DE ERRO 
+error: function(response){
+        //console.log(response.responseJSON);
+        //console.log(response.responseJSON.message);
+        console.log(response.responseJSON.errors);
+        console.log(response.responseJSON.errors.fone[0]);
+}
+
+ error: function(response){
+    //console.log(response.responseJSON);
+    //console.log(response.responseJSON.message);
+    $.each(response.responseJSON.errors, function(key, value){
+        console.log("campo: "+ key + " mensagem" + value);
+    });
+}
+

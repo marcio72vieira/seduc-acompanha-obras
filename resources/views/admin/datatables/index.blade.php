@@ -73,9 +73,8 @@
                                         <label for="nome" class="col-sm-2 col-form-label">Usuário <span class="small text-danger">*</span></label>
                                         <div class="col-sm-10">
                                         <input type="text" name="nome" value="{{ old('nome') }}" class="form-control" id="nome" placeholder="Nome de usuário" >
-                                        @error('nome')
-                                            <small style="color: red">{{$message}}</small>
-                                        @enderror
+                                        <span class="text-danger error-text nome_error"></span>
+                                        
                                         </div>
                                     </div>
 
@@ -85,9 +84,7 @@
                                         <label for="cpf" class="col-sm-2 col-form-label">CPF <span class="small text-danger">*</span></label>
                                         <div class="col-sm-10">
                                         <input type="text" name="cpf" value="{{ old('cpf') }}" class="form-control cpf" id="cpf" placeholder="CPF (só números)" >
-                                        @error('cpf')
-                                            <small style="color: red">{{$message}}</small>
-                                        @enderror
+                                        <span class="text-danger error-text cpf_error"></span>
                                         </div>
                                     </div>
 
@@ -97,9 +94,7 @@
                                         <label for="cargo" class="col-sm-2 col-form-label">Cargo <span class="small text-danger">*</span></label>
                                         <div class="col-sm-10">
                                         <input type="text" name="cargo" value="{{ old('cargo') }}" class="form-control" id="cargo" placeholder="Digite o cargo" >
-                                        @error('cargo')
-                                            <small style="color: red">{{$message}}</small>
-                                        @enderror
+                                        <span class="text-danger error-text cargo_error"></span>
                                         </div>
                                     </div>
 
@@ -109,9 +104,7 @@
                                         <label for="fone" class="col-sm-2 col-form-label">Telefone <span class="small text-danger">*</span></label>
                                         <div class="col-sm-10">
                                         <input type="text" name="fone" value="{{ old('fone') }}" class="form-control  mask-cell" id="fone" placeholder="Telefone (só números)" >
-                                        @error('fone')
-                                            <small style="color: red">{{$message}}</small>
-                                        @enderror
+                                        <span class="text-danger error-text fone_error"></span>
                                         </div>
                                     </div>
 
@@ -126,9 +119,7 @@
                                                 <option value="con" {{old('perfil') == 'con' ? 'selected' : ''}}>Consultor</option>
                                                 <option value="ope" {{old('perfil') == 'ope' ? 'selected' : ''}}>Operador</option>
                                             </select>
-                                            @error('perfil')
-                                                <small style="color: red">{{ $message }}</small>
-                                            @enderror
+                                            <span class="text-danger error-text perfil_error"></span>
                                         </div>
                                     </div>
 
@@ -138,9 +129,7 @@
                                         <label for="email" class="col-sm-2 col-form-label">E-mail <span class="small text-danger">*</span></label>
                                         <div class="col-sm-10">
                                         <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="email" placeholder="Melhor e-mail" >
-                                        @error('email')
-                                            <small style="color: red">{{$message}}</small>
-                                        @enderror
+                                        <span class="text-danger error-text email_error"></span>
                                         </div>
                                     </div>
 
@@ -150,9 +139,7 @@
                                         <label for="password" class="col-sm-2 col-form-label">Senha <span class="small text-danger">*</span></label>
                                         <div class="col-sm-10">
                                         <input type="password" name="password" value="{{ old('password') }}" class="form-control" id="password" placeholder="Senha" >
-                                        @error('password')
-                                            <small style="color: red">{{$message}}</small>
-                                        @enderror
+                                        <span class="text-danger error-text password_error"></span>
                                         </div>
                                     </div>
 
@@ -162,9 +149,7 @@
                                         <label for="password_confirmation" class="col-sm-2 col-form-label">Confirmar Senha <span class="small text-danger">*</span></label>
                                         <div class="col-sm-10">
                                         <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" class="form-control" id="password_confirmation" placeholder="Confirme a senha" >
-                                        @error('password_confirmation')
-                                            <small style="color: red">{{$message}}</small>
-                                        @enderror
+                                        <span class="text-danger error-text password_confirmation_error"></span>
                                         </div>
                                     </div>
 
@@ -273,6 +258,9 @@
                 type: "POST",
                 dataType : "json",
                 data: data,
+                beforeSend: function(){
+                    $(document).find("span.error-text").text("");
+                },
                 success: function(response){
                     if(response.status == 400){
                         // $.each(response.error, function(key, value){
@@ -284,8 +272,14 @@
                     console.log(response);
                     $("#modalCadastrarUsuario").modal('hide');
                 },
-
-
+                error: function(response){
+                    //console.log(response.responseJSON);
+                    //console.log(response.responseJSON.message);
+                    $.each(response.responseJSON.errors, function(key, value){
+                        $("span."+key+"_error").text(value);
+                        //console.log("campo: "+ key + " mensagem: " + value);
+                    });
+                }
             });
 
         });
