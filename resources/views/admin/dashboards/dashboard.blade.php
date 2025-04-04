@@ -9,9 +9,9 @@
 
             @can("onlyAdm")
                 {{-- inicio formulario baixar arquivo excel csv--}}
-                
+
                 <form action="{{ route('dashboard.gerarexcel') }}"  method="GET" class="form-inline" style="border-radius: 5px; margin-bottom: -15px;">
-                    
+
                     {{-- Esta classe, aplicada e esta DIV, faz com que os botões fiquem um ao lado do outro --}}
                     <div class="d-flex align-items-center justify-content-between">
 
@@ -48,7 +48,7 @@
                             </button>
                         </div>
                     </div>
-                    
+
                 </form>
                 {{--    fim formulario baixar arquivo excel csv--}}
             @endcan
@@ -118,7 +118,7 @@
         <div class="mb-4 card">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                DataTable Example
+                Usuários
             </div>
             <div class="card-body">
                 <table id="datatablesSimple" class="table table-striped table-hover table-bordered display" style="width:100%">
@@ -145,8 +145,7 @@
             // scrollY: 300,    //Define a altura da tabela para rolagem vertical
 
             // Menu da quantidade de registros a serem exibidos. O valor default é 10
-            // lengthMenu: [5, 10, 15, 20],
-            lengthMenu: [1, 2, 3],
+            lengthMenu: [5, 10, 15, 20],
 
             // Exibe/Esconde o botão de filtro Default true
             // bFilter: true,

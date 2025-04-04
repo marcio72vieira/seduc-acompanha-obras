@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\RegionalController;
 use App\Http\Controllers\Admin\MunicipioController;
 use App\Http\Controllers\Admin\EscolaController;
 use App\Http\Controllers\Admin\ObjetoController;
+use App\Http\Controllers\Admin\ObraController;
 use App\Http\Controllers\Admin\DatatableController;
 
 //---------------------------------------
@@ -126,6 +127,16 @@ Route::group(['middleware' => 'auth'], function(){
         Route::put('/update-objeto/{objeto}', [ObjetoController::class, 'update'])->name('objeto.update');
         Route::delete('/destroy-objeto/{objeto}', [ObjetoController::class, 'destroy'])->name('objeto.destroy');
         Route::get('pdf-objeto/relpdflistobjetos', [ObjetoController::class, 'relpdflistobjetos'])->name('objeto.relpdflistobjetos');
+
+
+        // OBRA
+        Route::get('/index-obra', [ObraController::class, 'index'])->name('obra.index');
+        Route::get('/create-obra', [ObraController::class, 'create'])->name('obra.create');
+        Route::post('/store-obra', [ObraController::class, 'store'])->name('obra.store');
+        Route::get('/edit-obra/{obra}', [ObraController::class, 'edit'])->name('obra.edit');
+        Route::put('/update-obra/{obra}', [ObraController::class, 'update'])->name('obra.update');
+        Route::delete('/destroy-obra/{obra}', [ObraController::class, 'destroy'])->name('obra.destroy');
+        Route::get('pdf-obra/relpdflistobras', [ObraController::class, 'relpdflistobras'])->name('obra.relpdflistobras');
 
 
         // DATATABLE
