@@ -19,11 +19,12 @@
             </div>
 
             <div class="card-body">
-
-                <x-alert />
-
-                {{-- Este componente será acionado sempre que houver uma erro de exceção em: store, update ou delete --}}
-                <x-errorexception />
+                
+                {{-- Aler de Sucesso --}}
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="visibility:hidden">
+                    <span id="msg_success"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
 
                 <table id="datatablesUsers" class="table table-striped table-hover table-bordered display" style="width:100%">
                     <thead class="table-light">
@@ -262,22 +263,16 @@
                     $(document).find("span.error-text").text("");
                 },
                 success: function(response){
-                    if(response.status == 400){
-                        // $.each(response.error, function(key, value){
-                        //     $("span."+key+"_error").text(value[0]);
-                        // });
-                        //console.log(response.errors);
-                        console.log("Error de Validacao");
-                    }
-                    console.log(response);
-                    $("#modalCadastrarUsuario").modal('hide');
+                    $('#formCadastrarUsuario').trigger("reset");
+                    $('#modalCadastrarUsuario').modal('hide');
+                    $("#msg_success").text(response.msg_sucesso);
+                    $(".alert").css("visibility","visible");
                 },
                 error: function(response){
                     //console.log(response.responseJSON);
                     //console.log(response.responseJSON.message);
                     $.each(response.responseJSON.errors, function(key, value){
                         $("span."+key+"_error").text(value);
-                        //console.log("campo: "+ key + " mensagem: " + value);
                     });
                 }
             });

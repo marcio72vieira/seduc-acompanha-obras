@@ -81,10 +81,10 @@
                     Usuários
                 </a>
 
-                {{-- <a class="nav-link" href="{{ route('datatable.index')}}">
+                <a class="nav-link" href="{{ route('datatable.index')}}">
                     <div class="sb-nav-link-icon"><i class="fas fa-table me-1"></i></div>
                     DataTable
-                </a> --}}
+                </a>
 
                 <a class="nav-link" href="{{ route('login.logout') }}">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>

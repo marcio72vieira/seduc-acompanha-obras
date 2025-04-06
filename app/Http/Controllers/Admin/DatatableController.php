@@ -17,60 +17,35 @@ class DatatableController extends Controller
     }
 
 
-    /* public function store(UserRequest $request)
+    public function store(UserRequest $request)
     {
         // Validar o formulário
+        // Em requisições Ajax, caso a validação falhe, Laravel irá lança o código de erro 422(unproecessed entity)
+        // naturalmente. Se a validação passar, o fluxo da execução do programa segue naturalmente.
         $request->validated();
+        
+        // Cadastrar no banco de dados na tabela usuários. 
+        User::create([
+            'nomecompleto' => $request->nomecompleto,
+            'nome' => $request->nome,
+            'cpf' => $request->cpf,
+            'cargo' => $request->cargo,
+            'fone' => $request->fone,
+            'perfil' => $request->perfil,
+            'email' => $request->email,
+            'password' => $request->password,
+            'ativo' => $request->ativo,
+            'primeiroacesso' => 1
+        ]);
 
-        try {
-            // Cadastrar no banco de dados na tabela usuários
-            $user = User::create([
-                'nomecompleto' => $request->nomecompleto,
-                'nome' => $request->nome,
-                'cpf' => $request->cpf,
-                'cargo' => $request->cargo,
-                'fone' => $request->fone,
-                'perfil' => $request->perfil,
-                'email' => $request->email,
-                'password' => $request->password,
-                'ativo' => $request->ativo,
-                'primeiroacesso' => 1
-            ]);
+        return response()->json([
+            'msg_sucesso' => "Usuário cadastrado com sucesso!"
+        ]);
 
-
-
-            // ENVIO DE EMAIL DIRETAMENTE
-            // Dados que serão enviados ao construtor da classe EmailAcesso
-            $dados = [
-                'nome' => $request->nomecompleto,
-                'email' => $request->email,
-                'senha' => $request->password,
-                'perfil' => ($request->perfil == "adm" ? "Administrador" : ($request->perfil == "con" ? "Consultor" : "Operador"))
-            ];
-
-            $envioEmail = Mail::to($request->email, $request->nome)->send(new EmailAcesso($dados));
-
-            if($envioEmail){
-                // Redirecionar o usuário, enviar a mensagem de sucesso
-                return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
-            } else {
-                // Redirecionar o usuário, enviar a mensagem de sucesso
-                return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso, mas houve falha no envio do E-mail!');
-            }
-
-
-            // ENVIO DE EMAIL INDIRETAMENTE, VIA FILA (Passando o Id do Usuário e sua senha não criptografada)
-            // JobSendEmailAcesso::dispatch($user->id, $request->password)->onQueue('default');
-            // Redirecionar o usuário, enviar a mensagem de sucesso
-            // return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
-
-        } catch (Exception $e) {
-            // Mantém o usuário na mesma página(back), juntamente com os dados digitados(withInput) e enviando a mensagem correspondente.
-            return back()->withInput()->with('error-exception', 'Usuário não cadastrado. Tente mais tarde!'. $e->getMessage());
-        }
     }
-    */
 
+
+    /*
     public function store(UserRequest $request)
     {
         // Validar o formulário
@@ -106,6 +81,7 @@ class DatatableController extends Controller
 
         }
     }
+    */   
 
 }
 
