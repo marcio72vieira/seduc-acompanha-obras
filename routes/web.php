@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\MunicipioController;
 use App\Http\Controllers\Admin\EscolaController;
 use App\Http\Controllers\Admin\ObjetoController;
 use App\Http\Controllers\Admin\ObraController;
+use App\Http\Controllers\Admin\ProgramaController;
 use App\Http\Controllers\Admin\DatatableController;
 
 //---------------------------------------
@@ -127,6 +128,16 @@ Route::group(['middleware' => 'auth'], function(){
         Route::put('/update-objeto/{objeto}', [ObjetoController::class, 'update'])->name('objeto.update');
         Route::delete('/destroy-objeto/{objeto}', [ObjetoController::class, 'destroy'])->name('objeto.destroy');
         Route::get('pdf-objeto/relpdflistobjetos', [ObjetoController::class, 'relpdflistobjetos'])->name('objeto.relpdflistobjetos');
+
+        
+        // PROGRAMA
+        Route::get('/index-programa', [ProgramaController::class, 'index'])->name('programa.index');
+        Route::get('/create-programa', [ProgramaController::class, 'create'])->name('programa.create');
+        Route::post('/store-programa', [ProgramaController::class, 'store'])->name('programa.store');
+        Route::get('/edit-programa/{programa}', [ProgramaController::class, 'edit'])->name('programa.edit');
+        Route::put('/update-programa/{programa}', [ProgramaController::class, 'update'])->name('programa.update');
+        Route::delete('/destroy-programa/{programa}', [ProgramaController::class, 'destroy'])->name('programa.destroy');
+        Route::get('pdf-programa/relpdflistprogramas', [ProgramaController::class, 'relpdflistprogramas'])->name('programa.relpdflistprogramas');
 
 
         // OBRA

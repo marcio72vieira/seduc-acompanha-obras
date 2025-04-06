@@ -67,6 +67,7 @@
                         <a class="nav-link" href="{{ route('municipio.index') }}">Municípios</a>
                         <a class="nav-link" href="{{ route('escola.index') }}">Escolas</a>
                         <a class="nav-link" href="{{ route('objeto.index') }}">Objetos</a>
+                        <a class="nav-link" href="{{ route('programa.index') }}">Programas</a>
                     </nav>
                 </div>
 

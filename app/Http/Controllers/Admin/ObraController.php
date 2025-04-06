@@ -13,4 +13,9 @@ class ObraController extends Controller
         $obras = Obra::with(['regional', 'municipio', 'tipounidade', 'escola', 'objeto'])->orderBy('descricao')->paginate(10);
         return view('admin.obras.index', ['obras' => $obras]);
     }
+
+    public function create()
+    {
+        return view('admin.obras.create');
+    }
 }
