@@ -129,7 +129,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::delete('/destroy-objeto/{objeto}', [ObjetoController::class, 'destroy'])->name('objeto.destroy');
         Route::get('pdf-objeto/relpdflistobjetos', [ObjetoController::class, 'relpdflistobjetos'])->name('objeto.relpdflistobjetos');
 
-        
+
         // PROGRAMA
         Route::get('/index-programa', [ProgramaController::class, 'index'])->name('programa.index');
         Route::get('/create-programa', [ProgramaController::class, 'create'])->name('programa.create');
@@ -154,6 +154,8 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/index-datatable', [DatatableController::class, 'index'])->name('datatable.index');
         Route::get('/create-datatable', [DatatableController::class, 'create'])->name('datatable.create');
         Route::post('/store-datatable', [DatatableController::class, 'store'])->name('datatable.store');
+        Route::get('/ajaxgetusers-datatable', [DatatableController::class, 'ajaxgetusers'])->name('datatable.ajaxgetusers');
+        Route::get('/ajaxgetuserid-datatable/{user}', [DatatableController::class, 'ajaxgetuserid'])->name('datatable.ajaxgetuserid');
         /*
         Route::get('/show-user/{user}', [DatatableController::class, 'show'])->name('user.show');
         Route::get('/edit-user/{user}', [DatatableController::class, 'edit'])->name('user.edit');

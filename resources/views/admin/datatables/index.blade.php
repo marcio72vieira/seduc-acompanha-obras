@@ -19,7 +19,7 @@
             </div>
 
             <div class="card-body">
-                
+
                 {{-- Aler de Sucesso --}}
                 <div class="alert alert-success alert-dismissible fade show" role="alert" style="visibility:hidden">
                     <span id="msg_success"></span>
@@ -30,11 +30,12 @@
                     <thead class="table-light">
                         <tr>
                             <th>ID</th>
-                            <th>Nome Completo</th>
+                            <th>NOME</th>
                             <th>CPF</th>
                             <th>CARGO</th>
                             <th>PERFIL</th>
                             <th>CONTATO</th>
+                            <th>AÇÕES</th>
                         </tr>
                     </thead>
                 </table>
@@ -75,7 +76,7 @@
                                         <div class="col-sm-10">
                                         <input type="text" name="nome" value="{{ old('nome') }}" class="form-control" id="nome" placeholder="Nome de usuário" >
                                         <span class="text-danger error-text nome_error"></span>
-                                        
+
                                         </div>
                                     </div>
 
@@ -188,9 +189,33 @@
             </form>
             <!-- Final Modal CadastrarUsuario -->
 
+
+            <!-- Inicio Modal VisualizarUsuario -->
+            <div class="modal fade" id="modalVisualizarUsuario" tabindex="-1" aria-labelledby="modalVisualizarUsuarioLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modalVisualizarUsuarioLabel">VISUALIZAR USUÁRIO</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      ...
+
+                      ...
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- Final Modal VisualizarUsuario -->
+
+
+
         </div>
     </div>
-
 
 @endsection
 
@@ -203,7 +228,6 @@
             // Menu da quantidade de registros a serem exibidos. O valor default é 10
             lengthMenu: [5, 10, 15, 20],
 
-
             // Exibe/Esconde o botão de filtro Default true
             // bFilter: true,
 
@@ -214,7 +238,8 @@
             // Indica a mensagem de processamento e que os dados virão de um servidor
             processing: true,
             serverSide: true,
-            ajax: "{{ route('dashboard.ajaxgetusers') }}",
+            ajax: "{{ route('datatable.ajaxgetusers') }}",
+            // Colunas que serão retornadas e deverão corresponder ao mesmo número de colunas da tabela
             columns: [
                     { data: 'id' },
                     { data: 'nomecompleto'},
@@ -222,6 +247,7 @@
                     { data: 'cargo' },
                     { data: 'perfil' },
                     { data: 'contato' },
+                    { data: 'acoes' },
             ],
         });
 
@@ -279,12 +305,20 @@
 
         });
 
+        $(document).on('click', '#btnVisualizarUsuario', function(){
+            var iduser = $(this).data("idusuario");
+            var rota = "{{route('datatable.ajaxgetuserid', 'id')}}";
+                rota = rota.replace('id', iduser);
 
-
-
-
-
-
+            $.ajax({
+                url: rota,
+                type: "GET",
+                dataType : "json",
+                success: function(response){
+                    $('#modalVisualizarUsuario').modal('show');
+                }
+            });
+        })
 
     </script>
 
