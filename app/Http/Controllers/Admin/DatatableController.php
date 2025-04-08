@@ -131,7 +131,7 @@ class DatatableController extends Controller
     }
 
     // Recupera o usuário pelo ID
-    public function ajaxgetuserid(User $user)
+    public function ajaxgetuser(User $user)
     {
         $user = User::findOrFail($user->id);
 

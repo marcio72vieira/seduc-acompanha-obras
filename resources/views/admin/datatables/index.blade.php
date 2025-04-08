@@ -191,21 +191,45 @@
 
 
             <!-- Inicio Modal VisualizarUsuario -->
-            <div class="modal fade" id="modalVisualizarUsuario" tabindex="-1" aria-labelledby="modalVisualizarUsuarioLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl">
+            <div class="modal fade" id="modalVisualizarUsuario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalVisualizarUsuarioLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="modalVisualizarUsuarioLabel">VISUALIZAR USUÁRIO</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      ...
+                        <dl class="row">
+                            <dt class="col-sm-2">Id</dt>
+                            <dd class="col-sm-10" id="show_id"></dd>
 
-                      ...
+                            <dt class="col-sm-2">Nome Completo</dt>
+                            <dd class="col-sm-10"  id="show_nomecompleto"></dd>
+        
+                            <dt class="col-sm-2">Nome</dt>
+                            <dd class="col-sm-10" id="show_nome"></dd>
+        
+                            <dt class="col-sm-2">CPF</dt>
+                            <dd class="col-sm-10" id="show_cpf"></dd>
+        
+                            <dt class="col-sm-2">Cargo</dt>
+                            <dd class="col-sm-10" id="show_cargo"></dd>
+        
+                            <dt class="col-sm-2">Telefone</dt>
+                            <dd class="col-sm-10" id="show_fone"></dd>
+        
+                            <dt class="col-sm-2">Perfil</dt>
+                            <dd class="col-sm-10" id="show_perfil"></dd>
+        
+                            <dt class="col-sm-2">E-mail</dt>
+                            <dd class="col-sm-10" id="show_email"></dd>
+        
+                            <dt class="col-sm-2">Ativo</dt>
+                            <dd class="col-sm-10" id="show_ativo"></dd>  
+                        </dl>
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
+                      <button type="button" id="btnFecharVisualizarUsuario" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
                     </div>
                   </div>
                 </div>
@@ -221,6 +245,9 @@
 
 @section('scripts')
     <script>
+        //////////////////////
+        //   DATATABLE      //
+        //////////////////////
         $('#datatablesUsers').DataTable({
             // ordering: true,  // Habilita/Desabilita a ordenação. Defult: true
             // scrollY: 300,    //Define a altura da tabela para rolagem vertical
@@ -254,8 +281,9 @@
 
 
 
-
-
+        //////////////////////
+        //   CADASTRAR      //
+        //////////////////////
         $(document).on('click', '#btnSalvarUsuario', function(e){
             // Evita que o formulário seja submetido
             e.preventDefault();
@@ -305,21 +333,40 @@
 
         });
 
+
+        //////////////////////
+        //   VISUALIZAR     //
+        //////////////////////
         $(document).on('click', '#btnVisualizarUsuario', function(){
             var iduser = $(this).data("idusuario");
-            var rota = "{{route('datatable.ajaxgetuserid', 'id')}}";
+            var rota = "{{route('datatable.ajaxgetuser', 'id')}}";
                 rota = rota.replace('id', iduser);
 
             $.ajax({
                 url: rota,
                 type: "GET",
                 dataType : "json",
-                success: function(response){
+                success: function(user){
+                    // Transformando alguns dados
+                    var userperfil = (user.perfil == "adm" ? "Administrador" : (user.perfil == "con" ? "Consultor" : "Operador"));
+                    var userativo  =  (user.ativo == "1" ? "Sim" : "Não");
+
+                    // Carrega os campos com as respectivas informações
+                    $("#show_id").text(user.id);
+                    $("#show_nomecompleto").text(user.nomecompleto);
+                    $("#show_nome").text(user.nome);
+                    $("#show_cpf").text(user.cpf);
+                    $("#show_cargo").text(user.cargo);
+                    $("#show_fone").text(user.fone);
+                    $("#show_perfil").text(userperfil);
+                    $("#show_email").text(user.email);
+                    $("#show_ativo").text(userativo);
+                
+                    // Exibe a modal com os campos já preenchidos
                     $('#modalVisualizarUsuario').modal('show');
                 }
             });
-        })
-
+        });
     </script>
 
 @endsection
