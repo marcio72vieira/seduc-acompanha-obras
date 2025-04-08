@@ -70,7 +70,7 @@ class DatatableController extends Controller
 
             // ações
             $acaoshow = "<button type='button'  id='btnVisualizarUsuario' data-idusuario=".$user->id." class='mb-1 btn btn-secondary btn-sm me-1' title='visualizar'  data-bs-toggle='modal' data-bs-target='#modalVisualizarUsuario'> <i class='fa-regular fa-eye'></i> visualizar </button>";
-            $acaoedit = "<button type='button'  class='mb-1 btn btn-secondary btn-sm me-1' title='editar'> <i class='fa-solid fa-pen-to-square'></i> editar</button>";
+            $acaoedit = "<button type='button'  id='btnVisualizarEditarUsuario' data-idusuario=".$user->id." class='mb-1 btn btn-secondary btn-sm me-1' title='editar'  data-bs-toggle='modal' data-bs-target='#modalEditarUsuario'> <i class='fa-solid fa-pen-to-square'></i> editar</button>";
             $acaodelete = $user->perfil == 'adm' ?  "<button type='button'  class='btn btn-outline-secondary btn-sm me-1 mb-1' title='apagar'> <i class='fa-solid fa-ban'></i> Apagar </button>" :
                                                     "<button type='button'  class='mb-1 btn btn-secondary btn-sm me-1' title='apagar'> <i class='fa-regular fa-trash-can'></i> Apagar";
 
@@ -102,6 +102,14 @@ class DatatableController extends Controller
         return response()->json($response);
     }
 
+    // Recupera o usuário pelo ID
+    public function ajaxgetuser(User $user)
+    {
+        $user = User::findOrFail($user->id);
+
+        return response()->json($user);
+    }    
+
 
     public function store(UserRequest $request)
     {
@@ -130,13 +138,7 @@ class DatatableController extends Controller
 
     }
 
-    // Recupera o usuário pelo ID
-    public function ajaxgetuser(User $user)
-    {
-        $user = User::findOrFail($user->id);
 
-        return response()->json($user);
-    }
 
 
     /*

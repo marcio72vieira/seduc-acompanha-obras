@@ -181,7 +181,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-primary" id="btnSalvarUsuario" style="width: 95px;"> Salvar </button>
+                                <button type="submit" class="btn btn-primary" id="btnEditarUsuario" style="width: 95px;"> Salvar </button>
                             </div>
                         </div>
                     </div>
@@ -235,6 +235,154 @@
                 </div>
               </div>
             <!-- Final Modal VisualizarUsuario -->
+
+            ....
+            <!-- Inicio Modal EditarUsuario -->
+            <form id="formEditarUsuario" action="{{ route('user.update', 0) }}" method="POST" autocomplete="off">
+                @csrf
+                @method('PUT')
+                    <div class="modal fade" id="modalEditarUsuario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalEditarUsuarioLabel">EDITAR USUÁRIO</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+    
+                                    {{-- inicio dos campos do formulário de edição de usuário  --}}
+                                    {{-- Este componente será acionado sempre que houver uma erro de exceção em: store, update ou delete --}}
+                                    <x-errorexception />
+    
+                                        {{-- nomecompleto --}}
+                                        <div class="mb-4 row">
+                                            <label for="nomecompleto" class="col-sm-2 col-form-label">Nome Completo <span class="small text-danger">*</span></label>
+                                            <div class="col-sm-10">
+                                                <input type="text" name="nomecompleto" value="{{ old('nomecompleto') }}" class="form-control" id="nomecompleto" placeholder="Nome completo" >
+                                                <span class="text-danger error-text nomecompleto_error"></span>
+                                            </div>
+                                        </div>
+    
+    
+                                        {{-- nome --}}
+                                        <div class="mb-4 row">
+                                            <label for="nome" class="col-sm-2 col-form-label">Usuário <span class="small text-danger">*</span></label>
+                                            <div class="col-sm-10">
+                                            <input type="text" name="nome" value="{{ old('nome') }}" class="form-control" id="nome" placeholder="Nome de usuário" >
+                                            <span class="text-danger error-text nome_error"></span>
+    
+                                            </div>
+                                        </div>
+    
+    
+                                        {{-- cpf --}}
+                                        <div class="mb-4 row">
+                                            <label for="cpf" class="col-sm-2 col-form-label">CPF <span class="small text-danger">*</span></label>
+                                            <div class="col-sm-10">
+                                            <input type="text" name="cpf" value="{{ old('cpf') }}" class="form-control cpf" id="cpf" placeholder="CPF (só números)" >
+                                            <span class="text-danger error-text cpf_error"></span>
+                                            </div>
+                                        </div>
+    
+    
+                                        {{-- cargo --}}
+                                        <div class="mb-4 row">
+                                            <label for="cargo" class="col-sm-2 col-form-label">Cargo <span class="small text-danger">*</span></label>
+                                            <div class="col-sm-10">
+                                            <input type="text" name="cargo" value="{{ old('cargo') }}" class="form-control" id="cargo" placeholder="Digite o cargo" >
+                                            <span class="text-danger error-text cargo_error"></span>
+                                            </div>
+                                        </div>
+    
+    
+                                        {{-- fone --}}
+                                        <div class="mb-4 row">
+                                            <label for="fone" class="col-sm-2 col-form-label">Telefone <span class="small text-danger">*</span></label>
+                                            <div class="col-sm-10">
+                                            <input type="text" name="fone" value="{{ old('fone') }}" class="form-control  mask-cell" id="fone" placeholder="Telefone (só números)" >
+                                            <span class="text-danger error-text fone_error"></span>
+                                            </div>
+                                        </div>
+    
+    
+                                        {{-- perfil --}}
+                                        <div class="mb-4 row">
+                                            <label for="perfil" class="col-sm-2 col-form-label">Perfil <span class="small text-danger">*</span></label>
+                                            <div class="col-sm-4">
+                                                <select name="perfil" id="perfil" class="form-control select2" >
+                                                    <option value="" selected disabled>Escolha...</option>
+                                                    <option value="adm" {{old('perfil') == 'adm' ? 'selected' : ''}}>Administrador</option>
+                                                    <option value="con" {{old('perfil') == 'con' ? 'selected' : ''}}>Consultor</option>
+                                                    <option value="ope" {{old('perfil') == 'ope' ? 'selected' : ''}}>Operador</option>
+                                                </select>
+                                                <span class="text-danger error-text perfil_error"></span>
+                                            </div>
+                                        </div>
+    
+    
+                                        {{-- email --}}
+                                        <div class="mb-4 row">
+                                            <label for="email" class="col-sm-2 col-form-label">E-mail <span class="small text-danger">*</span></label>
+                                            <div class="col-sm-10">
+                                            <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="email" placeholder="Melhor e-mail" >
+                                            <span class="text-danger error-text email_error"></span>
+                                            </div>
+                                        </div>
+    
+    
+                                        {{-- password --}}
+                                        <div class="mb-4 row">
+                                            <label for="password" class="col-sm-2 col-form-label">Senha <span class="small text-danger">*</span></label>
+                                            <div class="col-sm-10">
+                                            <input type="password" name="password" value="{{ old('password') }}" class="form-control" id="password" placeholder="Senha" >
+                                            <span class="text-danger error-text password_error"></span>
+                                            </div>
+                                        </div>
+    
+    
+                                        {{-- password_confirmation --}}
+                                        <div class="mb-4 row">
+                                            <label for="password_confirmation" class="col-sm-2 col-form-label">Confirmar Senha <span class="small text-danger">*</span></label>
+                                            <div class="col-sm-10">
+                                            <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" class="form-control" id="password_confirmation" placeholder="Confirme a senha" >
+                                            <span class="text-danger error-text password_confirmation_error"></span>
+                                            </div>
+                                        </div>
+    
+                                        {{-- ativo --}}
+                                        <div class="mb-4 row">
+                                            <label for="ativosim" class="col-sm-2 col-form-label">Ativo ? <span class="small text-danger">*</span></label>
+                                            <div class="col-sm-10">
+                                                <div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="ativo" id="ativosim" value="1" {{old('ativo') == '1' ? 'checked' : ''}} reuired>
+                                                        <label class="form-check-label" for="ativosim">Sim</label>
+    
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="ativo" id="ativonao" value="0" {{old('ativo') == '0' ? 'checked' : ''}} >
+                                                        <label class="form-check-label" for="ativonao">Não</label>
+                                                    </div>
+                                                    <br>
+                                                    @error('ativo')
+                                                        <small style="color: red">{{$message}}</small>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                    {{-- final dos campos do formulário de cadastro de usuário --}}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary" id="btnSalvarUsuario" style="width: 95px;"> Salvar </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- Final Modal EditarUsuario -->
+            ....
 
 
 
@@ -367,6 +515,47 @@
                 }
             });
         });
+
+
+
+        //////////////////////
+        //     EDITAR       //
+        //////////////////////
+        $(document).on('click', '#btnVisualizarEditarUsuario', function(){
+            //alert("disparar modal visualizar dados do usuário: "+ $(this).data("idusuario"));
+
+            var iduser = $(this).data("idusuario");
+            var rota = "{{route('datatable.ajaxgetuser', 'id')}}";
+                rota = rota.replace('id', iduser);
+
+            // <input type="text" name="nomecompleto" value="{{ old('nomecompleto') }}" class="form-control" id="nomecompleto" placeholder="Nome completo" >
+            $.ajax({
+                url: rota,
+                type: "GET",
+                dataType : "json",
+                success: function(user){
+                    // Encontra dentro do formulário(formEditarUsuario) o campo específico e atribui o respectivo valor.
+                    // evitando preencher o formulário(formSalvarUsuario) de forma inapropriada.
+                    $("#formEditarUsuario input[name=nomecompleto]").val(user.nomecompleto);
+                    $("#formEditarUsuario input[name=nome]").val(user.nome);
+                    $("#formEditarUsuario input[name=cpf]").val(user.cpf);
+                    $("#formEditarUsuario input[name=cargo]").val(user.cargo);
+                    $("#formEditarUsuario input[name=fone]").val(user.fone);
+                    //$("#formEditarUsuario input[name=perfil]").val(user.perfil);
+                    //$("#formEditarUsuario input[name=perfil] option[value='"+user.perfil+"']").change().attr('selected','selected');
+                    $("#formEditarUsuario input[name=perfil]").val(user.perfil).change();
+                    $("#formEditarUsuario input[name=email]").val(user.email);
+                    $("#formEditarUsuario input[name=ativo]").val(user.ativo);
+                    
+                    // Exibe a modal com os campos preenchidos
+                    $('#modalEditarUsuario').modal('show');
+
+                    
+                }
+            });
+        });
+        
+        
     </script>
 
 @endsection
