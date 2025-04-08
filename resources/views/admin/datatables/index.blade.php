@@ -170,9 +170,7 @@
                                                     <label class="form-check-label" for="ativonao">Não</label>
                                                 </div>
                                                 <br>
-                                                @error('ativo')
-                                                    <small style="color: red">{{$message}}</small>
-                                                @enderror
+                                                <span class="text-danger error-text ativo_error"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -181,7 +179,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-primary" id="btnEditarUsuario" style="width: 95px;"> Salvar </button>
+                                <button type="submit" class="btn btn-primary" id="btnSalvarUsuario" style="width: 95px;"> Salvar </button>
                             </div>
                         </div>
                     </div>
@@ -205,27 +203,27 @@
 
                             <dt class="col-sm-2">Nome Completo</dt>
                             <dd class="col-sm-10"  id="show_nomecompleto"></dd>
-        
+
                             <dt class="col-sm-2">Nome</dt>
                             <dd class="col-sm-10" id="show_nome"></dd>
-        
+
                             <dt class="col-sm-2">CPF</dt>
                             <dd class="col-sm-10" id="show_cpf"></dd>
-        
+
                             <dt class="col-sm-2">Cargo</dt>
                             <dd class="col-sm-10" id="show_cargo"></dd>
-        
+
                             <dt class="col-sm-2">Telefone</dt>
                             <dd class="col-sm-10" id="show_fone"></dd>
-        
+
                             <dt class="col-sm-2">Perfil</dt>
                             <dd class="col-sm-10" id="show_perfil"></dd>
-        
+
                             <dt class="col-sm-2">E-mail</dt>
                             <dd class="col-sm-10" id="show_email"></dd>
-        
+
                             <dt class="col-sm-2">Ativo</dt>
-                            <dd class="col-sm-10" id="show_ativo"></dd>  
+                            <dd class="col-sm-10" id="show_ativo"></dd>
                         </dl>
                     </div>
                     <div class="modal-footer">
@@ -249,62 +247,61 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-    
+
                                     {{-- inicio dos campos do formulário de edição de usuário  --}}
                                     {{-- Este componente será acionado sempre que houver uma erro de exceção em: store, update ou delete --}}
                                     <x-errorexception />
-    
+
                                         {{-- nomecompleto --}}
                                         <div class="mb-4 row">
                                             <label for="nomecompleto" class="col-sm-2 col-form-label">Nome Completo <span class="small text-danger">*</span></label>
                                             <div class="col-sm-10">
-                                                <input type="text" name="nomecompleto" value="{{ old('nomecompleto') }}" class="form-control" id="nomecompleto" placeholder="Nome completo" >
+                                                <input type="text" name="nomecompleto" value="{{ old('nomecompleto') }}" class="form-control" id="nomecompleto" placeholder="Nome completo">
                                                 <span class="text-danger error-text nomecompleto_error"></span>
                                             </div>
                                         </div>
-    
-    
+
+
                                         {{-- nome --}}
                                         <div class="mb-4 row">
                                             <label for="nome" class="col-sm-2 col-form-label">Usuário <span class="small text-danger">*</span></label>
                                             <div class="col-sm-10">
-                                            <input type="text" name="nome" value="{{ old('nome') }}" class="form-control" id="nome" placeholder="Nome de usuário" >
-                                            <span class="text-danger error-text nome_error"></span>
-    
+                                                <input type="text" name="nome" value="{{ old('nome') }}" class="form-control" id="nome" placeholder="Nome de usuário" >
+                                                <span class="text-danger error-text nome_error"></span>
                                             </div>
                                         </div>
-    
-    
+
+
                                         {{-- cpf --}}
                                         <div class="mb-4 row">
                                             <label for="cpf" class="col-sm-2 col-form-label">CPF <span class="small text-danger">*</span></label>
                                             <div class="col-sm-10">
-                                            <input type="text" name="cpf" value="{{ old('cpf') }}" class="form-control cpf" id="cpf" placeholder="CPF (só números)" >
-                                            <span class="text-danger error-text cpf_error"></span>
+                                                <input type="text" name="cpf" value="{{ old('cpf') }}" class="form-control cpf" id="cpf" placeholder="CPF (só números)">
+                                                <span class="text-danger error-text cpf_error"></span>
                                             </div>
                                         </div>
-    
-    
+
+
                                         {{-- cargo --}}
                                         <div class="mb-4 row">
                                             <label for="cargo" class="col-sm-2 col-form-label">Cargo <span class="small text-danger">*</span></label>
                                             <div class="col-sm-10">
-                                            <input type="text" name="cargo" value="{{ old('cargo') }}" class="form-control" id="cargo" placeholder="Digite o cargo" >
-                                            <span class="text-danger error-text cargo_error"></span>
+                                                <input type="text" name="cargo" value="{{ old('cargo') }}" class="form-control" id="cargo" placeholder="Digite o cargo">
+                                                <span class="text-danger error-text cargo_error"></span>
                                             </div>
                                         </div>
-    
-    
+
+
                                         {{-- fone --}}
                                         <div class="mb-4 row">
                                             <label for="fone" class="col-sm-2 col-form-label">Telefone <span class="small text-danger">*</span></label>
                                             <div class="col-sm-10">
-                                            <input type="text" name="fone" value="{{ old('fone') }}" class="form-control  mask-cell" id="fone" placeholder="Telefone (só números)" >
-                                            <span class="text-danger error-text fone_error"></span>
+                                                <input type="text" name="fone" value="{{ old('fone') }}" class="form-control  mask-cell" id="fone" placeholder="Telefone (só números)" >
+                                                <span class="text-danger error-text fone_error"></span>
                                             </div>
                                         </div>
-    
-    
+
+
                                         {{-- perfil --}}
                                         <div class="mb-4 row">
                                             <label for="perfil" class="col-sm-2 col-form-label">Perfil <span class="small text-danger">*</span></label>
@@ -318,37 +315,37 @@
                                                 <span class="text-danger error-text perfil_error"></span>
                                             </div>
                                         </div>
-    
-    
+
+
                                         {{-- email --}}
                                         <div class="mb-4 row">
                                             <label for="email" class="col-sm-2 col-form-label">E-mail <span class="small text-danger">*</span></label>
                                             <div class="col-sm-10">
-                                            <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="email" placeholder="Melhor e-mail" >
-                                            <span class="text-danger error-text email_error"></span>
+                                                <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="email" placeholder="Melhor e-mail">
+                                                <span class="text-danger error-text email_error"></span>
                                             </div>
                                         </div>
-    
-    
+
+
                                         {{-- password --}}
                                         <div class="mb-4 row">
                                             <label for="password" class="col-sm-2 col-form-label">Senha <span class="small text-danger">*</span></label>
                                             <div class="col-sm-10">
-                                            <input type="password" name="password" value="{{ old('password') }}" class="form-control" id="password" placeholder="Senha" >
-                                            <span class="text-danger error-text password_error"></span>
+                                                <input type="password" name="password" value="{{ old('password') }}" class="form-control" id="password" placeholder="Senha">
+                                                <span class="text-danger error-text password_error"></span>
                                             </div>
                                         </div>
-    
-    
+
+
                                         {{-- password_confirmation --}}
                                         <div class="mb-4 row">
                                             <label for="password_confirmation" class="col-sm-2 col-form-label">Confirmar Senha <span class="small text-danger">*</span></label>
                                             <div class="col-sm-10">
-                                            <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" class="form-control" id="password_confirmation" placeholder="Confirme a senha" >
-                                            <span class="text-danger error-text password_confirmation_error"></span>
+                                                <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" class="form-control" id="password_confirmation" placeholder="Confirme a senha">
+                                                <span class="text-danger error-text password_confirmation_error"></span>
                                             </div>
                                         </div>
-    
+
                                         {{-- ativo --}}
                                         <div class="mb-4 row">
                                             <label for="ativosim" class="col-sm-2 col-form-label">Ativo ? <span class="small text-danger">*</span></label>
@@ -357,25 +354,23 @@
                                                     <div class="form-check form-check-inline">
                                                         <input class="form-check-input" type="radio" name="ativo" id="ativosim" value="1" {{old('ativo') == '1' ? 'checked' : ''}} reuired>
                                                         <label class="form-check-label" for="ativosim">Sim</label>
-    
+
                                                     </div>
                                                     <div class="form-check form-check-inline">
                                                         <input class="form-check-input" type="radio" name="ativo" id="ativonao" value="0" {{old('ativo') == '0' ? 'checked' : ''}} >
                                                         <label class="form-check-label" for="ativonao">Não</label>
                                                     </div>
                                                     <br>
-                                                    @error('ativo')
-                                                        <small style="color: red">{{$message}}</small>
-                                                    @enderror
+                                                    <span class="text-danger error-text ativo_error"></span>
                                                 </div>
                                             </div>
                                         </div>
-    
+
                                     {{-- final dos campos do formulário de cadastro de usuário --}}
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary" id="btnSalvarUsuario" style="width: 95px;"> Salvar </button>
+                                    <button type="submit" class="btn btn-primary" id="btnEditarUsuario" style="width: 95px;"> Salvar </button>
                                 </div>
                             </div>
                         </div>
@@ -433,35 +428,44 @@
         //   CADASTRAR      //
         //////////////////////
         $(document).on('click', '#btnSalvarUsuario', function(e){
+
+            //alert($("#formCadastrarUsuario input:radio[name=ativo]").val());
+
             // Evita que o formulário seja submetido
             e.preventDefault();
 
             // Captura dados dos campos
             var data = {
-                'nomecompleto': $('#nomecompleto').val(),
-                'nome': $('#nome').val(),
-                'cpf': $('#cpf').val(),
-                'cargo': $('#cargo').val(),
-                'fone': $('#fone').val(),
-                'perfil': $('#perfil').val(),
-                'email': $('#email').val(),
-                'password': $('#password').val(),
-                'password_confirmation': $('#password_confirmation').val(),
-                'ativo': $("input[name=ativo]").val(), //'ativo': $("input:radio[name=ativo]").val()
+                'nomecompleto': $("#formCadastrarUsuario input[name=nomecompleto]").val(),
+                'nome': $("#formCadastrarUsuario input[name=nome]").val(),
+                'cpf': $("#formCadastrarUsuario input[name=cpf]").val(),
+                'cargo': $("#formCadastrarUsuario input[name=cargo]").val(),
+                'fone': $("#formCadastrarUsuario input[name=fone]").val(),
+                'perfil': $("#formCadastrarUsuario select[name=perfil]").val(),
+                'email': $("#formCadastrarUsuario input[name=email]").val(),
+                'password': $("#formCadastrarUsuario input[name=password]").val(),
+                'password_confirmation': $("#formCadastrarUsuario input[name=password_confirmation]").val(),
+                'ativo': $("#formCadastrarUsuario input:radio[name=ativo]:checked").val()
+                //'ativo': $("input[name=ativo]").val(),
+                //'ativo': $("input:radio[name=ativo]").val()
+                //'ativo': $('input:radio[name=theme]:checked').val();
             }
 
+            // Trecho de código fornecido na documentação do Laravel na seção AJAX
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
 
+            // Configuração da Requisição Ajax
             $.ajax({
                 url:"{{route('datatable.store')}}",
                 type: "POST",
                 dataType : "json",
                 data: data,
                 beforeSend: function(){
+                    // Limpa todas as mensagens de erro antes de fazer uma requisição
                     $(document).find("span.error-text").text("");
                 },
                 success: function(response){
@@ -509,7 +513,7 @@
                     $("#show_perfil").text(userperfil);
                     $("#show_email").text(user.email);
                     $("#show_ativo").text(userativo);
-                
+
                     // Exibe a modal com os campos já preenchidos
                     $('#modalVisualizarUsuario').modal('show');
                 }
@@ -541,21 +545,22 @@
                     $("#formEditarUsuario input[name=cpf]").val(user.cpf);
                     $("#formEditarUsuario input[name=cargo]").val(user.cargo);
                     $("#formEditarUsuario input[name=fone]").val(user.fone);
-                    //$("#formEditarUsuario input[name=perfil]").val(user.perfil);
-                    //$("#formEditarUsuario input[name=perfil] option[value='"+user.perfil+"']").change().attr('selected','selected');
-                    $("#formEditarUsuario input[name=perfil]").val(user.perfil).change();
+                    $("#formEditarUsuario select[name=perfil]").val(user.perfil).change(); //$("#formEditarUsuario select[name=perfil]").val(user.perfil).change().attr("selected", "true");
                     $("#formEditarUsuario input[name=email]").val(user.email);
-                    $("#formEditarUsuario input[name=ativo]").val(user.ativo);
-                    
+                    $("#formEditarUsuario input:radio[name=ativo]").val(user.ativo).prop("checked", "true");  //$("input:radio[name=myname]").val("cat");
+
                     // Exibe a modal com os campos preenchidos
                     $('#modalEditarUsuario').modal('show');
 
-                    
+                    //alert("Valor do ativo: " +  $("#formEditarUsuario input:radio[name=ativo]").val(user.ativo));
+
+
+
                 }
             });
         });
-        
-        
+
+
     </script>
 
 @endsection

@@ -108,14 +108,15 @@ class DatatableController extends Controller
         $user = User::findOrFail($user->id);
 
         return response()->json($user);
-    }    
+    }
 
 
     public function store(UserRequest $request)
     {
         // Validar o formulário
-        // Em requisições Ajax, caso a validação falhe, Laravel irá lança o código de erro 422(unproecessed entity)
-        // naturalmente. Se a validação passar, o fluxo da execução do programa segue naturalmente.
+        // Em requisições Ajax, caso a validação falhe, Laravel irá lança o código de erro 422(unproecessed entity),
+        // que será aprsentado no CONSOLE DO NAVEGADOR como se fosse um "pseudo" ERROR.
+        // Se a validação passar, o fluxo da execução do programa segue naturalmente.
         $request->validated();
 
         // Cadastrar no banco de dados na tabela usuários.
@@ -135,49 +136,7 @@ class DatatableController extends Controller
         return response()->json([
             'msg_sucesso' => "Usuário cadastrado com sucesso!"
         ]);
-
     }
-
-
-
-
-    /*
-    public function store(UserRequest $request)
-    {
-        // Validar o formulário
-        $dados_validados = $request->validated();
-
-        if(!$dados_validados){
-        // if($dados_validados->fails()){
-        // if(!$dados_validados->passes()){
-            return response()->json([
-                'status' => 400,
-                'errors' => $dados_validados->messages()
-                //'error' => $dados_validados->errors()->toArray()
-            ]);
-        } else {
-            // Cadastrar no banco de dados na tabela usuários
-            $user = User::create([
-                'nomecompleto' => $request->nomecompleto,
-                'nome' => $request->nome,
-                'cpf' => $request->cpf,
-                'cargo' => $request->cargo,
-                'fone' => $request->fone,
-                'perfil' => $request->perfil,
-                'email' => $request->email,
-                'password' => $request->password,
-                'ativo' => $request->ativo,
-                'primeiroacesso' => 1
-            ]);
-
-            return response()->json([
-                'status' => 200,
-                'msg' => "Usuário cadastrado com sucesso!"
-            ]);
-
-        }
-    }
-    */
 
 }
 
