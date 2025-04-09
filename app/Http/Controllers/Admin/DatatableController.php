@@ -76,6 +76,18 @@ class DatatableController extends Controller
                                                     "<button type='button'  class='mb-1 btn btn-secondary btn-sm me-1' title='apagar'> <i class='fa-regular fa-trash-can'></i> Apagar";
 
 
+            
+            /* $action = "{{ route('datatable.destroy', ['user' => $user->id]) }}";
+            $acaodelete2 = `<form id="formDelete{{ $user->id }}" method="POST" action="${$action}">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="mb-1 btn btn-secondary btn-sm me-1 btnDelete" data-delete-entidade="Usuário" data-delete-id="{{ $user->id }}"  data-value-record="{{ $user->nome }}" title="deletar">
+                                <i class="fa-regular fa-trash-can"></i> deletar
+                                </button>
+                            </form>`;
+            $acoes = $acaoshow." ".$acaoedit." ".$acaodelete2; */
+           
+
 
             $acoes = $acaoshow." ".$acaoedit." ".$acaodelete;
 

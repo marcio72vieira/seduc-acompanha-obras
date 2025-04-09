@@ -36,7 +36,7 @@
                             <th>PERFIL</th>
                             <th>CONTATO</th>
                             <th>ATIVO</th>
-                            <th>AÇÕES</th>
+                            <th style="width: 16%">AÇÕES</th>
                         </tr>
                     </thead>
                 </table>
@@ -239,7 +239,7 @@
             <!-- Inicio Modal EditarUsuario -->
             <form id="formEditarUsuario" action="{{ route('user.update', 0) }}" method="POST" autocomplete="off">
                 @csrf
-                @method('POST')
+                @method('PUT')
                     <div class="modal fade" id="modalEditarUsuario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
                         <div class="modal-dialog modal-xl">
                             <div class="modal-content">
@@ -310,7 +310,7 @@
                                         <div class="mb-4 row">
                                             <label for="perfil" class="col-sm-2 col-form-label">Perfil <span class="small text-danger">*</span></label>
                                             <div class="col-sm-4">
-                                                <select name="perfil" id="perfil" class="form-control select2" >
+                                                <select name="perfil" id="perfil" class="form-control select2">
                                                     <option value="" selected disabled>Escolha...</option>
                                                     <option value="adm" {{old('perfil') == 'adm' ? 'selected' : ''}}>Administrador</option>
                                                     <option value="con" {{old('perfil') == 'con' ? 'selected' : ''}}>Consultor</option>
@@ -605,7 +605,7 @@
 
             $.ajax({
                 url: rota,
-                type: "POST",
+                type: "PUT",
                 dataType : "json",
                 data: data,
                 beforeSend: function(){
