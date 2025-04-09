@@ -160,6 +160,8 @@ Route::group(['middleware' => 'auth'], function(){
 
         Route::get('/edit-datatable/{user}', [DatatableController::class, 'edit'])->name('datatable.edit');
         Route::put('/update-datatable/{user}', [DatatableController::class, 'update'])->name('datatable.update');
+
+        Route::delete('/destroy-datatable/{user}', [DatatableController::class, 'destroy'])->name('datatable.destroy');
         /*
         Route::get('/show-user/{user}', [DatatableController::class, 'show'])->name('user.show');
         Route::get('/edit-user/{user}', [DatatableController::class, 'edit'])->name('user.edit');

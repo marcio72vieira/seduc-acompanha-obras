@@ -560,7 +560,7 @@
                     $("#formEditarUsuario select[name=perfil]").val(user.perfil).change(); //$("#formEditarUsuario select[name=perfil]").val(user.perfil).change().attr("selected", "true");
                     $("#formEditarUsuario input[name=email]").val(user.email);
                     $("#formEditarUsuario input:radio[name=ativo][value=" + user.ativo + "]").prop('checked', true);
-                    
+
                     // Exibe a modal com os campos preenchidos
                     $('#modalEditarUsuario').modal('show');
                 }
@@ -628,7 +628,66 @@
                 }
             });
 
-        });        
+        });
+
+
+        //////////////////////
+        //     DELETAR      //
+        //////////////////////
+        $(document).on('click', '#btnDeletarUsuario', function(e){
+            //alert("Deletar usuário: "+ $(this).data("delete-id"));
+            e.preventDefault();
+
+            var valueRecord = $(this).data("value-record");
+            var deleteEntidade = $(this).data("delete-entidade");
+            var iduser = $(this).data("delete-id");
+            var rota = "{{route('datatable.destroy', 'id')}}";
+                rota = rota.replace('id', iduser);
+
+            // SweetAlert
+            Swal.fire({
+                    title: 'Excluir ' + deleteEntidade + '\n' + valueRecord + ' ?',
+                    text: 'Você não poderá reverter esta ação!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonColor: '#0d6efd',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: "#dc3545",
+                    confirmButtonText: "Excluir!"
+                }).then((result) => {
+                    // Carregar a página responsável em excluir se o usuário confirmar a exclusão
+                    if (result.isConfirmed) {
+
+                        // Trecho de código fornecido na documentação do Laravel na seção AJAX
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+
+                        $.ajax({
+                            url: rota,
+                            type: "DELETE",
+                            dataType : "json",
+                            data: {
+                                id: iduser
+                            },
+                            success: function(response){
+                                $("#msg_success").text(response.msg_sucesso);
+                                $(".alert").css("visibility","visible");
+                                $("#datatablesUsers").DataTable().ajax.reload();
+                                Swal.fire(
+                                    'Deleted!',
+                                    'O usuário foi deletado com sucesso.',
+                                    'success'
+                                )
+                            }
+                        });
+
+                        //document.getElementById(`formDelete${deleteId}`).submit();
+                    }
+                });
+        });
 
     </script>
 

@@ -72,21 +72,14 @@ class DatatableController extends Controller
             // ações
             $acaoshow = "<button type='button'  id='btnVisualizarUsuario' data-idusuario=".$user->id." class='mb-1 btn btn-secondary btn-sm me-1' title='visualizar'  data-bs-toggle='modal' data-bs-target='#modalVisualizarUsuario'> <i class='fa-regular fa-eye'></i> visualizar </button>";
             $acaoedit = "<button type='button'  id='btnVisualizarEditarUsuario' data-idusuario=".$user->id." class='mb-1 btn btn-secondary btn-sm me-1' title='editar'  data-bs-toggle='modal' data-bs-target='#modalEditarUsuario'> <i class='fa-solid fa-pen-to-square'></i> editar</button>";
-            $acaodelete = $user->perfil == 'adm' ?  "<button type='button'  class='btn btn-outline-secondary btn-sm me-1 mb-1' title='apagar'> <i class='fa-solid fa-ban'></i> Apagar </button>" :
-                                                    "<button type='button'  class='mb-1 btn btn-secondary btn-sm me-1' title='apagar'> <i class='fa-regular fa-trash-can'></i> Apagar";
+            //$acaodelete = $user->perfil == 'adm' ?  "<button type='button'  class='btn btn-outline-secondary btn-sm me-1 mb-1' title='apagar'> <i class='fa-solid fa-ban'></i> Apagar </button>" :
+            //                                        "<button type='button'  class='mb-1 btn btn-secondary btn-sm me-1' title='apagar'> <i class='fa-regular fa-trash-can'></i> Apagar";
 
 
-            
-            /* $action = "{{ route('datatable.destroy', ['user' => $user->id]) }}";
-            $acaodelete2 = `<form id="formDelete{{ $user->id }}" method="POST" action="${$action}">
-                                @csrf
-                                @method('delete')
-                                <button type="submit" class="mb-1 btn btn-secondary btn-sm me-1 btnDelete" data-delete-entidade="Usuário" data-delete-id="{{ $user->id }}"  data-value-record="{{ $user->nome }}" title="deletar">
-                                <i class="fa-regular fa-trash-can"></i> deletar
-                                </button>
-                            </form>`;
-            $acoes = $acaoshow." ".$acaoedit." ".$acaodelete2; */
-           
+
+            $acaodelete = "<button type='button' id='btnDeletarUsuario' class='mb-1 btn btn-secondary btn-sm me-1 btnDelete' data-delete-entidade='Usuário' data-delete-id='$user->id'  data-value-record='$user->nomecompleto' title='deletar'>
+                                <i class='fa-regular fa-trash-can'></i> deletar
+                          </button>";
 
 
             $acoes = $acaoshow." ".$acaoedit." ".$acaodelete;
@@ -178,7 +171,17 @@ class DatatableController extends Controller
         return response()->json([
             'msg_sucesso' => "Usuário atualizado com sucesso!"
         ]);
+    }
 
+    // Excluir o usuário do banco de dados
+    public function destroy(User $user)
+    {
+        // Excluir o registro do banco de dados
+        $user->delete();
+
+        return response()->json([
+            'msg_sucesso' => "Usuário deletado com sucesso!"
+        ]);
     }
 
 }
