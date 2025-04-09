@@ -35,6 +35,7 @@
                             <th>CARGO</th>
                             <th>PERFIL</th>
                             <th>CONTATO</th>
+                            <th>ATIVO</th>
                             <th>AÇÕES</th>
                         </tr>
                     </thead>
@@ -238,7 +239,7 @@
             <!-- Inicio Modal EditarUsuario -->
             <form id="formEditarUsuario" action="{{ route('user.update', 0) }}" method="POST" autocomplete="off">
                 @csrf
-                @method('PUT')
+                @method('POST')
                     <div class="modal fade" id="modalEditarUsuario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
                         <div class="modal-dialog modal-xl">
                             <div class="modal-content">
@@ -251,6 +252,9 @@
                                     {{-- inicio dos campos do formulário de edição de usuário  --}}
                                     {{-- Este componente será acionado sempre que houver uma erro de exceção em: store, update ou delete --}}
                                     <x-errorexception />
+
+                                        {{-- id do usuário --}}
+                                        <input type="hidden" name="iduser_hidden">
 
                                         {{-- nomecompleto --}}
                                         <div class="mb-4 row">
@@ -366,11 +370,11 @@
                                             </div>
                                         </div>
 
-                                    {{-- final dos campos do formulário de cadastro de usuário --}}
+                                    {{-- final dos campos do formulário de editar de usuário --}}
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary" id="btnEditarUsuario" style="width: 95px;"> Salvar </button>
+                                    <button type="submit" class="btn btn-primary" id="btnEditarUsuario" style="width: 95px;"> Atualizar </button>
                                 </div>
                             </div>
                         </div>
@@ -396,7 +400,15 @@
             // scrollY: 300,    //Define a altura da tabela para rolagem vertical
 
             // Menu da quantidade de registros a serem exibidos. O valor default é 10
-            lengthMenu: [5, 10, 15, 20],
+            lengthMenu: [10, 15, 20, 25],
+
+            // Ordena os dados em ordem alfabética pela coluna 1 (nomecompleto)
+            order: [[ 1, 'asc' ]],
+
+            // Colunas que não serão ordenadas (contato, ativo, ações)
+            columnDefs: [
+                { orderable: false, targets: [2, 5, 6, 7] }
+            ],
 
             // Exibe/Esconde o botão de filtro Default true
             // bFilter: true,
@@ -417,6 +429,7 @@
                     { data: 'cargo' },
                     { data: 'perfil' },
                     { data: 'contato' },
+                    { data: 'ativo' },
                     { data: 'acoes' },
             ],
         });
@@ -445,10 +458,7 @@
                 'email': $("#formCadastrarUsuario input[name=email]").val(),
                 'password': $("#formCadastrarUsuario input[name=password]").val(),
                 'password_confirmation': $("#formCadastrarUsuario input[name=password_confirmation]").val(),
-                'ativo': $("#formCadastrarUsuario input:radio[name=ativo]:checked").val()
-                //'ativo': $("input[name=ativo]").val(),
-                //'ativo': $("input:radio[name=ativo]").val()
-                //'ativo': $('input:radio[name=theme]:checked').val();
+                'ativo': $("#formCadastrarUsuario input:radio[name=ativo]:checked").val()   //'ativo': $("input[name=ativo]").val(), //'ativo': $("input:radio[name=ativo]").val() //'ativo': $('input:radio[name=theme]:checked').val();
             }
 
             // Trecho de código fornecido na documentação do Laravel na seção AJAX
@@ -471,6 +481,7 @@
                 success: function(response){
                     $('#formCadastrarUsuario').trigger("reset");
                     $('#modalCadastrarUsuario').modal('hide');
+                    $("#datatablesUsers").DataTable().ajax.reload();
                     $("#msg_success").text(response.msg_sucesso);
                     $(".alert").css("visibility","visible");
                 },
@@ -532,14 +543,15 @@
             var rota = "{{route('datatable.ajaxgetuser', 'id')}}";
                 rota = rota.replace('id', iduser);
 
-            // <input type="text" name="nomecompleto" value="{{ old('nomecompleto') }}" class="form-control" id="nomecompleto" placeholder="Nome completo" >
+            // EXIBINDO DADOS NO FORMULÁRIO PARA EDIÇÃO
             $.ajax({
                 url: rota,
                 type: "GET",
                 dataType : "json",
                 success: function(user){
                     // Encontra dentro do formulário(formEditarUsuario) o campo específico e atribui o respectivo valor.
-                    // evitando preencher o formulário(formSalvarUsuario) de forma inapropriada.
+                    // evitando preencher o formulário(formSalvarUsuario) de forma inapropriada
+                    $("#formEditarUsuario input[name=iduser_hidden]").val(user.id);
                     $("#formEditarUsuario input[name=nomecompleto]").val(user.nomecompleto);
                     $("#formEditarUsuario input[name=nome]").val(user.nome);
                     $("#formEditarUsuario input[name=cpf]").val(user.cpf);
@@ -547,19 +559,76 @@
                     $("#formEditarUsuario input[name=fone]").val(user.fone);
                     $("#formEditarUsuario select[name=perfil]").val(user.perfil).change(); //$("#formEditarUsuario select[name=perfil]").val(user.perfil).change().attr("selected", "true");
                     $("#formEditarUsuario input[name=email]").val(user.email);
-                    $("#formEditarUsuario input:radio[name=ativo]").val(user.ativo).prop("checked", "true");  //$("input:radio[name=myname]").val("cat");
-
+                    $("#formEditarUsuario input:radio[name=ativo][value=" + user.ativo + "]").prop('checked', true);
+                    
                     // Exibe a modal com os campos preenchidos
                     $('#modalEditarUsuario').modal('show');
-
-                    //alert("Valor do ativo: " +  $("#formEditarUsuario input:radio[name=ativo]").val(user.ativo));
-
-
-
                 }
             });
         });
 
+        // ENVIANDO OS DADOS DO FORMULÁRIO PARA ATUALIZAÇÃO NO BANCO
+        $(document).on('click', '#btnEditarUsuario', function(e){
+            // Evita que o formulário seja submetido
+            e.preventDefault();
+
+            // Captura dados dos campos
+            var data = {
+                'id': $("#formEditarUsuario input[name=iduser_hidden]").val(),
+                'nomecompleto': $("#formEditarUsuario input[name=nomecompleto]").val(),
+                'nome': $("#formEditarUsuario input[name=nome]").val(),
+                'cpf': $("#formEditarUsuario input[name=cpf]").val(),
+                'cargo': $("#formEditarUsuario input[name=cargo]").val(),
+                'fone': $("#formEditarUsuario input[name=fone]").val(),
+                'perfil': $("#formEditarUsuario select[name=perfil]").val(),
+                'email': $("#formEditarUsuario input[name=email]").val(),
+                'password': $("#formEditarUsuario input[name=password]").val(),
+                'password_confirmation': $("#formEditarUsuario input[name=password_confirmation]").val(),
+                'ativo': $("#formEditarUsuario input:radio[name=ativo]:checked").val()
+            }
+
+            // Trecho de código fornecido na documentação do Laravel na seção AJAX
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            // Configuração da Requisição Ajax
+            // var iduser = 12;
+            // var iduser = $("#formEditarUsuario input[name=iduser_hidden]").val();
+            var iduser = data.id;
+            var rota = "{{route('datatable.update', 'id')}}";
+                rota = rota.replace('id', iduser);
+
+                //alert("id do usuário: "+ iduser);
+
+            $.ajax({
+                url: rota,
+                type: "POST",
+                dataType : "json",
+                data: data,
+                beforeSend: function(){
+                    // Limpa todas as mensagens de erro antes de fazer uma requisição
+                    $(document).find("span.error-text").text("");
+                },
+                success: function(response){
+                    $('#formEditarUsuario').trigger("reset");
+                    $('#modalEditarUsuario').modal('hide');
+                    $("#datatablesUsers").DataTable().ajax.reload();
+                    $("#msg_success").text(response.msg_sucesso);
+                    $(".alert").css("visibility","visible");
+                },
+                error: function(response){
+                    //console.log(response.responseJSON);
+                    //console.log(response.responseJSON.message);
+                    $.each(response.responseJSON.errors, function(key, value){
+                        $("span."+key+"_error").text(value);
+                    });
+                }
+            });
+
+        });        
 
     </script>
 

@@ -159,7 +159,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/store-datatable', [DatatableController::class, 'store'])->name('datatable.store');
 
         Route::get('/edit-datatable/{user}', [DatatableController::class, 'edit'])->name('datatable.edit');
-        
+        Route::post('/update-datatable/{user}', [DatatableController::class, 'update'])->name('datatable.update');
         /*
         Route::get('/show-user/{user}', [DatatableController::class, 'show'])->name('user.show');
         Route::get('/edit-user/{user}', [DatatableController::class, 'edit'])->name('user.edit');

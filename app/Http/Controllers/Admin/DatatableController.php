@@ -46,7 +46,7 @@ class DatatableController extends Controller
 
         // Fetch records (restaurantes)
         $users = DB::table('users')
-        ->select('users.id', 'users.nomecompleto', 'users.cpf', 'users.cargo', 'users.fone', 'users.perfil', 'users.email')
+        ->select('users.id', 'users.nomecompleto', 'users.cpf', 'users.cargo', 'users.fone', 'users.perfil', 'users.email', 'users.ativo')
         ->where('users.nomecompleto', 'like', '%' .$searchValue . '%')
         ->orWhere('users.cpf', 'like', '%' .$searchValue . '%')
         ->orWhere('users.cargo', 'like', '%' . $searchValue . '%' )
@@ -65,6 +65,7 @@ class DatatableController extends Controller
             $cpf = $user->cpf;
             $cargo = $user->cargo;
             $perfil = ($user->perfil == 'adm' ? 'Administrador' : ($user->perfil == 'con' ? 'Consultor' : 'Operador'));
+            $ativo = ($user->ativo == '1' ? '<b><i class="fas fa-check text-success mr-2"></i></b>' : '<b><i class="fas fa-times  text-danger mr-2"></i></b>');
             $contato = $user->fone." / ".$user->email;
 
 
@@ -86,6 +87,7 @@ class DatatableController extends Controller
                 "cargo" => $cargo,
                 "perfil" => $perfil,
                 "contato" => $contato,
+                "ativo" => $ativo,
                 "acoes" => $acoes
             );
         }
@@ -136,6 +138,35 @@ class DatatableController extends Controller
         return response()->json([
             'msg_sucesso' => "Usuário cadastrado com sucesso!"
         ]);
+    }
+
+
+    public function update(UserRequest $request, User $user)
+    {
+        // Validar o formulário
+        $request->validated();
+
+        //$user = User::findOrFail($user->id);
+        //$user = User::find($user->id);
+
+        // Cadastrar no banco de dados na tabela usuários.
+        $user->update([
+            'nomecompleto' => $request->nomecompleto,
+            'nome' => $request->nome,
+            'cpf' => $request->cpf,
+            'cargo' => $request->cargo,
+            'fone' => $request->fone,
+            'perfil' => $request->perfil,
+            'email' => $request->email,
+            'password' => "123456",
+            'ativo' => $request->ativo,
+            'primeiroacesso' => 1
+        ]);
+
+        return response()->json([
+            'msg_sucesso' => "Usuário atualizado com sucesso!"
+        ]);
+
     }
 
 }
