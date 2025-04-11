@@ -152,7 +152,7 @@ Route::group(['middleware' => 'auth'], function(){
 
         // DATATABLE
         Route::get('/index-datatable', [DatatableController::class, 'index'])->name('datatable.index');
-        Route::get('/ajaxgetusersindex-datatable', [DatatableController::class, 'ajaxgetusersindex'])->name('datatable.ajaxgetusersindex');
+        Route::get('/indexajaxgetusers-datatable', [DatatableController::class, 'indexajaxgetusers'])->name('datatable.indexajaxgetusers');
 
         Route::get('/create-datatable', [DatatableController::class, 'create'])->name('datatable.create');
         Route::post('/store-datatable', [DatatableController::class, 'store'])->name('datatable.store');

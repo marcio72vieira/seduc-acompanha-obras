@@ -19,37 +19,53 @@
                     @csrf
                     @method('POST')
 
-                    <div class="row">
+                    <div class="row mb-3">
                         {{-- descricao --}}
                         <div class="col-6">
                             <div class="form-group focused">
                                 <label class="form-control-label" for="descricao">Descricao<span class="small text-danger">*</span></label>
-                                <input type="text" class="form-control" id="descricao" name="descricao" value="{{old('descricao')}}" required >
+                                <input type="text" class="form-control" id="descricao" name="descricao" value="{{old('descricao')}}"  >
                                 @error('descricao')
                                     <small style="color: red">{{$message}}</small>
                                 @enderror
                             </div>
                         </div>
 
-                        {{-- data_ini --}}
+                        {{-- escola_id --}}
+                        <div class="col-6">
+                            <div class="form-group focused">
+                                <label class="form-control-label" for="escola_id">Escola<span class="small text-danger">*</span></label>
+                                <select name="escola_id" id="escola_id" class="form-control select2" >
+                                    <option value="" selected disabled>Escolha...</option>
+                                    @foreach($escolas  as $escola)
+                                        <option value="{{$escola->id}}" {{old('escola_id') == $escola->id ? 'selected' : ''}}>{{$escola->nome}}</option>
+                                    @endforeach
+                                </select>
+                                @error('escola_id')
+                                    <small style="color: red">{{$message}}</small>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row  mb-3">
+                        {{-- data_inicio --}}
                         <div class="col-2">
                             <div class="form-group focused">
-                                <label class="form-control-label" for="data_ini">Data Inicial<span class="small text-danger">*</span></label>
-                                <input type="date" id="data_ini" class="form-control" name="data_ini" value="{{old('data_ini')}}" required>
-                                <input type="hidden" name="data_ini_hidden" id="data_ini_hidden"  value="">
-                                @error('data_ini')
+                                <label class="form-control-label" for="data_inicio">Data Inicial<span class="small text-danger">*</span></label>
+                                <input type="date" id="data_inicio" class="form-control" name="data_inicio" value="{{old('data_inicio')}}" >
+                                @error('data_inicio')
                                     <small style="color: red">{{$message}}</small>
                                 @enderror
                             </div>
                         </div>
 
-                        {{-- data_fin --}}
+                        {{-- data_fim --}}
                         <div class="col-2">
                             <div class="form-group focused">
-                                <label class="form-control-label" for="data_fin">Data Final<span class="small text-danger">*</span></label>
-                                <input type="date" id="data_fin" class="form-control" name="data_fin" value="{{old('data_fin')}}" required>
-                                <input type="hidden" name="data_fin_hidden" id="data_fin_hidden"  value="">
-                                @error('data_fin')
+                                <label class="form-control-label" for="data_fim">Data Final<span class="small text-danger">*</span></label>
+                                <input type="date" id="data_fim" class="form-control" name="data_fim" value="{{old('data_fim')}}" >
+                                @error('data_fim')
                                     <small style="color: red">{{$message}}</small>
                                 @enderror
                             </div>
@@ -61,30 +77,30 @@
                                 <label class="form-control-label" for="ativo">Ativo ? <span class="small text-danger">*</span></label>
                                 <div style="margin-top: 5px">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="ativo" id="ativosim" value="1" {{old('ativo') == '1' ? 'checked' : ''}} required>
+                                        <input class="form-check-input" type="radio" name="ativo" id="ativosim" value="1" {{old('ativo') == '1' ? 'checked' : ''}} >
                                         <label class="form-check-label" for="ativosim">Sim</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="ativo" id="ativonao" value="0" {{old('ativo') == '0' ? 'checked' : ''}} required>
+                                        <input class="form-check-input" type="radio" name="ativo" id="ativonao" value="0" {{old('ativo') == '0' ? 'checked' : ''}} >
                                         <label class="form-check-label" for="ativonao">Não</label>
                                     </div>
+                                    <br>
                                     @error('ativo')
                                         <small style="color: red">{{$message}}</small>
                                     @enderror
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Buttons -->
-                        <div class="row">
-                            <div class="d-flex flex-row-reverse col-12">
-                                <div style="margin-top: 15px">
-                                    <a class="btn btn-outline-secondary" href="{{ route('obra.index')}}" role="button">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary" style="width: 95px;"> Salvar </button>
-                                </div>
+                    <!-- Buttons -->
+                    <div class="row">
+                        <div class="d-flex flex-row-reverse col-12">
+                            <div style="margin-top: 15px">
+                                <a class="btn btn-outline-secondary" href="{{ route('obra.index')}}" role="button">Cancelar</a>
+                                <button type="submit" class="btn btn-primary" style="width: 95px;"> Salvar </button>
                             </div>
                         </div>
-
                     </div>
                 </form>
 

@@ -18,7 +18,7 @@ class DatatableController extends Controller
     }
 
 
-    public function ajaxgetusersindex(Request $request)
+    public function indexajaxgetusers(Request $request)
     {
         ## Read value
         $draw = $request->get('draw');

@@ -28,6 +28,11 @@ class Municipio extends Model
         return $this->hasMany(Escola::class);
     }
 
+    public function obras ()
+    {
+        return $this->hasMany(Obra::class);
+    }
+
     public function users()
     {
         return $this->hasMany(User::class);

@@ -22,19 +22,27 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nome</th>
+                        <th>Escola/Descrição</th>
+                        <th>Regional</th>
+                        <th>Município</th>
+                        <th>Inicio</th>
+                        <th>Fim</th>
+                        <th>Status</th>
                         <th>Ativo</th>
-                        <th>Cadastrado</th>
-                        <th width="25%">Ações</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($obras as $obra)
                         <tr>
                             <td>{{ $obra->id }}</th>
-                            <td>{{ $obra->nome }}</td>
+                            <td>{{ $obra->escola->nome }}<br>{{ $obra->descricao }}</td>
+                            <td>{{ $obra->regional->nome }}</td>
+                            <td>{{ $obra->municipio->nome }}</td>
+                            <td>{{ \Carbon\Carbon::parse($obra->data_inicio)->format('d/m/Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($obra->data_fim)->format('d/m/Y') }}</td>
+                            <td>{{ $obra->estatus == 1 ? 'Criada' : 'Outro' }}</td>
                             <td>{{ $obra->ativo == 1 ? "Sim" : "Não" }}</td>
-                            <td>{{ \Carbon\Carbon::parse($obra->created_at)->format('d/m/Y H:i') }}</td>
                             <td class="flex-row d-md-flex justify-content-start">
 
                                 <a href="{{ route('obra.edit', ['obra' => $obra->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">

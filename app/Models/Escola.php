@@ -36,4 +36,9 @@ class Escola extends Model
         return $this->belongsTo(Municipio::class);
     }
 
+    public function obra()
+    {
+        return $this->hasOne(Obra::class);
+    }
+
 }

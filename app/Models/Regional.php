@@ -28,6 +28,11 @@ class Regional extends Model
         return $this->hasMany(Escola::class);
     }
 
+    public function obras ()
+    {
+        return $this->hasMany(Obra::class);
+    }
+
     public function users ()
     {
         return $this->hasMany(User::class);
@@ -35,13 +40,13 @@ class Regional extends Model
 
 
     // Retorna especificamente (através do método count()) a quantidade de escolas de uma regional através do município.
-    public function qtdescolasdaregional() 
+    public function qtdescolasdaregional()
     {
         return $this->hasManyThrough(Escola::class, Municipio::class)->count();
     }
 
     // Retorna as escolas da regional através do município.
-    public function escolasdaregional() 
+    public function escolasdaregional()
     {
         return $this->hasManyThrough(Escola::class, Municipio::class);
     }

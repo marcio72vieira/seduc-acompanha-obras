@@ -423,7 +423,7 @@
             // Indica a mensagem de processamento e que os dados virão de um servidor
             processing: true,
             serverSide: true,
-            ajax: "{{ route('datatable.ajaxgetusersindex') }}",
+            ajax: "{{ route('datatable.indexajaxgetusers') }}",
             // Colunas que serão retornadas e deverão corresponder ao mesmo número de colunas da tabela
             columns: [
                     { data: 'id' },

@@ -11,7 +11,7 @@ class ObraRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,22 @@ class ObraRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'descricao'         => 'bail|required',
+            'escola_id'         => 'bail|required',
+            'data_inicio'       => 'bail|required',
+            'data_fim'          => 'bail|required',
+            'ativo'             => 'bail|required',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return[
+            'descricao.required' => 'Campo descrição é obrigatório!',
+            'escola_id.required' => 'Selecione uma escola',
+            'data_inicio.required' => 'Campo data inicial é obrigatório!',
+            'data_fim.required' => 'Campo data final é obrigatório!',
+            'ativo.required' => 'Campo ativo é obrigatório!'
         ];
     }
 }
