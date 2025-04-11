@@ -170,8 +170,6 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('pdf-user/relpdflistusers', [DatatableController::class, 'relpdflistusers'])->name('user.pdflistusers');
         Route::get('pdf-user/relpdflistusers', [DatatableController::class, 'relpdflistusers'])->name('user.pdflistusers');
         */
-
-
     });// Final das rotas de acesso a usuários administradores (onlyAdm)
 
 

@@ -695,5 +695,4 @@
         });
 
     </script>
-
 @endsection

@@ -147,7 +147,6 @@ class DatatableController extends Controller
     }
 
 
-
     public function update(UserRequest $request, User $user)
     {
         // Validar o formulário
