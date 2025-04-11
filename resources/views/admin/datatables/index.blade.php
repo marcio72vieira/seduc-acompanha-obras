@@ -256,6 +256,9 @@
                                         {{-- id do usuário --}}
                                         <input type="hidden" name="iduser_hidden">
 
+                                        {{-- antiga senha do usuário --}}
+                                        <input type="hidden" name="old_password_hidden">
+
                                         {{-- nomecompleto --}}
                                         <div class="mb-4 row">
                                             <label for="nomecompleto" class="col-sm-2 col-form-label">Nome Completo <span class="small text-danger">*</span></label>
@@ -420,7 +423,7 @@
             // Indica a mensagem de processamento e que os dados virão de um servidor
             processing: true,
             serverSide: true,
-            ajax: "{{ route('datatable.ajaxgetusers') }}",
+            ajax: "{{ route('datatable.ajaxgetusersindex') }}",
             // Colunas que serão retornadas e deverão corresponder ao mesmo número de colunas da tabela
             columns: [
                     { data: 'id' },
@@ -552,6 +555,7 @@
                     // Encontra dentro do formulário(formEditarUsuario) o campo específico e atribui o respectivo valor.
                     // evitando preencher o formulário(formSalvarUsuario) de forma inapropriada
                     $("#formEditarUsuario input[name=iduser_hidden]").val(user.id);
+                    $("#formEditarUsuario input[name=old_password_hidden").val(user.password);
                     $("#formEditarUsuario input[name=nomecompleto]").val(user.nomecompleto);
                     $("#formEditarUsuario input[name=nome]").val(user.nome);
                     $("#formEditarUsuario input[name=cpf]").val(user.cpf);
@@ -575,6 +579,7 @@
             // Captura dados dos campos
             var data = {
                 'id': $("#formEditarUsuario input[name=iduser_hidden]").val(),
+                'password': $("#formEditarUsuario input[name=old_password_hidden]").val(),
                 'nomecompleto': $("#formEditarUsuario input[name=nomecompleto]").val(),
                 'nome': $("#formEditarUsuario input[name=nome]").val(),
                 'cpf': $("#formEditarUsuario input[name=cpf]").val(),

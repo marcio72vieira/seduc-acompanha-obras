@@ -151,14 +151,13 @@ Route::group(['middleware' => 'auth'], function(){
 
 
         // DATATABLE
-        Route::get('/ajaxgetusers-datatable', [DatatableController::class, 'ajaxgetusers'])->name('datatable.ajaxgetusers');
-        Route::get('/ajaxgetuser-datatable/{user}', [DatatableController::class, 'ajaxgetuser'])->name('datatable.ajaxgetuser');
-
         Route::get('/index-datatable', [DatatableController::class, 'index'])->name('datatable.index');
+        Route::get('/ajaxgetusersindex-datatable', [DatatableController::class, 'ajaxgetusersindex'])->name('datatable.ajaxgetusersindex');
+
         Route::get('/create-datatable', [DatatableController::class, 'create'])->name('datatable.create');
         Route::post('/store-datatable', [DatatableController::class, 'store'])->name('datatable.store');
-
         Route::get('/edit-datatable/{user}', [DatatableController::class, 'edit'])->name('datatable.edit');
+        Route::get('/ajaxgetuser-datatable/{user}', [DatatableController::class, 'ajaxgetuser'])->name('datatable.ajaxgetuser');
         Route::put('/update-datatable/{user}', [DatatableController::class, 'update'])->name('datatable.update');
 
         Route::delete('/destroy-datatable/{user}', [DatatableController::class, 'destroy'])->name('datatable.destroy');

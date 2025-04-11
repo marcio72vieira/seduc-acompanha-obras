@@ -18,7 +18,7 @@ class DatatableController extends Controller
     }
 
 
-    public function ajaxgetusers(Request $request)
+    public function ajaxgetusersindex(Request $request)
     {
         ## Read value
         $draw = $request->get('draw');
@@ -109,14 +109,6 @@ class DatatableController extends Controller
         return response()->json($response);
     }
 
-    // Recupera o usuário pelo ID
-    public function ajaxgetuser(User $user)
-    {
-        $user = User::findOrFail($user->id);
-
-        return response()->json($user);
-    }
-
 
     public function store(UserRequest $request)
     {
@@ -146,6 +138,16 @@ class DatatableController extends Controller
     }
 
 
+    // Recupera o usuário pelo ID
+    public function ajaxgetuser(User $user)
+    {
+        $user = User::findOrFail($user->id);
+
+        return response()->json($user);
+    }
+
+
+
     public function update(UserRequest $request, User $user)
     {
         // Validar o formulário
@@ -153,6 +155,13 @@ class DatatableController extends Controller
 
         //$user = User::findOrFail($user->id);
         //$user = User::find($user->id);
+
+        // Se a senha não foi alterada, mantém a senha antiga.
+        if($request->password == ''){
+            $passwordUser = $request->old_password_hidden;
+        }else{
+            $passwordUser = bcrypt($request->password);
+        }
 
         // Cadastrar no banco de dados na tabela usuários.
         $user->update([
@@ -163,7 +172,7 @@ class DatatableController extends Controller
             'fone' => $request->fone,
             'perfil' => $request->perfil,
             'email' => $request->email,
-            'password' => "123456",
+            'password' => $passwordUser,
             'ativo' => $request->ativo,
             'primeiroacesso' => 1
         ]);
