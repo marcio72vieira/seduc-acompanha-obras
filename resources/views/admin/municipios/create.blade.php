@@ -3,7 +3,7 @@
 @section('content-page')
     <div class="container-fluid px-4">
         <div class="mb-1 hstack gap-2">
-            <h2 class="mt-3">Município - cadastro</h2>
+            <h2 class="mt-3">Municípios - cadastro</h2>
         </div>
 
         <div class="card mb-4 border-light shadow">

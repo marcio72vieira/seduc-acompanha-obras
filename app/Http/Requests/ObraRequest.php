@@ -21,13 +21,33 @@ class ObraRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        /* return [
+            'descricao'         => 'bail|required',
+            'escola_id'         => 'bail|required',
+            'data_inicio'       => 'bail|required',
+            'data_fim'          => 'bail|required',
+            'ativo'             => 'bail|required',
+        ]; */
+
+
+        $rules = [
             'descricao'         => 'bail|required',
             'escola_id'         => 'bail|required',
             'data_inicio'       => 'bail|required',
             'data_fim'          => 'bail|required',
             'ativo'             => 'bail|required',
         ];
+
+        // Se nenhum "objeto de construção/reforma" for escolhido a variável/array "objetos" virá vazia (null).
+        // Como sabemos, "checkbox" quando não é checkado a variável que o represdnta não é enviado para
+        // processamento, ou seja, ele é null (não existe), diferentemente de um "radio button" que possui 
+        // sempre dois valores do tipo: "sim" ou "não".
+        if($this->objetos == null){
+            $rules += ['objetos' => 'required'];
+        }
+
+        return $rules;
+
     }
 
     public function messages(): array
@@ -37,7 +57,8 @@ class ObraRequest extends FormRequest
             'escola_id.required' => 'Selecione uma escola',
             'data_inicio.required' => 'Campo data inicial é obrigatório!',
             'data_fim.required' => 'Campo data final é obrigatório!',
-            'ativo.required' => 'Campo ativo é obrigatório!'
+            'ativo.required' => 'Campo ativo é obrigatório!',
+            'objetos.required' => 'Escolha pelo menos um objeto!'
         ];
     }
 }

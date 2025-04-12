@@ -35,7 +35,7 @@
                 </thead>
                 <tbody>
                     @forelse ($obras as $obra)
-                        <tr>
+                        <tr class="align-top">
                             <td>{{ $obra->id }}</th>
                             <td>{{ $obra->escola->nome }}<br>{{ $obra->descricao }}</td>
                             <td>{{ $obra->regional->nome }}</td>
@@ -49,23 +49,24 @@
                             </td>
                             <td>{{ $obra->estatus == 1 ? 'Criada' : 'Outro' }}</td>
                             <td>{{ $obra->ativo == 1 ? "Sim" : "Não" }}</td>
-                            <td class="flex-row d-md-flex justify-content-start">
-
+                            <td class="align-top">
+                                <div class="flex-row d-md-flex justify-content-start">
                                 <a href="{{ route('obra.edit', ['obra' => $obra->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
                                     <i class="fa-solid fa-pen-to-square"></i> Editar
                                 </a>
 
-                                {{-- @if($obra->qtdmunicipiosvinc($obra->id) == 0) --}}
+                                @if(($obra->objetos->count() == 0) || (Auth::user()->id == 1))
                                     <form id="formDelete{{ $obra->id }}" method="POST" action="{{ route('obra.destroy', ['obra' => $obra->id]) }}">
                                         @csrf
                                         @method('delete')
-                                        <button type="submit" class="mb-1 btn btn-secondary btn-sm me-1 btnDelete" data-delete-entidade="obra" data-delete-id="{{ $obra->id }}"  data-value-record="{{ $obra->nome }}">
+                                        <button type="submit" class="mb-1 btn btn-secondary btn-sm me-1 btnDelete" data-delete-entidade="obra" data-delete-id="{{ $obra->id }}"  data-value-record="{{ $obra->escola->nome }}">
                                             <i class="fa-regular fa-trash-can"></i> Apagar
                                         </button>
                                     </form>
-                                {{-- @else
-                                    <button type="button" class="mb-1 btn btn-outline-secondary btn-sm me-1"  title="há municípios vinculados!"> <i class="fa-solid fa-ban"></i> Apagar </button>
-                                @endif --}}
+                                @else
+                                    <button type="button" class="mb-1 btn btn-outline-secondary btn-sm me-1"  title="há objetos vinculados!"> <i class="fa-solid fa-ban"></i> Apagar </button>
+                                @endif
+                                </div>
 
                             </td>
                         </tr>

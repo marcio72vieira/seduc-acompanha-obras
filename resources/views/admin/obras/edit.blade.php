@@ -3,7 +3,7 @@
 @section('content-page')
     <div class="px-4 container-fluid">
         <div class="gap-2 mb-1 hstack">
-            <h2 class="mt-3">Obras - cadastro</h2>
+            <h2 class="mt-3">Obras - edição</h2>
         </div>
 
         <div class="mb-4 shadow card border-light">
@@ -15,16 +15,16 @@
 
                 {{-- <x-alert /> --}}
 
-                <form action="{{ route('obra.store') }}" method="POST" autocomplete="off">
+                <form action="{{ route('obra.update', ['obra' => $obra->id]) }}" method="POST" autocomplete="off">
                     @csrf
-                    @method('POST')
+                    @method('PUT')
 
                     <div class="mb-3 row">
                         {{-- descricao --}}
                         <div class="col-12">
                             <div class="form-group focused">
                                 <label class="form-control-label" for="descricao">Descricao<span class="small text-danger">*</span></label>
-                                <input type="text" class="form-control" id="descricao" name="descricao" value="{{old('descricao')}}"  >
+                                <input type="text" class="form-control" id="descricao" name="descricao" value="{{ old('descricao', $obra->descricao) }}" required>
                                 @error('descricao')
                                     <small style="color: red">{{$message}}</small>
                                 @enderror
@@ -38,10 +38,10 @@
                         <div class="col-6">
                             <div class="form-group focused">
                                 <label class="form-control-label" for="escola_id">Escola<span class="small text-danger">*</span></label>
-                                <select name="escola_id" id="escola_id" class="form-control select2" >
+                                <select name="escola_id" id="escola_id" class="form-control select2" required>
                                     <option value="" selected disabled>Escolha...</option>
                                     @foreach($escolas  as $escola)
-                                        <option value="{{$escola->id}}" {{old('escola_id') == $escola->id ? 'selected' : ''}}>{{$escola->nome}}</option>
+                                        <option value="{{ $escola->id }}" {{old('escola_id', $obra->escola->id) == $escola->id ? 'selected' : ''}}>{{$escola->nome}}</option>
                                     @endforeach
                                 </select>
                                 @error('escola_id')
@@ -54,7 +54,7 @@
                         <div class="col-2">
                             <div class="form-group focused">
                                 <label class="form-control-label" for="data_inicio">Data Inicial<span class="small text-danger">*</span></label>
-                                <input type="date" id="data_inicio" class="form-control" name="data_inicio" value="{{old('data_inicio')}}" >
+                                <input type="date" id="data_inicio" class="form-control" name="data_inicio" value="{{ old('data_inicio', $obra->data_inicio) }}" required >
                                 @error('data_inicio')
                                     <small style="color: red">{{$message}}</small>
                                 @enderror
@@ -65,7 +65,7 @@
                         <div class="col-2">
                             <div class="form-group focused">
                                 <label class="form-control-label" for="data_fim">Data Final<span class="small text-danger">*</span></label>
-                                <input type="date" id="data_fim" class="form-control" name="data_fim" value="{{old('data_fim')}}" >
+                                <input type="date" id="data_fim" class="form-control" name="data_fim" value="{{ old('data_fim', $obra->data_fim) }}" required>
                                 @error('data_fim')
                                     <small style="color: red">{{$message}}</small>
                                 @enderror
@@ -78,11 +78,11 @@
                                 <label class="form-control-label" for="ativo">Ativo ? <span class="small text-danger">*</span></label>
                                 <div style="margin-top: 5px">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="ativo" id="ativosim" value="1" {{old('ativo') == '1' ? 'checked' : ''}} >
+                                        <input class="form-check-input" type="radio" name="ativo" id="ativosim" value="1" {{old('ativo', $obra->ativo) == '1' ? 'checked' : ''}} required>
                                         <label class="form-check-label" for="ativosim">Sim</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="ativo" id="ativonao" value="0" {{old('ativo') == '0' ? 'checked' : ''}} >
+                                        <input class="form-check-input" type="radio" name="ativo" id="ativonao" value="0" {{old('ativo', $obra->ativo) == '0' ? 'checked' : ''}} required>
                                         <label class="form-check-label" for="ativonao">Não</label>
                                     </div>
                                     <br>
@@ -104,11 +104,15 @@
                                 @foreach ($objetos as $objeto)
                                     <div class="col-lg-3" style="padding-bottom: 10px;">
                                         <div>
-                                            <input type="checkbox" id="objeto_{{$objeto->id}}" name="objetos[]" value="{{$objeto->id}}"
+                                            <input type="checkbox" id="residuo_{{$objeto->id}}" name="objetos[]" value="{{$objeto->id}}"
                                             @if(old('objetos'))
+                                                {{-- Verifica se o id do objeto atual(do loop atual, está dentro do array de objetos retornado pela diretriz old('objetos'), 
+                                                     estando, ele faz o 'checked' --}}
                                                 {{ in_array($objeto->id, old('objetos')) ? 'checked' : '' }}
+                                            @else
+                                                {{ $obra->objetos->contains($objeto->id) ? 'checked' : '' }}
                                             @endif
-                                            style="background: #ff0000;">
+                                            >
                                             <label for="residuo_{{$objeto->id}}">{{$objeto->nome}}</label>
                                         </div>
                                     </div>
