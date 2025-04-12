@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ObraRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Escola;
 use App\Models\Obra;
+use App\Models\Objeto;
 use Exception;
 
 
@@ -24,14 +26,35 @@ class ObraController extends Controller
     public function create()
     {
         $escolas = Escola::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
+        $objetos = Objeto::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
 
-        return view('admin.obras.create', ['escolas' => $escolas]);
+        return view('admin.obras.create', ['escolas' => $escolas, 'objetos' => $objetos]);
     }
+
 
     public function store(ObraRequest $request)
     {
         // Validar o formulário
         $request->validated();
+
+        /* /////////////////////////
+                                //dd($request->all());
+
+                                DB::beginTransaction();
+                                    $companhia = Companhia::create($request->all());
+
+                                    if($request->has('residuos')){
+                                        $companhia->residuos()->sync($request->residuos);
+                                    }
+                                DB::commit();
+
+                                $request->session()->flash('sucesso', 'Registro incluído com sucesso!');
+
+                                return redirect()->route('admin.companhia.index');
+        //////////////// */
+
+        // Marcar o ponto inicial de uma transação
+        DB::beginTransaction();
 
         try {
 
@@ -41,7 +64,7 @@ class ObraController extends Controller
             // Obtém o id do Municipio através do relacionamento existente entre escola e municipio
             $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
 
-            Obra::create([
+            $obra = Obra::create([
                 'descricao' => $request->descricao,
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
@@ -52,10 +75,19 @@ class ObraController extends Controller
                 'ativo' => $request->ativo,
             ]);
 
+            if($request->has('objetos')){
+                $obra->objetos()->sync($request->objetos);
+            }
+
+            DB::commit();
+
              // Redirecionar o usuário, enviar a mensagem de sucesso
             return redirect()->route('obra.index')->with('success', 'Obra cadastrada com sucesso!');
 
         } catch (Exception $e) {
+
+            // Operação não é concluiída com êxito
+            DB::rollBack();
 
             // Redirecionar o usuário, enviar a mensagem de erro
             return back()->withInput()->with('error', 'Obra não cadastrada!');

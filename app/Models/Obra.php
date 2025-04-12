@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Obra extends Model
 {
     use HasFactory;
@@ -36,6 +36,12 @@ class Obra extends Model
     public function escola()
     {
         return $this->belongsTo(Escola::class);
+    }
+
+
+    public function objetos(): BelongsToMany
+    {
+        return $this->belongsToMany(Objeto::class)->withTimestamps();
     }
 
 
