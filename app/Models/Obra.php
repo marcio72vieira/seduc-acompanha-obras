@@ -44,7 +44,6 @@ class Obra extends Model
         return $this->belongsTo(Escola::class);
     }
 
-
     public function objetos(): BelongsToMany
     {
         return $this->belongsToMany(Objeto::class)->withTimestamps();

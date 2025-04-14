@@ -22,6 +22,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>TIPO</th>
                         <th>Escola/Descrição</th>
                         <th>Regional</th>
                         <th>Município</th>
@@ -37,6 +38,7 @@
                     @forelse ($obras as $obra)
                         <tr class="align-top">
                             <td>{{ $obra->id }}</th>
+                            <td>{{ $obra->tipoobra->nome }}</th>
                             <td>{{ $obra->escola->nome }}<br>{{ $obra->descricao }}</td>
                             <td>{{ $obra->regional->nome }}</td>
                             <td>{{ $obra->municipio->nome }}</td>
@@ -85,10 +87,6 @@
 
 </div>
 
-
-@endsection
-
-@section('scripts')
 
 @endsection
 

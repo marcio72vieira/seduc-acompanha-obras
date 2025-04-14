@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ObraRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Tipoobra;
 use App\Models\Escola;
 use App\Models\Obra;
 use App\Models\Objeto;
@@ -25,10 +26,11 @@ class ObraController extends Controller
 
     public function create()
     {
+        $tipoobras = Tipoobra::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $escolas = Escola::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $objetos = Objeto::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
 
-        return view('admin.obras.create', ['escolas' => $escolas, 'objetos' => $objetos]);
+        return view('admin.obras.create', ['tipoobras' => $tipoobras, 'escolas' => $escolas, 'objetos' => $objetos]);
     }
 
 
@@ -36,7 +38,6 @@ class ObraController extends Controller
     {
         // Validar o formulário
         $request->validated();
-
 
         // Marcar o ponto inicial de uma transação
         DB::beginTransaction();
@@ -50,7 +51,7 @@ class ObraController extends Controller
             $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
 
             $obra = Obra::create([
-                'descricao' => $request->descricao,
+                'tipoobra_id' => $request->tipoobra_id,
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
                 'municipio_id' => $idMunicipioObra,
@@ -58,6 +59,7 @@ class ObraController extends Controller
                 'data_fim' => $request->data_fim,
                 'estatus' => 1,     // Obra criada/cadastrada
                 'ativo' => $request->ativo,
+                'descricao' => $request->descricao,
             ]);
 
             if($request->has('objetos')){
@@ -82,15 +84,12 @@ class ObraController extends Controller
 
     public function edit(Obra $obra)
     {
+        $tipoobras = Tipoobra::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $escolas = Escola::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $objetos = Objeto::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
 
-        return view('admin.obras.edit', ['obra' => $obra, 'escolas' => $escolas, 'objetos' => $objetos]);
-
+        return view('admin.obras.edit', ['tipoobras' => $tipoobras, 'obra' => $obra, 'escolas' => $escolas, 'objetos' => $objetos]);
     }
-
-
-
 
 
     public function update(ObraRequest $request, Obra $obra)
@@ -111,7 +110,7 @@ class ObraController extends Controller
             $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
 
             $obra->update([
-                'descricao' => $request->descricao,
+                'tipoobra_id' => $request->tipoobra_id,
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
                 'municipio_id' => $idMunicipioObra,
@@ -119,6 +118,7 @@ class ObraController extends Controller
                 'data_fim' => $request->data_fim,
                 'estatus' => 1,     // Obra criada/cadastrada
                 'ativo' => $request->ativo,
+                'descricao' => $request->descricao,
             ]);
 
             if($request->has('objetos')){
@@ -157,6 +157,85 @@ class ObraController extends Controller
             return redirect()->route('obra.index')->with('error', 'Obra não excluída!');
         }
     }
+
+
+
+
+    public function relpdflistobras()
+    {
+        // Obtendo os dados
+        $obras = Obra::orderBy('id')->get();
+
+        // Definindo o nome do arquivo a ser baixado
+        $fileName = ('Obras_lista.pdf');
+
+        // Invocando a biblioteca mpdf e definindo as margens do arquivo
+        $mpdf = new \Mpdf\Mpdf([
+            'orientation' => 'L',
+            'margin_left' => 10,
+            'margin_right' => 10,
+            'margin_top' => 30,
+            'margin_bottom' => 15,
+            'margin-header' => 10,
+            'margin_footer' => 5
+        ]);
+
+        // Configurando o cabeçalho da página
+        $mpdf->SetHTMLHeader('
+            <table style="width:1080px; border-bottom: 1px solid #000000; margin-bottom: 3px;">
+                <tr>
+                    <td style="width: 140px">
+                        <img src="images/logo_seduc2.png" width="120"/>
+                    </td>
+                    <td style="width: 400px; font-size: 10px; font-family: Arial, Helvetica, sans-serif;">
+                        Governo do Estado do Maranhão<br>
+                        Secretaria de Estado da Educação / SEDUC<br>
+                        Agência de Tecnologia da Informação / ATI<br>
+                        Acompanhamento de Execução de Obras
+                    </td>
+                    <td style="width: 540px;" class="titulo-rel">
+                        OBRAS
+                    </td>
+                </tr>
+            </table>
+            <table style="width:1080px; border-collapse: collapse">
+                <tr>
+                    <td width="40px" class="col-header-table">ID</td>
+                    <td width="180px" class="col-header-table">TIPO</td>
+                    <td width="250px" class="col-header-table">ESCOLA</td>
+                    <td width="150px" class="col-header-table">REGIONAL</td>
+                    <td width="150px" class="col-header-table">MUNICÍPIO</td>
+                    <td width="140px" class="col-header-table">DATAs DE INÍCIO E FIM</td>
+                    <td width="170px" class="col-header-table">OBJETOS</td>
+                </tr>
+            </table>
+        ');
+
+        // Configurando o rodapé da página
+        $mpdf->SetHTMLFooter('
+            <table style="width:1080px; border-top: 1px solid #000000; font-size: 10px; font-family: Arial, Helvetica, sans-serif;">
+                <tr>
+                    <td width="200px">São Luis(MA) {DATE d/m/Y}</td>
+                    <td width="830px" align="center"></td>
+                    <td width="50px" align="right">{PAGENO}/{nbpg}</td>
+                </tr>
+            </table>
+        ');
+
+        // Definindo a view que deverá ser renderizada como arquivo .pdf e passando os dados da pesquisa
+        $html = \View::make('admin.obras.pdfs.pdf_list_obras', compact('obras'));
+        $html = $html->render();
+
+        // Definindo o arquivo .css que estilizará o arquivo blade na view ('admin.users.pdfs.pdf_users')
+        $stylesheet = file_get_contents('css/pdf/mpdf.css');
+        $mpdf->WriteHTML($stylesheet, 1);
+
+        // Transformando a view blade em arquivo .pdf e enviando a saida para o browse (I); 'D' exibe e baixa para o pc
+        $mpdf->WriteHTML($html);
+        $mpdf->Output($fileName, 'I');  // Exibe o arquivo no browse   || $mpdf->Output($fileName, 'F');  Gera o arquivo na pasta pública
+
+    }
+
 
 }
 

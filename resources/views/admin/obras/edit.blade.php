@@ -20,22 +20,24 @@
                     @method('PUT')
 
                     <div class="mb-3 row">
-                        {{-- descricao --}}
-                        <div class="col-12">
+                        {{-- tipoobra_id --}}
+                        <div class="col-2">
                             <div class="form-group focused">
-                                <label class="form-control-label" for="descricao">Descricao<span class="small text-danger">*</span></label>
-                                <input type="text" class="form-control" id="descricao" name="descricao" value="{{ old('descricao', $obra->descricao) }}" required>
-                                @error('descricao')
+                                <label class="form-control-label" for="tipoobra_id">Tipo<span class="small text-danger">*</span></label>
+                                <select name="tipoobra_id" id="tipoobra_id" class="form-control select2" required>
+                                    <option value="" selected disabled>Escolha...</option>
+                                    @foreach($tipoobras  as $tipoobra)
+                                        <option value="{{ $tipoobra->id }}" {{old('tipoobra_id', $obra->tipoobra->id) == $tipoobra->id ? 'selected' : ''}}>{{$tipoobra->nome}}</option>
+                                    @endforeach
+                                </select>
+                                @error('tipoobra_id')
                                     <small style="color: red">{{$message}}</small>
                                 @enderror
                             </div>
                         </div>
 
-                    </div>
-                    
-                    <div class="mb-3 row">
                         {{-- escola_id --}}
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="form-group focused">
                                 <label class="form-control-label" for="escola_id">Escola<span class="small text-danger">*</span></label>
                                 <select name="escola_id" id="escola_id" class="form-control select2" required>
@@ -93,7 +95,20 @@
                             </div>
                         </div>
                     </div>
-                    
+
+                    <div class="mb-3 row">
+                        {{-- descricao --}}
+                        <div class="col-12">
+                            <div class="form-group focused">
+                                <label class="form-control-label" for="descricao">Descricao<span class="small text-danger">*</span></label>
+                                <textarea class="form-control" id="descricao" name="descricao" required>{{ old('descricao', $obra->descricao) }}</textarea>
+                                @error('descricao')
+                                    <small style="color: red">{{$message}}</small>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
                     {{-- objetos_id--}}
                     <fieldset style="margin-top: 40px; border: 1px solid #dddbdb; padding: 5px; border-radius: 7px;">
                         @error('objetos') <small style="color: red">{{$message}}</small> @enderror
@@ -104,22 +119,22 @@
                                 @foreach ($objetos as $objeto)
                                     <div class="col-lg-3" style="padding-bottom: 10px;">
                                         <div>
-                                            <input type="checkbox" id="residuo_{{$objeto->id}}" name="objetos[]" value="{{$objeto->id}}"
+                                            <input type="checkbox" id="objeto_{{$objeto->id}}" name="objetos[]" value="{{$objeto->id}}"
                                             @if(old('objetos'))
-                                                {{-- Verifica se o id do objeto atual(do loop atual, está dentro do array de objetos retornado pela diretriz old('objetos'), 
+                                                {{-- Verifica se o id do objeto atual(do loop atual, está dentro do array de objetos retornado pela diretriz old('objetos'),
                                                      estando, ele faz o 'checked' --}}
                                                 {{ in_array($objeto->id, old('objetos')) ? 'checked' : '' }}
                                             @else
                                                 {{ $obra->objetos->contains($objeto->id) ? 'checked' : '' }}
                                             @endif
                                             >
-                                            <label for="residuo_{{$objeto->id}}">{{$objeto->nome}}</label>
+                                            <label for="objeto_{{$objeto->id}}">{{$objeto->nome}}</label>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
                     </fieldset>
-                    
+
 
                     <!-- Buttons -->
                     <div class="row">

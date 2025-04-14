@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('obras', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
+            $table->foreignId('tipoobra_id')->constrained('tipoobras')->onDelete('cascade');
             $table->foreignId('escola_id')->constrained('escolas')->onDelete('cascade');
             $table->foreignId('regional_id')->constrained('regionais')->onDelete('cascade');
             $table->foreignId('municipio_id')->constrained('municipios')->onDelete('cascade');
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('data_fim');
             $table->boolean('estatus');     // MySQL cria uma coluna do tipo tinyint(1)
             $table->boolean('ativo');
+            $table->string('descricao');
             $table->timestamps();
         });
     }

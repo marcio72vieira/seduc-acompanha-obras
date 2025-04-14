@@ -23,6 +23,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Nome</th>
+                        <th>Obras</th>
+                        <th>Lista</th>
                         <th>Ativo</th>
                         <th>Cadastrado</th>
                         <th width="25%">Ações</th>
@@ -33,6 +35,11 @@
                         <tr>
                             <td>{{ $tipoobra->id }}</th>
                             <td>{{ $tipoobra->nome }}</td>
+                            <td>{{ $tipoobra->obra->count() > 0 ? $tipoobra->obra->count() : '' }}</td>
+                            {{-- <td>{!! $tipoobra->obra->count() > 0 ? "<a href='' class='btn btn-outline-secondary btn-sm me-1'><i class='fa-solid fa-file-pdf'></i></a>" : "" !!}</td> --}}
+                            <td>
+                                @if ($tipoobra->obra->count() > 0) <a href="{{ route('tipoobra.relpdflisttipoobras') }}" class="btn btn-outline-secondary btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i></a> @endif
+                            </td>
                             <td>{{ $tipoobra->ativo == 1 ? "Sim" : "Não" }}</td>
                             <td>{{ \Carbon\Carbon::parse($tipoobra->created_at)->format('d/m/Y H:i') }}</td>
                             <td class="flex-row d-md-flex justify-content-start">
@@ -41,7 +48,7 @@
                                     <i class="fa-solid fa-pen-to-square"></i> Editar
                                 </a>
 
-                                {{-- @if($tipoobra->qtdmunicipiosvinc($tipoobra->id) == 0) --}}
+                                @if($tipoobra->obra->count() == 0)
                                     <form id="formDelete{{ $tipoobra->id }}" method="POST" action="{{ route('tipoobra.destroy', ['tipoobra' => $tipoobra->id]) }}">
                                         @csrf
                                         @method('delete')
@@ -49,10 +56,9 @@
                                             <i class="fa-regular fa-trash-can"></i> Apagar
                                         </button>
                                     </form>
-                                {{-- @else
-                                    <button type="button" class="btn btn-outline-secondary btn-sm me-1 mb-1"  title="há municípios vinculados!"> <i class="fa-solid fa-ban"></i> Apagar </button>
-                                @endif --}}
-
+                                @else
+                                    <button type="button" class="btn btn-outline-secondary btn-sm me-1 mb-1"  title="há obras vinculadas!"> <i class="fa-solid fa-ban"></i> Apagar </button>
+                                @endif
                             </td>
                         </tr>
                     @empty
