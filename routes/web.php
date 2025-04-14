@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\RegionalController;
 use App\Http\Controllers\Admin\MunicipioController;
 use App\Http\Controllers\Admin\EscolaController;
 use App\Http\Controllers\Admin\ObjetoController;
+use App\Http\Controllers\Admin\TipoobraController;
 use App\Http\Controllers\Admin\ObraController;
 use App\Http\Controllers\Admin\ProgramaController;
 use App\Http\Controllers\Admin\DatatableController;
@@ -138,6 +139,16 @@ Route::group(['middleware' => 'auth'], function(){
         Route::put('/update-programa/{programa}', [ProgramaController::class, 'update'])->name('programa.update');
         Route::delete('/destroy-programa/{programa}', [ProgramaController::class, 'destroy'])->name('programa.destroy');
         Route::get('pdf-programa/relpdflistprogramas', [ProgramaController::class, 'relpdflistprogramas'])->name('programa.relpdflistprogramas');
+
+
+        // TIPOOBRA
+        Route::get('/index-tipoobra', [TipoobraController::class, 'index'])->name('tipoobra.index');
+        Route::get('/create-tipoobra', [TipoobraController::class, 'create'])->name('tipoobra.create');
+        Route::post('/store-tipoobra', [TipoobraController::class, 'store'])->name('tipoobra.store');
+        Route::get('/edit-tipoobra/{tipoobra}', [TipoobraController::class, 'edit'])->name('tipoobra.edit');
+        Route::put('/update-tipoobra/{tipoobra}', [TipoobraController::class, 'update'])->name('tipoobra.update');
+        Route::delete('/destroy-tipoobra/{tipoobra}', [TipoobraController::class, 'destroy'])->name('tipoobra.destroy');
+        Route::get('pdf-tipoobra/relpdflisttipoobras', [TipoobraController::class, 'relpdflisttipoobras'])->name('tipoobra.relpdflisttipoobras');
 
 
         // OBRA

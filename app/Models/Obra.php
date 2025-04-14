@@ -12,6 +12,7 @@ class Obra extends Model
     protected $table = "obras";
 
     protected $fillable = [
+        'tipoobra_id',
         'descricao',
         'escola_id',
         'regional_id',
@@ -31,6 +32,11 @@ class Obra extends Model
     public function municipio()
     {
         return $this->belongsTo(Municipio::class);
+    }
+
+    public function tipoobra()
+    {
+        return $this->belongsTo(Tipoobra::class);
     }
 
     public function escola()
