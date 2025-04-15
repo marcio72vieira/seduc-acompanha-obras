@@ -38,7 +38,7 @@
                             <td>{{ $tipoobra->obra->count() > 0 ? $tipoobra->obra->count() : '' }}</td>
                             {{-- <td>{!! $tipoobra->obra->count() > 0 ? "<a href='' class='btn btn-outline-secondary btn-sm me-1'><i class='fa-solid fa-file-pdf'></i></a>" : "" !!}</td> --}}
                             <td>
-                                @if ($tipoobra->obra->count() > 0) <a href="{{ route('tipoobra.relpdflisttipoobras') }}" class="btn btn-outline-secondary btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i></a> @endif
+                                @if ($tipoobra->obra->count() > 0) <a href="{{ route('tipoobra.relpdflisttipoobrasespecifica', ['tipoobra' => $tipoobra->id]) }}" class="btn btn-outline-secondary btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i></a> @endif
                             </td>
                             <td>{{ $tipoobra->ativo == 1 ? "Sim" : "Não" }}</td>
                             <td>{{ \Carbon\Carbon::parse($tipoobra->created_at)->format('d/m/Y H:i') }}</td>

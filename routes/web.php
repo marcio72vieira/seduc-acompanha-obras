@@ -149,6 +149,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::put('/update-tipoobra/{tipoobra}', [TipoobraController::class, 'update'])->name('tipoobra.update');
         Route::delete('/destroy-tipoobra/{tipoobra}', [TipoobraController::class, 'destroy'])->name('tipoobra.destroy');
         Route::get('pdf-tipoobra/relpdflisttipoobras', [TipoobraController::class, 'relpdflisttipoobras'])->name('tipoobra.relpdflisttipoobras');
+        Route::get('pdf-tipoobra/relpdflisttipoobrasespecifica/{tipoobra}', [TipoobraController::class, 'relpdflisttipoobrasespecifica'])->name('tipoobra.relpdflisttipoobrasespecifica');
 
 
         // OBRA
