@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('data_fim');
             $table->boolean('estatus');     // MySQL cria uma coluna do tipo tinyint(1)
             $table->boolean('ativo');
-            $table->string('descricao');
+            $table->text('descricao');
             $table->timestamps();
         });
     }

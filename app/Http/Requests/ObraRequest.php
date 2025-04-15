@@ -38,6 +38,10 @@ class ObraRequest extends FormRequest
             $rules += ['objetos' => 'required'];
         }
 
+        if($this->users == null){
+            $rules += ['users' => 'required'];
+        }
+
         return $rules;
 
     }
@@ -51,7 +55,8 @@ class ObraRequest extends FormRequest
             'data_fim.required' => 'Campo data final é obrigatório!',
             'ativo.required' => 'Campo ativo é obrigatório!',
             'descricao.required' => 'Campo descrição é obrigatório!',
-            'objetos.required' => 'Escolha pelo menos um objeto!'
+            'objetos.required' => 'Escolha pelo menos um objeto!',
+            'users.required' => 'Escolha pelo menos um responsável!'
         ];
     }
 }

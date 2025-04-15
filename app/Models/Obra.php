@@ -13,14 +13,14 @@ class Obra extends Model
 
     protected $fillable = [
         'tipoobra_id',
-        'descricao',
         'escola_id',
         'regional_id',
         'municipio_id',
         'data_inicio',
         'data_fim',
         'estatus',       // 1 - Definida/Criada 2 - Iniciada 3 - Em andmento 4 - Parada  5 - Avançada  6 - Concluída 7 -  Inaugurada/Finalizada
-        'ativo'          // Sim Não Obs: Uma obra pode assumir qualquer um dos estatus acima, mas pode está desativada, o que não permite o registro das atividades ou execuções da mesma
+        'ativo',          // Sim Não Obs: Uma obra pode assumir qualquer um dos estatus acima, mas pode está desativada, o que não permite o registro das atividades ou execuções da mesma
+        'descricao',
     ];
 
 
@@ -47,6 +47,11 @@ class Obra extends Model
     public function objetos(): BelongsToMany
     {
         return $this->belongsToMany(Objeto::class)->withTimestamps();
+    }
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
     }
 
 

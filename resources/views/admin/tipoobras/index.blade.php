@@ -3,7 +3,7 @@
 @section('content-page')
 <div class="px-4 container-fluid">
     <div class="mb-1 hstack gap-2">
-        <h2 class="mt-3">Tipos de Obra - lista</h2>
+        <h2 class="mt-3">TIPOS DE OBRA - lista</h2>
     </div>
 
     <div class="mb-4 shadow card border-light">

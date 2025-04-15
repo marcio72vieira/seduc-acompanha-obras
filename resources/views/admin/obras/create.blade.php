@@ -99,11 +99,31 @@
 
                     <div class="mb-3 row">
                         {{-- descricao --}}
-                        <div class="col-12">
+                        <div class="col-8">
                             <div class="form-group focused">
                                 <label class="form-control-label" for="descricao">Descricao<span class="small text-danger">*</span></label>
                                 <textarea class="form-control" id="descricao" name="descricao" required> {{ old('descricao') }} </textarea>
                                 @error('descricao')
+                                    <small style="color: red">{{$message}}</small>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- responsavel --}}
+                        <div class="col-4">
+                            <div class="form-group focused">
+                                <label class="form-control-label" for="user_id">Responsável (pode selecionar mais de um)<span class="small text-danger">*</span></label>
+                                <select name="users[]" id="users" class="form-control select2" multiple >
+                                    <option value="" disabled>Escolha...</option>
+                                    @foreach($users  as $user)
+                                        <option value="{{$user->id}}"
+                                            @if(old('users'))
+                                                {{in_array($user->id, old('users')) ? 'selected' : ''}}
+                                            @endif
+                                        >{{$user->nomecompleto}}</option>
+                                    @endforeach
+                                </select>
+                                @error('users')
                                     <small style="color: red">{{$message}}</small>
                                 @enderror
                             </div>

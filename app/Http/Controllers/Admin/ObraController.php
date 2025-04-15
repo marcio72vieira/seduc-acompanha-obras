@@ -10,6 +10,7 @@ use App\Models\Tipoobra;
 use App\Models\Escola;
 use App\Models\Obra;
 use App\Models\Objeto;
+use App\Models\User;
 use Exception;
 
 
@@ -29,8 +30,9 @@ class ObraController extends Controller
         $tipoobras = Tipoobra::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $escolas = Escola::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $objetos = Objeto::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
+        $users = User::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
 
-        return view('admin.obras.create', ['tipoobras' => $tipoobras, 'escolas' => $escolas, 'objetos' => $objetos]);
+        return view('admin.obras.create', ['tipoobras' => $tipoobras, 'escolas' => $escolas, 'objetos' => $objetos, 'users' => $users]);
     }
 
 
@@ -66,6 +68,10 @@ class ObraController extends Controller
                 $obra->objetos()->sync($request->objetos);
             }
 
+            if($request->has('users')){
+                $obra->users()->sync($request->users);
+            }
+
             DB::commit();
 
              // Redirecionar o usuário, enviar a mensagem de sucesso
@@ -87,8 +93,9 @@ class ObraController extends Controller
         $tipoobras = Tipoobra::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $escolas = Escola::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $objetos = Objeto::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
+        $users = User::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
 
-        return view('admin.obras.edit', ['tipoobras' => $tipoobras, 'obra' => $obra, 'escolas' => $escolas, 'objetos' => $objetos]);
+        return view('admin.obras.edit', ['tipoobras' => $tipoobras, 'obra' => $obra, 'escolas' => $escolas, 'objetos' => $objetos, 'users' => $users]);
     }
 
 
@@ -125,6 +132,10 @@ class ObraController extends Controller
                 $obra->objetos()->sync($request->objetos);
             }
 
+            if($request->has('users')){
+                $obra->users()->sync($request->users);
+            }
+
             DB::commit();
 
              // Redirecionar o usuário, enviar a mensagem de sucesso
@@ -139,6 +150,15 @@ class ObraController extends Controller
             return back()->withInput()->with('error', 'Obra não editada!');
         }
     }
+
+
+
+    public function show(Obra $obra)
+    {
+        // Exibe os detalhes da obra
+        return view('admin.obras.show', ['obra' => $obra]);
+    }
+
 
 
     // Excluir a obra do banco de dados

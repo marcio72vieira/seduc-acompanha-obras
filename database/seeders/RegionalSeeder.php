@@ -20,5 +20,12 @@ class RegionalSeeder extends Seeder
             $regional->created_at = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
             $regional->updated_at = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
         $regional->save();
+
+        $regional = new Regional();
+            $regional->nome = "BAIXADA";
+            $regional->ativo = true;
+            $regional->created_at = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
+            $regional->updated_at = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
+        $regional->save();
     }
 }

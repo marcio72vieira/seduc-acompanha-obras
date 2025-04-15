@@ -158,6 +158,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/store-obra', [ObraController::class, 'store'])->name('obra.store');
         Route::get('/edit-obra/{obra}', [ObraController::class, 'edit'])->name('obra.edit');
         Route::put('/update-obra/{obra}', [ObraController::class, 'update'])->name('obra.update');
+        Route::get('/show-obra/{obra}', [ObraController::class, 'show'])->name('obra.show');
         Route::delete('/destroy-obra/{obra}', [ObraController::class, 'destroy'])->name('obra.destroy');
         Route::get('pdf-obra/relpdflistobras', [ObraController::class, 'relpdflistobras'])->name('obra.relpdflistobras');
 
