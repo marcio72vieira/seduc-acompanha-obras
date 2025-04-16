@@ -25,12 +25,12 @@
                         <th>TIPO</th>
                         <th>Escola/Descrição</th>
                         <th>Município (Regional)</th>
-                        <th>Datas de Inicio e Fim</th>
+                        <th style="width: 10%">Datas de Inicio e Fim</th>
                         <th>Objetos</th>
                         <th>Responsáveis</th>
                         <th>Status</th>
                         <th>Ativo</th>
-                        <th>Ações</th>
+                        <th style="width: 15%">Ações</th>
                     </tr>
                 </thead>
                 <tbody>

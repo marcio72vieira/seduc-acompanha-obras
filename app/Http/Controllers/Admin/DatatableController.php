@@ -157,7 +157,8 @@ class DatatableController extends Controller
 
         // Se a senha não foi alterada, mantém a senha antiga.
         if($request->password == ''){
-            $passwordUser = $request->old_password_hidden;
+            //$passwordUser = $request->old_password_hidden;
+            $passwordUser = $request->old_password;
         }else{
             $passwordUser = bcrypt($request->password);
         }

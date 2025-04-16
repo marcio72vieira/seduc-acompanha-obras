@@ -38,10 +38,22 @@ $(document).ready(function() {
     // Uso do Select2
     // Acrescentar a classe ".select2" em todos os selects que houver a necessidade de utilizar o select2
     /*************************/
+    // Para todos os select's de todas as views
     $('.select2').select2({
         theme: 'bootstrap-5',
     });
 
+    // Específico para o select dentro da modal Cadastar
+    $('#perfilCadastrar').select2({
+        theme: 'bootstrap-5',
+        dropdownParent: $("#modalCadastrarUsuario")   // Corrige o problema de não funcionamento dentro de uma modal: ref: https://select2.org/troubleshooting/common-problems
+    });
+
+    // Específico para o select dentro da modal Editar
+    $('#perfilEditar').select2({
+        theme: 'bootstrap-5',
+        dropdownParent: $("#modalEditarUsuario")   // Corrige o problema de não funcionamento dentro de uma modal: ref: https://select2.org/troubleshooting/common-problems
+    });
 
 
     /***********************************/

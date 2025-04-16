@@ -19,7 +19,7 @@
                     <dd class="col-sm-10">{{ $obra->id }}</dd>
 
                     <dt class="col-sm-2">Tipo</dt>
-                    <dd class="col-sm-10">{{ $obra->tipoobra->nome }}</dd>
+                    <dd class="col-sm-10" style="margin-bottom: 30px;">{{ $obra->tipoobra->nome }}</dd>
 
                     <dt class="col-sm-2">Escola</dt>
                     <dd class="col-sm-10">{{ $obra->escola->nome }}</dd>
@@ -31,20 +31,28 @@
                     <dd class="col-sm-10">Fone: {{ $obra->escola->fone }}</dd>
 
                     <dt class="col-sm-2"></dt>
-                    <dd class="col-sm-10">Regional: {{ $obra->escola->regional->nome }} Cidade: {{ $obra->escola->municipio->nome }}</dd>
+                    <dd class="col-sm-10" style="margin-bottom: 50px;">Regional: {{ $obra->escola->regional->nome }} Cidade: {{ $obra->escola->municipio->nome }}</dd>
 
                     <dt class="col-sm-2">Data Inío e FIm</dt>
                     <dd class="col-sm-10">{{ \Carbon\Carbon::parse($obra->data_inicio)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($obra->data_fim)->format('d/m/Y') }}</dd>
 
                     <dt class="col-sm-2">Objetos</dt>
-                    <dd class="col-sm-10">
+                    <dd class="col-sm-10" style="margin-bottom: 20px;">
                         @foreach ($obra->objetos as $objeto)
                             {{ $objeto->nome }},
                         @endforeach
                     </dd>
 
                     <dt class="col-sm-2">Descrição</dt>
-                    <dd class="col-sm-10">{{ $obra->descricao }}</dd>
+                    <dd class="col-sm-10" style="margin-bottom: 50px;">{{ $obra->descricao }}</dd>
+
+                    <dt class="col-sm-2">Responsável(is)</dt>
+                    <dd class="col-sm-10" style="margin-bottom: 50px;">
+                        @foreach ($obra->users as $user)
+                            {{ $user->nomecompleto }} ({{ ($user->perfil == 'adm' ? 'Administrador' : ($user->perfil == 'con' ? 'Consultor' : 'Operador')) }})
+                            <br>
+                        @endforeach
+                    </dd>
 
                     <dt class="col-sm-2">Status</dt>
                     <dd class="col-sm-10">{{ $obra->estatus }}</dd>

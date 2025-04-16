@@ -116,7 +116,7 @@
                                     <div class="mb-4 row">
                                         <label for="perfil" class="col-sm-2 col-form-label">Perfil <span class="small text-danger">*</span></label>
                                         <div class="col-sm-4">
-                                            <select name="perfil" id="perfil" class="form-control select2" >
+                                            <select name="perfil" id="perfilCadastrar" class="form-control">
                                                 <option value="" selected disabled>Escolha...</option>
                                                 <option value="adm" {{old('perfil') == 'adm' ? 'selected' : ''}}>Administrador</option>
                                                 <option value="con" {{old('perfil') == 'con' ? 'selected' : ''}}>Consultor</option>
@@ -313,7 +313,7 @@
                                         <div class="mb-4 row">
                                             <label for="perfil" class="col-sm-2 col-form-label">Perfil <span class="small text-danger">*</span></label>
                                             <div class="col-sm-4">
-                                                <select name="perfil" id="perfil" class="form-control select2">
+                                                <select name="perfil" id="perfilEditar" class="form-control">
                                                     <option value="" selected disabled>Escolha...</option>
                                                     <option value="adm" {{old('perfil') == 'adm' ? 'selected' : ''}}>Administrador</option>
                                                     <option value="con" {{old('perfil') == 'con' ? 'selected' : ''}}>Consultor</option>
@@ -576,10 +576,10 @@
             // Evita que o formulário seja submetido
             e.preventDefault();
 
-            // Captura dados dos campos
+            // Captura dados dos campos do formulário de edição (vindos do banco ou alerados recentemente) e envia para atualização
             var data = {
                 'id': $("#formEditarUsuario input[name=iduser_hidden]").val(),
-                'password': $("#formEditarUsuario input[name=old_password_hidden]").val(),
+                'old_password': $("#formEditarUsuario input[name=old_password_hidden]").val(),
                 'nomecompleto': $("#formEditarUsuario input[name=nomecompleto]").val(),
                 'nome': $("#formEditarUsuario input[name=nome]").val(),
                 'cpf': $("#formEditarUsuario input[name=cpf]").val(),
@@ -605,8 +605,6 @@
             var iduser = data.id;
             var rota = "{{route('datatable.update', 'id')}}";
                 rota = rota.replace('id', iduser);
-
-                //alert("id do usuário: "+ iduser);
 
             $.ajax({
                 url: rota,

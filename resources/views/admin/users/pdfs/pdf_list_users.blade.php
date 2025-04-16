@@ -15,17 +15,18 @@
                 <td style="width: 40px;" class="dados-lista">{{$user->id}}</td>
                 <td style="width: 275px;" class="dados-lista">{{$user->nomecompleto}}</td>
                 <td style="width: 100px;" class="dados-lista">
-                    @if($user->perfil == 'adm') 
-                        <b>ADMINISTRADOR</b> 
-                    @elseif($user->perfil == 'con') 
+                    @if($user->perfil == 'adm')
+                        <b>ADMINISTRADOR</b>
+                    @elseif($user->perfil == 'con')
                         <b>Consultor</b>
-                    @elseif($user->perfil == 'ope') 
+                    @elseif($user->perfil == 'ope')
                         <b>Operador</b>
-                    @endif 
+                    @endif
                 </td>
-                <td style="width: 315px;" class="dados-lista">{{ $user->cargo }}</td>
+                <td style="width: 265px;" class="dados-lista">{{ $user->cargo }}</td>
                 <td style="width: 200px;" class="dados-lista">{{ $user->email }}</td>
                 <td style="width: 100px;" class="dados-lista">{{ $user->fone}} </td>
+                <td style="width: 50px;" class="dados-lista">{{ $user->obras()->count() > 0 ? $user->obras()->count() : '' }} </td>
                 <td style="width: 50px;" class="dados-lista">@if($user->ativo == 1 ) sim @else não @endif </td>
             </tr>
         @endforeach

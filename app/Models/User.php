@@ -39,7 +39,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
+        //'password',  // Comentado, permiti ser resgatado e serializado em requisições Ajax (a exemplo da modal de edição de usuários no módulo DataTable).
         'remember_token',
     ];
 
