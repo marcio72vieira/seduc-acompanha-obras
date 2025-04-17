@@ -25,13 +25,16 @@
                     <dd class="col-sm-10">{{ $obra->escola->nome }}</dd>
 
                     <dt class="col-sm-2"></dt>
-                    <dd class="col-sm-10">{{ $obra->escola->endereco }}, nº {{ $obra->escola->numero }}. {{ $obra->escola->complemento }}. Bairro: {{ $obra->escola->bairro }}. CEP: {{ $obra->escola->cep }} </dd>
+                    <dd class="col-sm-10">{{ $obra->escola->endereco }}, nº {{ $obra->escola->numero }}. Complemento: {{ $obra->escola->complemento }}. Bairro: {{ $obra->escola->bairro }}. CEP: {{ $obra->escola->cep }} </dd>
 
                     <dt class="col-sm-2"></dt>
                     <dd class="col-sm-10">Fone: {{ $obra->escola->fone }}</dd>
 
                     <dt class="col-sm-2"></dt>
-                    <dd class="col-sm-10" style="margin-bottom: 50px;">Regional: {{ $obra->escola->regional->nome }} Cidade: {{ $obra->escola->municipio->nome }}</dd>
+                    <dd class="col-sm-10">Município: {{ $obra->escola->municipio->nome }}</dd>
+
+                    <dt class="col-sm-2"></dt>
+                    <dd class="col-sm-10" style="margin-bottom: 50px;">Regional: {{ $obra->escola->regional->nome }}</dd>
 
                     <dt class="col-sm-2">Data Inío e FIm</dt>
                     <dd class="col-sm-10">{{ \Carbon\Carbon::parse($obra->data_inicio)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($obra->data_fim)->format('d/m/Y') }}</dd>
@@ -54,18 +57,18 @@
                         @endforeach
                     </dd>
 
-                    <dt class="col-sm-2">Status</dt>
-                    <dd class="col-sm-10">{{ $obra->estatus }}</dd>
-
                     <dt class="col-sm-2">Ativo</dt>
                     <dd class="col-sm-10">{{ $obra->ativo == 1 ? 'Sim' : 'Não' }}</dd>
-
+                    
+                    <dt class="col-sm-2">Status</dt>
+                    <dd class="col-sm-10">{{ $obra->estatus == 1 ? '0% Criada' : 'Iniciada'}}</dd>
                 </dl>
 
                 <dl class="row">
                     <dt class="col-sm-2"></dt>
                     <dd class="col-sm-10">
                         <a class="btn btn-outline-secondary" href="{{ route('obra.index')}}" role="button">Listar</a>
+                        <a class="btn btn-outline-secondary" href="{{ route('obra.relpdfobra', ['obra' => $obra->id]) }}" role="button" target="_blank">pdf</a>
                     </dd>
                 </dl>
 

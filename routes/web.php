@@ -95,8 +95,10 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('pdf-regional/relpdflistregionais', [RegionalController::class, 'relpdflistregionais'])->name('regional.relpdflistregionais');
         Route::get('/escolas-regional/{regional}', [RegionalController::class, 'escolasregional'])->name('regional.escolas');
         Route::get('/municipios-regional/{regional}', [RegionalController::class, 'municipiosregional'])->name('regional.municipios');
+        Route::get('/obras-regional/{regional}', [RegionalController::class, 'obrasregional'])->name('regional.obras');
         Route::get('pdf-regional/relpdflistmunicipiosregional/{regional}', [RegionalController::class, 'relpdflistmunicipiosregional'])->name('regional.relpdflistmunicipiosregional');
         Route::get('pdf-regional/relpdflistescolasregional/{regional}', [RegionalController::class, 'relpdflistescolasregional'])->name('regional.relpdflistescolasregional');
+        Route::get('pdf-regional/relpdflistobrasregional/{regional}', [RegionalController::class, 'relpdflistobrasregional'])->name('regional.relpdflistobrasregional');
 
 
         // MUNICIPIO
@@ -161,6 +163,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/show-obra/{obra}', [ObraController::class, 'show'])->name('obra.show');
         Route::delete('/destroy-obra/{obra}', [ObraController::class, 'destroy'])->name('obra.destroy');
         Route::get('pdf-obra/relpdflistobras', [ObraController::class, 'relpdflistobras'])->name('obra.relpdflistobras');
+        Route::get('pdf-obra/relpdfobra/{obra}', [ObraController::class, 'relpdfobra'])->name('obra.relpdfobra');
 
 
         // DATATABLE

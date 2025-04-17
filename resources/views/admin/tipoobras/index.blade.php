@@ -24,7 +24,6 @@
                         <th>ID</th>
                         <th>Nome</th>
                         <th>Obras</th>
-                        <th>Lista</th>
                         <th>Ativo</th>
                         <th>Cadastrado</th>
                         <th width="25%">Ações</th>
@@ -35,10 +34,11 @@
                         <tr>
                             <td>{{ $tipoobra->id }}</th>
                             <td>{{ $tipoobra->nome }}</td>
-                            <td>{{ $tipoobra->obra->count() > 0 ? $tipoobra->obra->count() : '' }}</td>
-                            {{-- <td>{!! $tipoobra->obra->count() > 0 ? "<a href='' class='btn btn-outline-secondary btn-sm me-1'><i class='fa-solid fa-file-pdf'></i></a>" : "" !!}</td> --}}
                             <td>
-                                @if ($tipoobra->obra->count() > 0) <a href="{{ route('tipoobra.relpdflisttipoobrasespecifica', ['tipoobra' => $tipoobra->id]) }}" class="btn btn-outline-secondary btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i></a> @endif
+                                @if ($tipoobra->obra->count() > 0)
+                                    {{ $tipoobra->obra->count() }}
+                                    <a href="{{ route('tipoobra.relpdflisttipoobrasespecifica', ['tipoobra' => $tipoobra->id]) }}" class="btn btn-outline-secondary btn-sm me-1" target="_blank" style="margin-left: 10px"><i class="fa-solid fa-file-pdf"></i></a>
+                                @endif
                             </td>
                             <td>{{ $tipoobra->ativo == 1 ? "Sim" : "Não" }}</td>
                             <td>{{ \Carbon\Carbon::parse($tipoobra->created_at)->format('d/m/Y H:i') }}</td>
@@ -60,6 +60,9 @@
                                     <button type="button" class="btn btn-outline-secondary btn-sm me-1 mb-1"  title="há obras vinculadas!"> <i class="fa-solid fa-ban"></i> Apagar </button>
                                 @endif
                             </td>
+                            {{-- <td> @if ($tipoobra->obra->count() > 0) <a href="{{ route('tipoobra.relpdflisttipoobrasespecifica', ['tipoobra' => $tipoobra->id]) }}" class="btn btn-outline-secondary btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i></a> @endif </td>--}}
+                            {{-- {{ $tipoobra->obra->count() > 0 ? $tipoobra->obra->count() : '' }} --}}
+                            {{-- <td>{!! $tipoobra->obra->count() > 0 ? "<a href='' class='btn btn-outline-secondary btn-sm me-1'><i class='fa-solid fa-file-pdf'></i></a>" : "" !!}</td> --}}
                         </tr>
                     @empty
                         <div class="alert alert-danger" role="alert">Nenhum registro encontrado!</div>
