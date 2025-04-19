@@ -16,7 +16,8 @@ class RegionalController extends Controller
     public function index()
     {
         // Recuperar os registros do banco dados sem pesquisa
-        $regionais = Regional::orderByDesc('created_at')->paginate(10);
+        //$regionais = Regional::orderByDesc('created_at')->paginate(10);
+        $regionais = Regional::orderBy('nome')->paginate(10);
 
         return view('admin.regionais.index', ['regionais' => $regionais]);
     }
@@ -188,10 +189,11 @@ class RegionalController extends Controller
             <table style="width:1080px; border-collapse: collapse">
                 <tr>
                     <td width="40px" class="col-header-table">ID</td>
-                    <td width="690px" class="col-header-table">NOME</td>
+                    <td width="590px" class="col-header-table">NOME</td>
                     <td width="50px" class="col-header-table">ATIVO</td>
                     <td width="100px" class="col-header-table">MUNICÍPIOS</td>
                     <td width="100px" class="col-header-table">ESCOLAS</td>
+                    <td width="100px" class="col-header-table">OBRAS</td>
                     <td width="100px" class="col-header-table">CADASTRO</td>
                 </tr>
             </table>
@@ -386,14 +388,12 @@ class RegionalController extends Controller
         // Obtendo os dados
         $regional =  $regional::findOrFail($regional->id);
 
-        // Obtendo as escolas através do relacionamento direto
-        // $escolas = $regional->escolas()->orderBy('nome')->get();
+        //Obtendo as obras através do relacionamento direto
+        $obras = $regional->obras()->orderBy('id')->get();
 
-        // Obtendo as escolas através do relacionamento indireto(hasManyThrough)
-        $escolas = $regional->escolasdaregional()->orderBy('nome')->get();
 
         // Definindo o nome do arquivo a ser baixado
-        $fileName = ('escolasregional_'.$regional->nome.'.pdf');
+        $fileName = ('obrasregional_'.$regional->nome.'.pdf');
 
         // Invocando a biblioteca mpdf e definindo as margens do arquivo
         $mpdf = new \Mpdf\Mpdf([
@@ -420,17 +420,18 @@ class RegionalController extends Controller
                         Acompanhamento de Execução de Obras
                     </td>
                     <td style="width: 540px;" class="titulo-rel">
-                        ESCOLAS DA REGIONAL: '.$regional->nome.'
+                        OBRAS DA REGIONAL: '.$regional->nome.'
                     </td>
                 </tr>
             </table>
             <table style="width:1080px; border-collapse: collapse">
                 <tr>
                     <td width="40px" class="col-header-table">ID</td>
-                    <td width="290px" class="col-header-table">NOME</td>
+                    <td width="190px" class="col-header-table">TIPO</td>
+                    <td width="275px" class="col-header-table">ESCOLA</td>
+                    <td width="275px" class="col-header-table">OBJETOS</td>
+                    <td width="150px" class="col-header-table">MUNICIPIO</td>
                     <td width="50px" class="col-header-table">ATIVO</td>
-                    <td width="500px" class="col-header-table">ENDEREÇO</td>
-                    <td width="100px" class="col-header-table">MUNICIPIO</td>
                     <td width="100px" class="col-header-table">CADASTRADO</td>
                 </tr>
             </table>
@@ -448,7 +449,7 @@ class RegionalController extends Controller
         ');
 
         // Definindo a view que deverá ser renderizada como arquivo .pdf e passando os dados da pesquisa
-        $html = \View::make('admin.regionais.pdfs.pdf_list_escolasregional', compact('escolas'));
+        $html = \View::make('admin.regionais.pdfs.pdf_list_obrasregional', compact('obras'));
         $html = $html->render();
 
         // Definindo o arquivo .css que estilizará o arquivo blade na view ('admin.users.pdfs.pdf_users')

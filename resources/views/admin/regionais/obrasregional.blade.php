@@ -27,7 +27,8 @@
                         <th>Objetos</th>
                         <th>Município</th>
                         <th>Ativo</th>
-                        <th>Cadastrado</th>
+                        {{-- <th style="width: 300px;">Estatus</th> --}}
+                        <th>Cadastro</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,9 +38,14 @@
                             <td>{{ $obra->id }}</th>
                             <td>{{ $obra->tipoobra->nome }}</td>
                             <td>{{ $obra->escola->nome }}</td>
-                            <td>{{ $obra->municipio->nome }}</td>
                             <td>@foreach ($obra->objetos as $objeto ) <span style="font-size: 12px;">{{ $objeto->nome }}, </span>,  @endforeach</td>
+                            <td>{{ $obra->municipio->nome }}</td>
                             <td>{{ $obra->ativo == 1 ? "Sim" : "Não" }}</td>
+                            {{-- <td>
+                                <div class="progress border" style="height:30px">
+                                    <div class="progress-bar {{ $obra->ativo == 1 ? 'bg-white' : 'bg-danger' }}" style="width:80%">{{ $obra->estatus == 1 ? 'criada': 'iniciada'}}</div>
+                                </div> 
+                            </td> --}}
                             <td>{{ \Carbon\Carbon::parse($obra->created_at)->format('d/m/Y H:i') }}</td>
                         </tr>
                     @empty
