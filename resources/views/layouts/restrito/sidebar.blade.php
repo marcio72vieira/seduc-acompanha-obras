@@ -68,7 +68,7 @@
                         <a class="nav-link" href="{{ route('escola.index') }}"><i class="fa-solid fa-school" style="margin-right:7px;"></i>Escolas</a>
                         <a class="nav-link" href="{{ route('objeto.index') }}"><i class="fa-regular fa-object-group" style="margin-right:7px;"></i>Objetos</a>
                         <a class="nav-link" href="{{ route('tipoobra.index') }}"><i class="fa-solid fa-list" style="margin-right:7px;"></i>Tipos de Obra</a>
-                        <a class="nav-link" href=""><i class="fa-solid fa-bars-progress" style="margin-right:7px;"></i>Status</a>
+                        <a class="nav-link" href="{{ route('estatu.index') }}"><i class="fa-solid fa-bars-progress" style="margin-right:7px;"></i>Status</a>
                         {{-- <a class="nav-link" href="{{ route('programa.index') }}">Programas</a> --}}
                     </nav>
                 </div>

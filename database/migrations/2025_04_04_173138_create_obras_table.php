@@ -17,9 +17,10 @@ return new class extends Migration
             $table->foreignId('escola_id')->constrained('escolas')->onDelete('cascade');
             $table->foreignId('regional_id')->constrained('regionais')->onDelete('cascade');
             $table->foreignId('municipio_id')->constrained('municipios')->onDelete('cascade');
+            $table->foreignId('estatu_id')->constrained('estatus')->onDelete('cascade');
             $table->date('data_inicio');
             $table->date('data_fim');
-            $table->boolean('estatus');     // MySQL cria uma coluna do tipo tinyint(1)
+            //$table->boolean('estatus');     // MySQL cria uma coluna do tipo tinyint(1)
             $table->boolean('ativo');
             $table->text('descricao');
             $table->timestamps();
