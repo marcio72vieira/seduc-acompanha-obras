@@ -57,9 +57,9 @@ class ObraController extends Controller
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
                 'municipio_id' => $idMunicipioObra,
+                'estatu_id' => 1,                       // Obra parada ou criada
                 'data_inicio' => $request->data_inicio,
                 'data_fim' => $request->data_fim,
-                'estatus' => 1,     // Obra criada/cadastrada
                 'ativo' => $request->ativo,
                 'descricao' => $request->descricao,
             ]);
@@ -121,9 +121,9 @@ class ObraController extends Controller
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
                 'municipio_id' => $idMunicipioObra,
+                'estatu_id' => 1,                       // Obra parada ou criada
                 'data_inicio' => $request->data_inicio,
                 'data_fim' => $request->data_fim,
-                'estatus' => 1,     // Obra criada/cadastrada
                 'ativo' => $request->ativo,
                 'descricao' => $request->descricao,
             ]);

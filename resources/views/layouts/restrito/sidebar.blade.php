@@ -83,6 +83,12 @@
                     Usuários
                 </a>
 
+
+                <a class="nav-link" href="{{ route('atividade.index')}}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+                    Atividades
+                </a>
+
                 <a class="nav-link" href="{{ route('datatable.index')}}">
                     <div class="sb-nav-link-icon"><i class="fas fa-table me-1"></i></div>
                     DataTable

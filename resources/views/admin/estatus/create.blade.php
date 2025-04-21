@@ -33,7 +33,7 @@
                     {{-- valormin --}}
                     <div class="mb-4 row">
                         <label for="valormin" class="col-sm-2 col-form-label">Valor Mínimo <span class="small text-danger">*</span></label>
-                        <div class="col-sm-1">
+                        <div class="col-sm-2">
                             <input type="number" name="valormin" value="{{ old('valormin') }}" class="form-control" id="valormin"  min="0" max="100">
                             @error('valormin')
                               <small style="color: red">{{$message}}</small>
@@ -44,7 +44,7 @@
                     {{-- valormax --}}
                     <div class="mb-4 row">
                         <label for="valormax" class="col-sm-2 col-form-label">Valor Máximo <span class="small text-danger">*</span></label>
-                        <div class="col-sm-1">
+                        <div class="col-sm-2">
                             <input type="number" name="valormax" value="{{ old('valormax') }}" class="form-control" id="valormax"  min="0" max="100">
                             @error('valormax')
                               <small style="color: red">{{$message}}</small>
@@ -55,13 +55,32 @@
                     {{-- cor --}}
                     <div class="mb-4 row">
                         <label for="cor" class="col-sm-2 col-form-label">cor <span class="small text-danger">*</span></label>
-                        <div class="col-sm-1">
-                          <input type="color" name="cor" value="{{ old('cor') }}" class="form-control" id="cor" placeholder="cor da escola" >
+                        <div class="col-sm-2">
+                          <input type="color" name="cor" value="{{ old('cor') }}" class="form-control" id="cor">
                           @error('cor')
                               <small style="color: red">{{$message}}</small>
                           @enderror
                         </div>
                     </div>
+                    
+
+                    {{-- cor 
+                    <div class="mb-4 row">
+                        <label for="cor" class="col-sm-2 col-form-label">Cor <span class="small text-danger">*</span></label>
+                        <div class="col-sm-1">
+                            <select name="cor" id="cor" class="form-control">
+                                <option value="" selected disabled>Escolha...</option>
+                                <option value="bg-primary" {{old('cor') == 'bg-primary' ? 'selected' : ''}}><div class="text-bg-primary p-3">primary</div></option>
+                                <option value="bg-secondary" {{old('cor') == 'bg-secondary' ? 'selected' : ''}}><div class="text-bg-primary p-3">secondary</div></option>
+                                <option value="bg-success" {{old('cor') == 'bg-success' ? 'selected' : ''}}><div class="text-bg-success p-3">Success with contrasting color</div>
+                                </option>
+                            </select>
+                            @error('cor')
+                                <small style="color: red">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+                    --}}
 
 
                     {{-- ativo --}}

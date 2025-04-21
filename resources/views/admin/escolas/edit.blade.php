@@ -119,12 +119,12 @@
                         <div class="col-sm-10">
                             <div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="ativo" id="ativosim" value="1" {{old('ativo', $escola->ativo) == '1' ? 'checked' : ''}} reuired>
+                                    <input class="form-check-input" type="radio" name="ativo" id="ativosim" value="1" {{old('ativo', $escola->ativo) == '1' ? 'checked' : ''}}>
                                     <label class="form-check-label" for="ativosim">Sim</label>
 
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="ativo" id="ativonao" value="0" {{old('ativo', $escola->ativo) == '0' ? 'checked' : ''}} >
+                                    <input class="form-check-input" type="radio" name="ativo" id="ativonao" value="0" {{old('ativo', $escola->ativo) == '0' ? 'checked' : ''}}>
                                     <label class="form-check-label" for="ativonao">Não</label>
                                 </div>
                                 <br>

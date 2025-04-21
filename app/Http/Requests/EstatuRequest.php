@@ -25,10 +25,10 @@ class EstatuRequest extends FormRequest
 
         return [
             'nome'      => 'bail|required|min:5|unique:estatus,nome,'. ($estatuId ? $estatuId->id : null),
-            /* 'valormin'  => 'bail|required|min:0|max:100|unique:estatus,valormin,'. ($estatuId ? $estatuId->id : null),
+            'valormin'  => 'bail|required|min:0|max:100|unique:estatus,valormin,'. ($estatuId ? $estatuId->id : null),
             'valormax'  => 'bail|required|min:0|max:100|unique:estatus,valormax,'. ($estatuId ? $estatuId->id : null),
             'cor'       => 'bail|required|unique:estatus,cor,'. ($estatuId ? $estatuId->id : null),
-            'ativo'     => 'bail|required',   */
+            'ativo'     => 'bail|required',  
         ];
     }
 
@@ -39,18 +39,21 @@ class EstatuRequest extends FormRequest
             'nome.required' => 'Campo nome é obrigatório!',
             'nome.min' => 'Campo nome deve ter no mínimo 5 caracteres!',
             'nome.unique' => 'Este Estatus já está cadastrado!',
-            /* 'valormin.required' => 'Campo valor mínimo é obrigatório',
-            'valormin.min' => 'Campo valor mínimo deve ter o valor :min como mínimo',
-            'valormin.max' => 'Campo valor mínimo deve ter o valor :max como máximo',
-            'valormin.unique' => 'Este valor mínimo já está definido',
 
-            'valormax.required' => 'Campo valor máximo é obrigatório',
-            'valormax.min' => 'Campo valor máximo deve ter o valor :min como mínimo',
-            'valormax.max' => 'Campo valor máximo deve ter o valor :max como máximo',
-            'valormax.unique' => 'Este valor máximo já está definido',
-            'ativo.required' => 'Campo ativo é obrigatório!',
+            'valormin.required' => 'Defina um valor entre 1 e 100',
+            'valormin.min' => 'Valor mínimo deve ter o valor :min no mínimo',
+            'valormin.max' => 'Valor mínimo deve ter o valor :max no máximo',
+            'valormin.unique' => 'Valor mínimo já definido!',
+
+            'valormax.required' => 'Defina um valor entre 1 e 100',
+            'valormax.min' => 'Valor máximo deve ter o valor :min no mínimo',
+            'valormax.max' => 'Valor máximo deve ter o valor :max no máximo',
+            'valormax.unique' => 'Valor máximo já definido!',
+
+            'ativo.required' => 'Escolha um opção!',
+
             'cor.required' => 'Defina uma cor para este estatus',
-            'cor.unique' => 'Esta cor já foi escolhida para outro estatus', */
+            'cor.unique' => 'Cor já definida!',
         ];
     }
 }

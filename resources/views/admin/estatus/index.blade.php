@@ -26,8 +26,6 @@
                     <tr>
                         <th>ID</th>
                         <th>Nome</th>
-                        <th>Mínimo</th>
-                        <th>Máximo</th>
                         <th>Cor</th>
                         <th>Ativo</th>
                         <th>Cadastrado</th>
@@ -40,9 +38,13 @@
                         <tr>
                             <td>{{ $estatu->id }}</th>
                             <td>{{ $estatu->nome }}</td>
-                            <td>{{ $estatu->valormin }}</td>
-                            <td>{{ $estatu->valormax }}</td>
-                            <td><div style="width: 40px; height: 40px; border: 1px solid rgb(161, 158, 158); border-radius: 100px; background: {{ $estatu->cor }}"></div></td>
+                            <td>
+                                <div class="d-flex justify-content-between align-items-center" style="width: 200px; height: 40px; border: 1px solid rgb(218, 213, 213); border-radius: 7px; background: {{ $estatu->cor }}">
+                                    <span style="padding-left: 10px; padding-right:10px;">{{ $estatu->valormin }}%</span> 
+                                    <span style="padding-left: 10px; padding-right:10px;"> a </span> 
+                                    <span style="padding-left: 10px; padding-right:10px;">{{ $estatu->valormax }}%</span>
+                                </div>
+                            </td>
                             <td>{{ $estatu->ativo == 1 ? "Sim" : "Não" }}</td>
                             <td>{{ \Carbon\Carbon::parse($estatu->created_at)->format('d/m/Y') }}</td>
                             <td class="flex-row d-md-flex justify-content-start">
@@ -58,7 +60,7 @@
                                     <form id="formDelete{{ $estatu->id }}" method="POST" action="{{ route('estatu.destroy', ['estatu' => $estatu->id]) }}">
                                         @csrf
                                         @method('delete')
-                                        <button type="submit" class="mb-1 btn btn-secondary btn-sm me-1 btnDelete" data-delete-entidade="estatu" data-delete-id="{{ $estatu->id }}"  data-value-record="{{ $estatu->nome }}">
+                                        <button type="submit" class="mb-1 btn btn-secondary btn-sm me-1 btnDelete" data-delete-entidade="estatus" data-delete-id="{{ $estatu->id }}"  data-value-record="{{ $estatu->nome }}">
                                             <i class="fa-regular fa-trash-can"></i> Apagar
                                         </button>
                                     </form>

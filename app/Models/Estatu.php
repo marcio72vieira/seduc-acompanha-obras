@@ -16,8 +16,8 @@ class Estatu extends Model
         'ativo'
     ];
 
-    public function obra()
+    public function obras()
     {
-        return $this->hasOne(Obra::class);
+        return $this->hasMany(Obra::class);
     }
 }

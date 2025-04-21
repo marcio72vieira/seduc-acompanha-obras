@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ObjetoController;
 use App\Http\Controllers\Admin\TipoobraController;
 use App\Http\Controllers\Admin\EstatuController;
 use App\Http\Controllers\Admin\ObraController;
+use App\Http\Controllers\Admin\AtividadeController;
 use App\Http\Controllers\Admin\ProgramaController;
 use App\Http\Controllers\Admin\DatatableController;
 
@@ -204,7 +205,13 @@ Route::group(['middleware' => 'auth'], function(){
     // Acesso apenas a usuários Admnistradores e Consultores (onlyAdmCon)
     Route::group(['middleware' => 'can:onlyAdmCon'], function(){
 
+    });// Final das rotas de acesso a usuários administradores e consultores (onlyAdmCon)
 
+
+
+    // Acesso apenas a usuários Administradores e Operadores (onlyAdmOpe)
+    Route::group(['middleware' => 'can:onlyAdmOpe'], function(){
+        Route::get('/index-atividade', [AtividadeController::class, 'index'])->name('atividade.index');
 
     });// Final das rotas de acesso a usuários administradores e consultores (onlyAdmCon)
 

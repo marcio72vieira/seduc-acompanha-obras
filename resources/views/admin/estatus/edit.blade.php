@@ -3,7 +3,7 @@
 @section('content-page')
     <div class="px-4 container-fluid">
         <div class="gap-2 mb-1 hstack">
-            <h2 class="mt-3">ESCOLA -  edição</h2>
+            <h2 class="mt-3">ESTATUS -  edição</h2>
         </div>
 
         <div class="mb-4 shadow card border-light">
@@ -13,105 +13,56 @@
 
             <div class="card-body">
 
-                {{-- Este componente será acionado sempre que houver uma erro de exceção em: store, update ou delete --}}
-                <x-errorexception />
+                {{-- <x-alert /> --}}
 
-                <form action="{{ route('escola.update', ['escola' => $escola->id]) }}" method="POST" autocomplete="off">
-                    @csrf,
+                <form action="{{ route('estatu.update', ['estatu' => $estatu->id]) }}" method="POST" autocomplete="off">
+                    @csrf
                     @method('PUT')
 
                     {{-- nome --}}
                     <div class="mb-4 row">
                         <label for="nome" class="col-sm-2 col-form-label">Nome <span class="small text-danger">*</span></label>
-                        <div class="col-sm-10">
-                          <input type="text" name="nome" value="{{ old('nome', $escola->nome) }}" class="form-control" id="nome" placeholder="Nome da Unidade" >
+                        <div class="col-sm-2">
+                          <input type="text" name="nome" value="{{ old('nome', $estatu->nome) }}" class="form-control" id="nome" placeholder="Nome do estatus" >
                           @error('nome')
                               <small style="color: red">{{$message}}</small>
                           @enderror
                         </div>
                     </div>
 
-                    {{-- endereco --}}
+                    {{-- valormin --}}
                     <div class="mb-4 row">
-                        <label for="endereco" class="col-sm-2 col-form-label">Endereço <span class="small text-danger">*</span></label>
-                        <div class="col-sm-10">
-                            <input type="text" name="endereco" value="{{ old('endereco', $escola->endereco) }}" class="form-control" id="endereco" placeholder="Rua, Av. Trav, etc.." >
-                            @error('endereco')
+                        <label for="valormin" class="col-sm-2 col-form-label">Valor Mínimo <span class="small text-danger">*</span></label>
+                        <div class="col-sm-2">
+                            <input type="number" name="valormin" value="{{ old('valormin', $estatu->valormin) }}" class="form-control" id="valormin"  min="0" max="100">
+                            @error('valormin')
                               <small style="color: red">{{$message}}</small>
                             @enderror
                         </div>
                     </div>
 
-                    {{-- numero --}}
+                    {{-- valormax --}}
                     <div class="mb-4 row">
-                        <label for="numero" class="col-sm-2 col-form-label">Número <span class="small text-danger">*</span></label>
-                        <div class="col-sm-10">
-                            <input type="text" name="numero" value="{{ old('numero', $escola->numero) }}" class="form-control" id="numero" placeholder="Número" >
-                            @error('numero')
+                        <label for="valormax" class="col-sm-2 col-form-label">Valor Máximo <span class="small text-danger">*</span></label>
+                        <div class="col-sm-2">
+                            <input type="number" name="valormax" value="{{ old('valormax', $estatu->valormax) }}" class="form-control" id="valormax"  min="0" max="100">
+                            @error('valormax')
                               <small style="color: red">{{$message}}</small>
                             @enderror
                         </div>
                     </div>
 
-                    {{-- complemento --}}
+                    {{-- cor --}}
                     <div class="mb-4 row">
-                        <label for="complemento" class="col-sm-2 col-form-label">Complemento</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="complemento" value="{{ old('complemento', $escola->complemento) }}" class="form-control" id="complemento" placeholder="Complemento" >
+                        <label for="cor" class="col-sm-2 col-form-label">cor <span class="small text-danger">*</span></label>
+                        <div class="col-sm-2">
+                          <input type="color" name="cor" value="{{ old('cor', $estatu->cor) }}" class="form-control" id="cor">
+                          @error('cor')
+                              <small style="color: red">{{$message}}</small>
+                          @enderror
                         </div>
                     </div>
 
-                    {{-- bairro --}}
-                    <div class="mb-4 row">
-                        <label for="bairro" class="col-sm-2 col-form-label">Bairro <span class="small text-danger">*</span></label>
-                        <div class="col-sm-10">
-                            <input type="text" name="bairro" value="{{ old('bairro', $escola->bairro) }}" class="form-control" id="bairro" placeholder="Bairro" >
-                            @error('bairro')
-                              <small style="color: red">{{$message}}</small>
-                            @enderror
-                        </div>
-                    </div>
-
-                    {{-- cep --}}
-                    <div class="mb-4 row">
-                        <label for="cep" class="col-sm-2 col-form-label">CEP <span class="small text-danger">*</span></label>
-                        <div class="col-sm-10">
-                            <input type="text" name="cep" value="{{ old('cep', $escola->cep) }}" class="form-control cep" id="cep" placeholder="CEP" >
-                            @error('cep')
-                              <small style="color: red">{{$message}}</small>
-                            @enderror
-                        </div>
-                    </div>
-
-                    {{-- fone --}}
-                    <div class="mb-4 row">
-                        <label for="fone" class="col-sm-2 col-form-label">Telefone <span class="small text-danger">*</span></label>
-                        <div class="col-sm-10">
-                            <input type="text" name="fone" value="{{ old('fone', $escola->fone) }}" class="form-control mask-cell" id="fone" placeholder="Telefone" >
-                            @error('fone')
-                              <small style="color: red">{{$message}}</small>
-                            @enderror
-                        </div>
-                    </div>
-
-                    {{-- municipio --}}
-                    <div class="mb-4 row">
-                        <label for="municipio_id" class="col-sm-2 col-form-label">Município <span class="small text-danger">*</span></label>
-                        <div class="col-sm-4">
-                            <select name="municipio_id" id="municipio_id" class="form-control select2" >
-                                <option value="" selected disabled>Escolha...</option>
-                                @foreach($municipios as $municipio)
-                                    <option value="{{ $municipio->id }}" {{ old('municipio_id', $escola->municipio->id) == $municipio->id ? 'selected' : '' }}>{{ $municipio->nome }}</option>
-                                @endforeach
-                            </select>
-                            @error('municipio_id')
-                                <small style="color: red">{{$message}}</small>
-                                @error('municpio_id')
-                              <small style="color: red">{{$message}}</small>
-                            @enderror
-                            @enderror
-                        </div>
-                    </div>
 
                     {{-- ativo --}}
                     <div class="mb-4 row">
@@ -119,12 +70,12 @@
                         <div class="col-sm-10">
                             <div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="ativo" id="ativosim" value="1" {{old('ativo', $escola->ativo) == '1' ? 'checked' : ''}} reuired>
+                                    <input class="form-check-input" type="radio" name="ativo" id="ativosim" value="1"  {{old('ativo', $estatu->ativo) == '1' ? 'checked' : ''}}>
                                     <label class="form-check-label" for="ativosim">Sim</label>
 
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="ativo" id="ativonao" value="0" {{old('ativo', $escola->ativo) == '0' ? 'checked' : ''}} >
+                                    <input class="form-check-input" type="radio" name="ativo" id="ativonao" value="0"  {{old('ativo', $estatu->ativo) == '0' ? 'checked' : ''}}>
                                     <label class="form-check-label" for="ativonao">Não</label>
                                 </div>
                                 <br>
@@ -139,7 +90,7 @@
                         <div class="col-sm-2"></div>
                         <div class="col-sm-10">
                             <div style="margin-top: 15px">
-                                <a class="btn btn-outline-secondary" href="{{ route('escola.index')}}" role="button">Cancelar</a>
+                                <a class="btn btn-outline-secondary" href="{{ route('estatu.index')}}" role="button">Cancelar</a>
                                 <button type="submit" class="btn btn-primary" style="width: 95px;"> Salvar </button>
                             </div>
                         </div>
