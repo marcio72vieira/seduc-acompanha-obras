@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use App\Models\User;
+use App\Models\Obra;
+use App\Models\Estatu;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -41,7 +43,10 @@ class DashboardController extends Controller
             $anospesquisa = array_reverse($anos);
         }
 
-        return view('admin.dashboards.dashboard', compact('mes_corrente','ano_corrente','mesespesquisa', 'anospesquisa'));
+        $obras = Obra::orderBy('id')->paginate(10);
+        $estatus = Estatu::orderBy('id')->get();
+
+        return view('admin.dashboards.dashboard', compact('mes_corrente','ano_corrente','mesespesquisa', 'anospesquisa', 'obras', 'estatus'));
     }
 
 

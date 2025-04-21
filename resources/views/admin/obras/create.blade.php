@@ -102,7 +102,7 @@
                         <div class="col-8">
                             <div class="form-group focused">
                                 <label class="form-control-label" for="descricao">Descricao<span class="small text-danger">*</span></label>
-                                <textarea class="form-control" id="descricao" name="descricao" required> {{ old('descricao') }} </textarea>
+                                <textarea rows="3" class="form-control" id="descricao" name="descricao" required> {{ old('descricao') }} </textarea>
                                 @error('descricao')
                                     <small style="color: red">{{$message}}</small>
                                 @enderror

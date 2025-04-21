@@ -19,6 +19,24 @@
                     @csrf
                     @method('POST')
 
+
+                    {{-- tipo --}}
+                    <div class="mb-4 row">
+                        <label for="tipo" class="col-sm-2 col-form-label">tipo <span class="small text-danger">*</span></label>
+                        <div class="col-sm-2">
+                            <select name="tipo" id="tipo" class="form-control">
+                                <option value="" selected disabled>Escolha...</option>
+                                <option value="informativo" {{old('tipo') == 'informativo' ? 'selected' : ''}}>informativo</option>
+                                <option value="progressivo" {{old('tipo') == 'progressivo' ? 'selected' : ''}}>progressivo</option>
+                            </select>
+                            @error('tipo')
+                                <small style="color: red">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+                                        
+                    
+
                     {{-- nome --}}
                     <div class="mb-4 row">
                         <label for="nome" class="col-sm-2 col-form-label">Nome <span class="small text-danger">*</span></label>

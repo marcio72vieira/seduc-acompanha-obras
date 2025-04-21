@@ -57,7 +57,7 @@ class ObraController extends Controller
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
                 'municipio_id' => $idMunicipioObra,
-                'estatu_id' => 1,                       // Obra parada ou criada
+                'estatu_id' => 1,                       // Obra criada (padrão)
                 'data_inicio' => $request->data_inicio,
                 'data_fim' => $request->data_fim,
                 'ativo' => $request->ativo,
@@ -116,12 +116,14 @@ class ObraController extends Controller
             // Obtém o id do Municipio através do relacionamento existente entre escola e municipio
             $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
 
+            // Vefifica se o campo ativo, foi alterado para 0 (inativo), significando que a obra está parada
+
             $obra->update([
                 'tipoobra_id' => $request->tipoobra_id,
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
                 'municipio_id' => $idMunicipioObra,
-                'estatu_id' => 1,                       // Obra parada ou criada
+                'estatu_id' => $request->ativo == 1 ? 1 : 2,   // Obra criada (padrão). Criar um campo old_status_hidden que preserve o status da obra. Só altera o valor para "parada" se inativa for acionada.
                 'data_inicio' => $request->data_inicio,
                 'data_fim' => $request->data_fim,
                 'ativo' => $request->ativo,

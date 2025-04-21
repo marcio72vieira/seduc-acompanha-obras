@@ -25,6 +25,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Tipo</th>
                         <th>Nome</th>
                         <th>Cor</th>
                         <th>Ativo</th>
@@ -37,13 +38,18 @@
                     @forelse ($estatus as $estatu)
                         <tr>
                             <td>{{ $estatu->id }}</th>
+                            <td>{{ $estatu->tipo }}</th>
                             <td>{{ $estatu->nome }}</td>
                             <td>
-                                <div class="d-flex justify-content-between align-items-center" style="width: 200px; height: 40px; border: 1px solid rgb(218, 213, 213); border-radius: 7px; background: {{ $estatu->cor }}">
-                                    <span style="padding-left: 10px; padding-right:10px;">{{ $estatu->valormin }}%</span> 
-                                    <span style="padding-left: 10px; padding-right:10px;"> a </span> 
-                                    <span style="padding-left: 10px; padding-right:10px;">{{ $estatu->valormax }}%</span>
-                                </div>
+                                @if ($estatu->tipo == "informativo")
+                                    <div class="d-flex justify-content-between align-items-center" style="width: 200px; height: 40px; border: 1px solid rgb(218, 213, 213); border-radius: 7px; background: {{ $estatu->cor }}">
+                                        &nbsp;
+                                    </div>
+                                @else
+                                    <div class="d-flex justify-content-between align-items-center" style="width: 200px; height: 40px; border: 1px solid rgb(218, 213, 213); border-radius: 7px; background: {{ $estatu->cor }}">
+                                        <span style="padding-left: 10px; padding-right:10px;">{{ $estatu->valormin }}%</span> <span style="padding-left: 10px; padding-right:10px;"> a </span>  <span style="padding-left: 10px; padding-right:10px;">{{ $estatu->valormax }}%</span> 
+                                    </div>
+                                @endif
                             </td>
                             <td>{{ $estatu->ativo == 1 ? "Sim" : "Não" }}</td>
                             <td>{{ \Carbon\Carbon::parse($estatu->created_at)->format('d/m/Y') }}</td>

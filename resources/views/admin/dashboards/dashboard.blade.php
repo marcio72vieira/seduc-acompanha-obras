@@ -76,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-2 col-md-2">
                 <div class="mb-4 text-white card bg-success">
                     <div class="card-body">Fase Avançada</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
@@ -85,13 +85,23 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-2 col-md-2">
                 <div class="mb-4 text-white card bg-danger">
                     <div class="card-body">Paradas</div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
                         <a class="text-white small stretched-link" href="#">View Details</a>
                         <div class="text-white small"><i class="fas fa-angle-right"></i></div>
                     </div>
+                </div>
+            </div>
+            <div class="col-xl-1 col-md-1">
+                <div class="mb-4 card" style="background: {{ $estatus[0]->cor }}">
+                    <div class="card-body">{{ $estatus[0]->nome }}</div>
+                </div>
+            </div>
+            <div class="col-xl-1 col-md-1">
+                <div class="mb-4 card" style="background: rgb(4, 248, 45)">
+                    <div class="card-body">Concluídas</div>
                 </div>
             </div>
         </div>

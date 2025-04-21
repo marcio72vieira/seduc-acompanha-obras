@@ -32,6 +32,7 @@ class EstatuController extends Controller
         try {
 
             Estatu::create([
+                'tipo' => $request->tipo,
                 'nome' => Str::upper($request->nome),
                 'valormin' => $request->valormin,
                 'valormax' => $request->valormax,
@@ -64,6 +65,7 @@ class EstatuController extends Controller
 
         try{
             $estatu->update([
+                'tipo' => $request->tipo,
                 'nome' => Str::upper($request->nome),
                 'valormin' => $request->valormin,
                 'valormax' => $request->valormax,

@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('estatus', function (Blueprint $table) {
             $table->id();
+            $table->string('tipo');
             $table->string('nome');
-            $table->tinyInteger('valormin');
-            $table->tinyInteger('valormax');
+            $table->tinyInteger('valormin')->nullable();
+            $table->tinyInteger('valormax')->nullable();
             $table->string('cor');
             $table->boolean('ativo');
             $table->timestamps();

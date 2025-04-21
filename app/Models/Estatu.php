@@ -9,6 +9,7 @@ class Estatu extends Model
     protected $table = "estatus";
 
     protected $fillable = [
+        'tipo',
         'nome',
         'valormin',
         'valormax',
