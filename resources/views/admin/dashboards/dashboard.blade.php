@@ -57,6 +57,7 @@
         {{-- Mensagem de error a ser exibida na geração do arquivo Excel ou CSV --}}
         <x-alert />
 
+        {{-- Área de Cards Original 
         <div class="row">
             <div class="col-xl-3 col-md-6">
                 <div class="mb-4 text-white card bg-primary">
@@ -67,44 +68,28 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="mb-4 text-white card bg-warning">
-                    <div class="card-body">Fase Intermediária</div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="text-white small stretched-link" href="#">View Details</a>
-                        <div class="text-white small"><i class="fas fa-angle-right"></i></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-2 col-md-2">
-                <div class="mb-4 text-white card bg-success">
-                    <div class="card-body">Fase Avançada</div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="text-white small stretched-link" href="#">View Details</a>
-                        <div class="text-white small"><i class="fas fa-angle-right"></i></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-2 col-md-2">
-                <div class="mb-4 text-white card bg-danger">
-                    <div class="card-body">Paradas</div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="text-white small stretched-link" href="#">View Details</a>
-                        <div class="text-white small"><i class="fas fa-angle-right"></i></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-1 col-md-1">
-                <div class="mb-4 card" style="background: {{ $estatus[0]->cor }}">
-                    <div class="card-body">{{ $estatus[0]->nome }}</div>
-                </div>
-            </div>
-            <div class="col-xl-1 col-md-1">
-                <div class="mb-4 card" style="background: rgb(4, 248, 45)">
-                    <div class="card-body">Concluídas</div>
-                </div>
-            </div>
         </div>
+        --}}
+
+        {{-- Área de cards de Estatus --}}
+        <div class="row">
+            @foreach ($estatus as $estatu )
+                {{-- Se a iteração é a primeira, (id = 1) ignora-a com a diretiva (@continue) soltando par a próxima --}}
+                @if($estatu->id == 1) @continue @endif
+
+                <div class="col-xl-2 col-md-2">
+                    <div class="mb-4 text-white card" style="background: {{ $estatu->cor }}">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div><i class="fa-solid fa-person-digging"></i> {{ $estatu->nome }} | {{ $estatu->cor }}</div>
+                            {{-- recupera todas as obras cujo estatus seja igual ao status do "id" atual --}}
+                            <div class="text-white small"><strong>{{ $estatu->obras->count() > 0 ? $estatu->obras->count() : "" }}</strong></div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        {{-- Área de gráficos
         <div class="row">
             <div class="col-xl-6">
                 <div class="mb-4 card">
@@ -125,6 +110,8 @@
                 </div>
             </div>
         </div>
+        --}}
+
         <div class="mb-4 card">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>

@@ -45,8 +45,10 @@ class EstatuSeeder extends Seeder
             'nome' => 'INAUGURADA',
             'valormin' => null,
             'valormax' => null,
-            'cor' => '#fcb2f2',
+            'cor' => '#bf40b1',
             'ativo' => true
         ]);
+
+        // fase inicial: #0d6efc; fase intermediária: #fcaf3e; fase avançda: 4e9a06
     }
 }

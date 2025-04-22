@@ -285,14 +285,14 @@ class ObraController extends Controller
                     <td style="width: 140px text-align:left">
                         <img src="images/logo_seduc2.png" width="120"/>
                     </td>
-                    <td style="width: 400px; font-size: 10px; font-family: Arial, Helvetica, sans-serif;">
+                    <td style="width: 200px; font-size: 10px; font-family: Arial, Helvetica, sans-serif;">
                         Governo do Estado do Maranhão<br>
                         Secretaria de Estado da Educação / SEDUC<br>
                         Agência de Tecnologia da Informação / ATI<br>
                         Acompanhamento de Execução de Obras
                     </td>
-                    <td style="width: 177px;" class="titulo-rel">
-                        OBRA
+                    <td style="width: 377px;" class="titulo-rel">
+                        OBRA: '.$obra->tipoobra->nome.'<br>'.$obra->escola->nome.'
                     </td>
                 </tr>
             </table>
