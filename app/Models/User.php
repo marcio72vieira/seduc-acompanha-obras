@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Obra::class)->withTimestamps();
     }
+
+    public function atividades()
+    {
+        return $this->hasMany(Atividade::class);
+    }
 }

@@ -57,7 +57,7 @@
         {{-- Mensagem de error a ser exibida na geração do arquivo Excel ou CSV --}}
         <x-alert />
 
-        {{-- Área de Cards Original 
+        {{-- Área de Cards Original
         <div class="row">
             <div class="col-xl-3 col-md-6">
                 <div class="mb-4 text-white card bg-primary">
@@ -80,7 +80,7 @@
                 <div class="col-xl-2 col-md-2">
                     <div class="mb-4 text-white card" style="background: {{ $estatu->cor }}">
                         <div class="card-body d-flex align-items-center justify-content-between">
-                            <div><i class="fa-solid fa-person-digging"></i> {{ $estatu->nome }} | {{ $estatu->cor }}</div>
+                            <div><i class="fa-solid fa-person-digging"></i> {{ $estatu->nome }}</div>
                             {{-- recupera todas as obras cujo estatus seja igual ao status do "id" atual --}}
                             <div class="text-white small"><strong>{{ $estatu->obras->count() > 0 ? $estatu->obras->count() : "" }}</strong></div>
                         </div>

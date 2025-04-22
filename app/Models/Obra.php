@@ -48,7 +48,7 @@ class Obra extends Model
     {
         return $this->belongsToMany(Objeto::class)->withTimestamps();
     }
-    
+
 
     public function users(): BelongsToMany
     {
@@ -58,6 +58,11 @@ class Obra extends Model
     public function estatu()
     {
         return $this->belongsTo(Estatu::class);
+    }
+
+    public function atividades()
+    {
+        return $this->hasMany(Atividade::class);
     }
 
 

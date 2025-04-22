@@ -212,7 +212,8 @@ Route::group(['middleware' => 'auth'], function(){
     // Acesso apenas a usuários Administradores e Operadores (onlyAdmOpe)
     Route::group(['middleware' => 'can:onlyAdmOpe'], function(){
         Route::get('/index-atividade', [AtividadeController::class, 'index'])->name('atividade.index');
-
+        Route::get('/create-atividade/{obra}', [AtividadeController::class, 'create'])->name('atividade.create');
+        Route::post('/store-atividade', [AtividadeController::class, 'store'])->name('atividade.store');
     });// Final das rotas de acesso a usuários administradores e consultores (onlyAdmCon)
 
 

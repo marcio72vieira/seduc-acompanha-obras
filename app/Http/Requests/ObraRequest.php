@@ -25,7 +25,7 @@ class ObraRequest extends FormRequest
             'tipoobra_id'       => 'bail|required',
             'escola_id'         => 'bail|required',
             'data_inicio'       => 'bail|required',
-            'data_fim'          => 'bail|required',
+            'data_fim'          => 'bail|required|afterOrEqual:data_inicio',
             'ativo'             => 'bail|required',
             'descricao'         => 'bail|required',
         ];
@@ -53,6 +53,7 @@ class ObraRequest extends FormRequest
             'escola_id.required' => 'Selecione uma escola',
             'data_inicio.required' => 'Campo data inicial é obrigatório!',
             'data_fim.required' => 'Campo data final é obrigatório!',
+            'data_fim.afterOrEqual' => 'Data não pode ser inferior a data inicial!',
             'ativo.required' => 'Campo ativo é obrigatório!',
             'descricao.required' => 'Campo descrição é obrigatório!',
             'objetos.required' => 'Escolha pelo menos um objeto!',
