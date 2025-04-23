@@ -19,6 +19,9 @@
                     @csrf
                     @method('PUT')
 
+                    {{-- Preservando o estatu atual da obra --}}
+                    <input type="hidden" name="obra_estatus_hidden" value="{{ $obra->estatu->id }}">
+
                     <div class="mb-3 row">
                         {{-- tipoobra_id --}}
                         <div class="col-2">

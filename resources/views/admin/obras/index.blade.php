@@ -56,20 +56,29 @@
                                 @endforeach
                             </td>
 
-                            {{-- <td>{{ $obra->estatus == 1 ? 'Criada' : 'Outro' }}</td> --}}
                             <td>
-                                <div style="margin-left: 15px; width: 25px; height: 25px; border: 1px solid {{ $obra->estatu->cor }}; border-radius: 50px; background: {{ $obra->estatu->cor }}" title="{{ $obra->estatu->nome }}"></div>
+                                @if($obra->atividades->count() > 0 )
+                                    <div style="display: inline-block; background-color: {{ $obra->estatu->cor }}; width: 2.8em; height: 2.8em; line-height: 2.8em; border-radius: 50%; text-align:center; vertical-align: middle; color: white"  title="{{ $obra->estatu->nome }}">
+                                        {{ $obra->ultimoprogresso($obra->id) }}%
+                                    </div>
+                                @else
+                                    <div style="display: inline-block; background-color: {{ $obra->estatu->cor }}; width: 2.8em; height: 2.8em; line-height: 2.8em; border-radius: 50%; text-align:center; vertical-align: middle; color: white"  title="{{ $obra->estatu->nome }}">
+                                        0 %
+                                    </div>
+                                @endif
                             </td>
-                            {{-- <td>{{ $obra->ativo == 1 ? "Sim" : "Não" }}</td> --}}
+
                             <td class="align-top">
                                 <div class="flex-row d-md-flex justify-content-start">
-                                    <a href="{{ route('obra.show', ['obra' => $obra->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1" title="visualizar"> <i class="fa-regular fa-eye"></i> visualizar </a>
+                                    <a href="{{ route('obra.show', ['obra' => $obra->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1" title="visualizar">
+                                        <i class="fa-regular fa-eye"></i> visualizar
+                                    </a>
 
                                     <a href="{{ route('obra.edit', ['obra' => $obra->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
                                         <i class="fa-solid fa-pen-to-square"></i> Editar
                                     </a>
 
-                                    @if(($obra->objetos->count() == 0) || (Auth::user()->id == 1))
+                                    @if($obra->atividades->count() == 0)
                                         <form id="formDelete{{ $obra->id }}" method="POST" action="{{ route('obra.destroy', ['obra' => $obra->id]) }}">
                                             @csrf
                                             @method('delete')
@@ -78,10 +87,9 @@
                                             </button>
                                         </form>
                                     @else
-                                        <button type="button" class="mb-1 btn btn-outline-secondary btn-sm me-1"  title="há objetos vinculados!"> <i class="fa-solid fa-ban"></i> Apagar </button>
+                                        <button type="button" class="mb-1 btn btn-outline-secondary btn-sm me-1"  title="há registro de atividades vinculados!"> <i class="fa-solid fa-ban"></i> Apagar </button>
                                     @endif
                                 </div>
-
                             </td>
                         </tr>
                     @empty

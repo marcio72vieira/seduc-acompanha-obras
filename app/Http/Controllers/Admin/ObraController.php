@@ -10,6 +10,7 @@ use App\Models\Tipoobra;
 use App\Models\Escola;
 use App\Models\Obra;
 use App\Models\Objeto;
+use App\Models\Estatu;
 use App\Models\User;
 use Exception;
 
@@ -116,14 +117,29 @@ class ObraController extends Controller
             // Obtém o id do Municipio através do relacionamento existente entre escola e municipio
             $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
 
-            // Vefifica se o campo ativo, foi alterado para 0 (inativo), significando que a obra está parada
+
+            //----
+            // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
+            $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
+
+            // Recuperando o estatu de acordo com o registro do último progresso, na situação da obra ser inativada e depois voltar a ser ativada novamente.
+            $ultimo_progresso =  $obra->ultimoprogresso($obra->id);
+
+            foreach($estatusprogressivos as $indicador){
+                if(($ultimo_progresso >= $indicador->valormin) && ($ultimo_progresso <= $indicador->valormax)){
+                    $estatus_restaurado = $indicador->id;
+                }
+            }
+            //---
+
 
             $obra->update([
                 'tipoobra_id' => $request->tipoobra_id,
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
                 'municipio_id' => $idMunicipioObra,
-                'estatu_id' => $request->ativo == 1 ? 1 : 2,   // Obra criada (padrão). Criar um campo old_status_hidden que preserve o status da obra. Só altera o valor para "parada" se inativa for acionada.
+                //'estatu_id' => $request->ativo == 1 ? 1 : 2,   // Obra criada (padrão). Criar um campo old_status_hidden que preserve o status da obra. Só altera o valor para "parada" se inativa for acionada.
+                'estatu_id' => $request->ativo == 1 ? $estatus_restaurado : 2, // Se a obra for ativa(1), presenva o staus que possui, se for inativa(0) o estatus será 2("parada" assumindo a cor vermelha como padrão)
                 'data_inicio' => $request->data_inicio,
                 'data_fim' => $request->data_fim,
                 'ativo' => $request->ativo,

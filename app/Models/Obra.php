@@ -65,5 +65,15 @@ class Obra extends Model
         return $this->hasMany(Atividade::class);
     }
 
+    // Retorna o último registro do model Atividade, cujo valor do campo obra_id, seja o $idobra fornecido como parâmetro.
+    public function ultimoprogresso($idobra)
+    {
+        $ultimaatividade = Atividade::latest()->where('obra_id', '=', $idobra )->first();
+        // dd($ultimaatividade->registro);  dd($ultimaatividade->progresso); dd($ultimaatividade->observacao);
+
+        // Retorna o camo progresso da última atividade cadastrada
+        return $ultimaatividade->progresso;
+    }
+
 
 }

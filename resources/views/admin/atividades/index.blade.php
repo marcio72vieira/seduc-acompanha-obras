@@ -23,25 +23,31 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>TIPO</th>
                         <th>Escola</th>
                         <th>Município</th>
-                        <th style="width: 15%">Datas de Inicio e Fim</th>
+                        <th style="width: 15%">Prazo</th>
+                        <th>Registros</th>
                         <th>Status</th>
-                        <th style="width: 15%">Ações</th>
+                        <th style="width: 15%">Ação</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($obras as $obra)
                         <tr class="align-top">
-                            <td>{{ $obra->id }}</th>
-                            <td>{{ $obra->tipoobra->nome }}</th>
                             <td>{{ $obra->escola->nome }}</td>
                             <td>{{ $obra->municipio->nome }}</td>
-                            <td>{{ \Carbon\Carbon::parse($obra->data_inicio)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($obra->data_fim)->format('d/m/Y') }}</td>
+                            <td>de {{ \Carbon\Carbon::parse($obra->data_inicio)->format('d-m-Y') }} a {{ \Carbon\Carbon::parse($obra->data_fim)->format('d-m-Y') }}</td>
+                            <td>{{ $obra->atividades->count() > 0 ? $obra->atividades->count() : '' }}</td>
                             <td>
-                                <div style="margin-left: 15px; width: 25px; height: 25px; border: 1px solid {{ $obra->estatu->cor }}; border-radius: 50px; background: {{ $obra->estatu->cor }}" title="{{ $obra->estatu->nome }}"></div>
+                                @if($obra->atividades->count() > 0 )
+                                    <div style="display: inline-block; background-color: {{ $obra->estatu->cor }}; width: 2.8em; height: 2.8em; line-height: 2.8em; border-radius: 50%; text-align:center; vertical-align: middle; color: white"  title="{{ $obra->estatu->nome }}">
+                                        {{ $obra->ultimoprogresso($obra->id) }}%
+                                    </div>
+                                @else
+                                    <div style="display: inline-block; background-color: {{ $obra->estatu->cor }}; width: 2.8em; height: 2.8em; line-height: 2.8em; border-radius: 50%; text-align:center; vertical-align: middle; color: white"  title="{{ $obra->estatu->nome }}">
+                                        0 %
+                                    </div>
+                                @endif
                             </td>
                             <td class="align-top">
                                 <div class="flex-row d-md-flex justify-content-start">
