@@ -28,6 +28,7 @@
                         <th>Tipo</th>
                         <th>Nome</th>
                         <th>Cor</th>
+                        <th>Obras</th>
                         <th>Ativo</th>
                         <th>Cadastrado</th>
                         <th width="18%">Ações</th>
@@ -51,6 +52,7 @@
                                     </div>
                                 @endif
                             </td>
+                            <td>{{ $estatu->obras->count() > 0 ? $estatu->obras->count() : '' }}</td>
                             <td>{{ $estatu->ativo == 1 ? "Sim" : "Não" }}</td>
                             <td>{{ \Carbon\Carbon::parse($estatu->created_at)->format('d/m/Y') }}</td>
                             <td class="flex-row d-md-flex justify-content-start">
@@ -62,7 +64,7 @@
                                     <i class="fa-solid fa-pen-to-square"></i> Editar
                                 </a>
 
-                                {{-- @if($unidadeatendimento->qtdusuariosdaunidade($unidadeatendimento->id) == 0) --}}
+                                @if($estatu->obras->count() == 0)
                                     <form id="formDelete{{ $estatu->id }}" method="POST" action="{{ route('estatu.destroy', ['estatu' => $estatu->id]) }}">
                                         @csrf
                                         @method('delete')
@@ -70,9 +72,9 @@
                                             <i class="fa-regular fa-trash-can"></i> Apagar
                                         </button>
                                     </form>
-                                {{-- @else
-                                    <button type="button" class="mb-1 btn btn-outline-secondary btn-sm me-1"  title="há usuários vinculados!"> <i class="fa-solid fa-ban"></i> Apagar </button>
-                                @endif --}}
+                                @else
+                                    <button type="button" class="mb-1 btn btn-outline-secondary btn-sm me-1"  title="há obras vinculadas!"> <i class="fa-solid fa-ban"></i> Apagar </button>
+                                @endif
                             </td>
                         </tr>
                     @empty

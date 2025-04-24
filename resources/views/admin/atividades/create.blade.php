@@ -57,11 +57,33 @@
                         </div>
                     </div>
 
+                    {{-- obraconcluida --}}
+                    <div class="mb-4 row" id="regiaoobraconcluida" style="visibility:hidden">
+                        <label for="obraconcluidasim" class="col-sm-2 col-form-label">Obra Concluida ? <span class="small text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="obraconcluida" id="obraconcluidasim" value="1" {{old('obraconcluida') == '1' ? 'checked' : ''}} reuired>
+                                    <label class="form-check-label" for="obraconcluidasim">Sim</label>
+
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="obraconcluida" id="obraconcluidanao" value="0" {{old('obraconcluida') == '0' ? 'checked' : ''}} >
+                                    <label class="form-check-label" for="obraconcluidanao">Não</label>
+                                </div>
+                                <br>
+                                @error('obraconcluida')
+                                    <small style="color: red">{{$message}}</small>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
                     {{-- observacao --}}
                     <div class="mb-4 row">
                         <label for="observacao" class="col-sm-2 col-form-label">Observação <span class="small text-danger">*</span></label>
                         <div class="col-sm-5">
-                        <textarea rows="3" class="form-control" id="descricao" name="observacao" > {{ old('observacao') }} </textarea>
+                        <textarea rows="3" class="form-control" id="observacao" name="observacao" > {{ old('observacao') }} </textarea>
                           @error('observacao')
                               <small style="color: red">{{$message}}</small>
                           @enderror
@@ -84,4 +106,18 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $("#progresso").blur(function(){
+            if($(this).val() == 100) {
+                $("#regiaoobraconcluida").css("visibility","visible");
+                $("#obraconcluidanao").focus();
+            }else{
+                $("#regiaoobraconcluida").css("visibility","hidden");
+                $("#observacao").focus();
+            }
+        });
+    </script>
 @endsection
