@@ -99,7 +99,9 @@
             <tr @if($loop->even) style="background-color: #e3e3e3;" @endif>
                 <td width="30px" class="dados-lista">{{ $atividade->id }}</td>
                 <td width="70px" class="dados-lista">{{ \Carbon\Carbon::parse($atividade->data_registro)->format('d/m/Y') }}</td>
-                <td width="40px" class="dados-lista" style="text-align: center">{{ $atividade->progresso }}%</td>
+                <td width="40px" class="dados-lista" style="text-align: center">
+                    {{ $atividade->progresso }}%
+                </td>
                 <td width="577px" class="dados-lista">{{ $atividade->registro }}
                     @if ($atividade->observacao != null)
                         <br>
