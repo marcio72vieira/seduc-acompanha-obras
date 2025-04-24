@@ -51,7 +51,11 @@
                             </td>
                             <td class="align-top">
                                 <div class="flex-row d-md-flex justify-content-start">
-                                    <a href="{{ route('atividade.create', ['obra' => $obra->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1" title="registrar atividades"> <i class="fa-solid fa-keyboard"></i> Registrar atividades</a>
+                                    @if($obra->estatu_id != 3)
+                                        <a href="{{ route('atividade.create', ['obra' => $obra->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1" title="registrar atividades"> <i class="fa-solid fa-keyboard"></i> Registrar atividades</a>
+                                    @else
+                                    <a href="" class="mb-1 btn btn-outline-secondary btn-sm me-1" title="registrar atividades"> <i class="fa-solid fa-ban"></i> Registrar atividades</a>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

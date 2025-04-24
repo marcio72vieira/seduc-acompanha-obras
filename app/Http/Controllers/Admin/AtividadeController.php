@@ -47,36 +47,35 @@ class AtividadeController extends Controller
                 'data_registro' => $request->data_registro,
                 'registro' => $request->registro,
                 'progresso' => $request->progresso,
+                'obraconcluida' => $request->obraconcluida,
                 'observacao' => $request->observacao,
             ]);
 
-            // Resgatando todos os Estatus cujo tipo sej do tipo progressivo
-            $indicadores = Estatu::where('tipo', '=', 'progressivo')->get();
-
-            //dd(count($indicadores));
-
-            // Recuperando a Obra, cujo, "estatus" deverá ser atualizado
-            //$obra = Obra::where('id', '=', intval($request->obra_hidden))->first();
+            // Recuperando a Obra, cujo, "estatus" deverá ser atualizado com base no valor do campo "progresso"
+            // $obra = Obra::where('id', '=', intval($request->obra_hidden))->first();
             $obra = Obra::where('id', '=', $request->obra_hidden)->first();
-            //$obra = Obra::where('id', '=', 1)->first();
 
-            //dd($obra->escola->nome);
+            // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
+            $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
 
-
-
-            foreach($indicadores as $indicador){
-                if((intval($request->progresso) >= $indicador->valormin) && (intval($request->progresso) <= $indicador->valormax)){
-
-                    //dd($indicador->valormin);
-                    //dd(intval($request->progresso));
-
+            foreach($estatusprogressivos as $estatu){
+                // Obs: intval(), transforma a string retornada em "$request->progresso" em um número inteiro, para que o mesmo seja comparado com os
+                // valores inteiros $estatu->valormin e $estatu->valormax.
+                if((intval($request->progresso) >= $estatu->valormin) && (intval($request->progresso) <= $estatu->valormax)){
                     $obra->update([
-                        'estatu_id' => $indicador->id
+                        'estatu_id' => $estatu->id
                     ]);
                 }
             }
 
-             // Redirecionar o usuário, enviar a mensagem de sucesso
+            // Se o operador determinar que  obra está concluída após definir o "progresso" como sendo igual a 100, atribui o estatu de obra = 3(concluída)
+            if($request->obraconcluida == 1){
+                $obra->update([
+                    'estatu_id' => 3 // Estatu com id = 3 é a obra concluida.
+                ]);
+            }
+
+            // Redirecionar o usuário, enviar a mensagem de sucesso
             return redirect()->route('atividade.index')->with('success', 'Atividade registrada com sucesso!');
 
         } catch (Exception $e) {

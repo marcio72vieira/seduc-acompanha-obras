@@ -17,8 +17,9 @@ return new class extends Migration
             $table->foreignId('obra_id')->constrained('obras')->onDelete('cascade');
             $table->date('data_registro');
             $table->text('registro');
-            $table->tinyInteger('progresso');   // valores em percentagem 1% a 100%
-            $table->text('observacao');         // Campo acessado exclusivamente pelo consultor
+            $table->tinyInteger('progresso');               // valores em percentagem 1% a 100%
+            $table->boolean('obraconcluida')->nullable();
+            $table->text('observacao')->nullable();         // Uma particularidade da atividade registrada
             $table->timestamps();
         });
     }

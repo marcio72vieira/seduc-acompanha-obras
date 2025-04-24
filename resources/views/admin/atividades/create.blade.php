@@ -3,8 +3,10 @@
 @section('content-page')
     <div class="px-4 container-fluid">
         <div class="gap-2 mb-1 hstack">
-            <h2 class="mt-3">REGISTRO DE ATIVIDADES -  cadastro</h2>
-            <h6 class="mt-3">{{ $obra->escola->nome }}</h6>
+            <h2 class="mt-3">REGISTRO DE ATIVIDADES</h2>
+        </div>
+        <div class="gap-2 mb-1 hstack">
+            <h4 class="mt-3">{{ $obra->escola->nome }}</h4>
         </div>
 
         <div class="mb-4 shadow card border-light">
@@ -110,12 +112,21 @@
 
 @section('scripts')
     <script>
+        // Este teste se faz necessário, uma vez que "#regiaoobraconcluida" está "oculto" por default. Caso haja falha de validação
+        // toda a div(#regiaoobraconcluida) com o respectivo erro de validação não seriam exibidos de forma apropriada para o usuário
+        // final ao recarregar a página com relação aos erros.
+        if($("#progresso").val() == 100){
+            $("#regiaoobraconcluida").css("visibility","visible");
+        }
+
         $("#progresso").blur(function(){
             if($(this).val() == 100) {
                 $("#regiaoobraconcluida").css("visibility","visible");
-                $("#obraconcluidanao").focus();
+                $("#obraconcluidasim").focus();
+                //$("#obraconcluidasim").prop("checked", true);
             }else{
                 $("#regiaoobraconcluida").css("visibility","hidden");
+                //$("#obraconcluidanao").prop("checked", true);
                 $("#observacao").focus();
             }
         });

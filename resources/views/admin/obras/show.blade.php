@@ -59,7 +59,7 @@
 
                     <dt class="col-sm-2">Ativo</dt>
                     <dd class="col-sm-10">{{ $obra->ativo == 1 ? 'Sim' : 'Não' }}</dd>
-                    
+
                     <dt class="col-sm-2">Status</dt>
                     <dd class="col-sm-10">{{ $obra->estatu->nome }}</dd>
                 </dl>
@@ -68,7 +68,8 @@
                     <dt class="col-sm-2"></dt>
                     <dd class="col-sm-10">
                         <a class="btn btn-outline-secondary" href="{{ route('obra.index')}}" role="button">Listar</a>
-                        <a class="btn btn-outline-secondary" href="{{ route('obra.relpdfobra', ['obra' => $obra->id]) }}" role="button" target="_blank">pdf</a>
+                        <a class="btn btn-outline-secondary" href="{{ route('obra.relpdfobra', ['obra' => $obra->id]) }}" role="button" target="_blank">Descrição</a>
+                        <a class="btn btn-outline-secondary" href="{{ route('obra.relpdfobraatividade', ['obra' => $obra->id]) }}" role="button" target="_blank">Atividades</a>
                     </dd>
                 </dl>
             </div>

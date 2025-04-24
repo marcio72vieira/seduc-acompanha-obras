@@ -18,7 +18,7 @@ class EstatuSeeder extends Seeder
             'nome' => 'CRIADA',
             'valormin' => null,
             'valormax' => null,
-            'cor' => '#000000',
+            'cor' => '#6d8196',
             'ativo' => true
         ]);
 
@@ -36,7 +36,7 @@ class EstatuSeeder extends Seeder
             'nome' => 'CONCLUÍDA',
             'valormin' => null,
             'valormax' => null,
-            'cor' => '#08b317',
+            'cor' => '#0bda51',
             'ativo' => true
         ]);
 
@@ -63,7 +63,7 @@ class EstatuSeeder extends Seeder
             'nome' => 'FASE INTERMEDIÁRIA',
             'valormin' => 34,
             'valormax' => 67,
-            'cor' => '#fcaf3e',
+            'cor' => '#ffa500',
             'ativo' => true
         ]);
 
@@ -72,10 +72,8 @@ class EstatuSeeder extends Seeder
             'nome' => 'FASE AVANÇADA',
             'valormin' => 68,
             'valormax' => 100,
-            'cor' => '#4e9a06',
+            'cor' => '#2e6f40',
             'ativo' => true
         ]);
-
-        // fase inicial: #0d6efc; fase intermediária: #fcaf3e; fase avançda: #4e9a06
     }
 }

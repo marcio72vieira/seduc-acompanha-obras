@@ -8,7 +8,7 @@
 
     <div class="mb-4 shadow card border-light">
         <div class="gap-2 card-header hstack">
-            <span class="flex-row mt-1 mb-1 ms-auto d-sm-flex"> 
+            <span class="flex-row mt-1 mb-1 ms-auto d-sm-flex">
                 <a href="{{ route('estatu.create') }}" class="btn btn-primary btn-sm me-1"><i class="fa-regular fa-square-plus"></i> Novo </a>
                 <a href="{{ route('estatu.pdflistestatus') }}" class="btn btn-secondary btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i> pdf</a>
             </span>
@@ -48,7 +48,7 @@
                                     </div>
                                 @else
                                     <div class="d-flex justify-content-between align-items-center" style="width: 200px; height: 40px; border: 1px solid rgb(218, 213, 213); border-radius: 7px; background: {{ $estatu->cor }}">
-                                        <span style="padding-left: 10px; padding-right:10px;">{{ $estatu->valormin }}%</span> <span style="padding-left: 10px; padding-right:10px;"> a </span>  <span style="padding-left: 10px; padding-right:10px;">{{ $estatu->valormax }}%</span> 
+                                        <span style="padding-left: 10px; padding-right:10px; color: white">{{ $estatu->valormin }}%</span> <span style="padding-left: 10px; padding-right:10px; color: white"> a </span>  <span style="padding-left: 10px; padding-right:10px; color: white">{{ $estatu->valormax }}%</span>
                                     </div>
                                 @endif
                             </td>
@@ -57,7 +57,7 @@
                             <td>{{ \Carbon\Carbon::parse($estatu->created_at)->format('d/m/Y') }}</td>
                             <td class="flex-row d-md-flex justify-content-start">
                                 <a href="{{ route('estatu.show', ['estatu' => $estatu->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
-                                    <i class="fa-regular fa-eye"></i> Visualizar 
+                                    <i class="fa-regular fa-eye"></i> Visualizar
                                 </a>
 
                                 <a href="{{ route('estatu.edit', ['estatu' => $estatu->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">

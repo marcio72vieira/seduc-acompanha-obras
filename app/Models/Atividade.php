@@ -17,6 +17,7 @@ class Atividade extends Model
         'data_registro',
         'registro',
         'progresso',
+        'obraconcluida',
         'observacao',
     ];
 

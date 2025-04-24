@@ -177,6 +177,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::delete('/destroy-obra/{obra}', [ObraController::class, 'destroy'])->name('obra.destroy');
         Route::get('pdf-obra/relpdflistobras', [ObraController::class, 'relpdflistobras'])->name('obra.relpdflistobras');
         Route::get('pdf-obra/relpdfobra/{obra}', [ObraController::class, 'relpdfobra'])->name('obra.relpdfobra');
+        Route::get('pdf-obra/relpdfobraatividade/{obra}', [ObraController::class, 'relpdfobraatividade'])->name('obra.relpdfobraatividade');
 
 
         // DATATABLE
