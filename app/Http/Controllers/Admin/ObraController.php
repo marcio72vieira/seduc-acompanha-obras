@@ -105,7 +105,6 @@ class ObraController extends Controller
         // Validar o formulário
         $request->validated();
 
-
         // Marcar o ponto inicial de uma transação
         DB::beginTransaction();
 
@@ -118,19 +117,22 @@ class ObraController extends Controller
             $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
 
 
-            //----
-            // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
-            $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
+            if($request->obra_estatus_hidden != 1){
+                // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
+                $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
 
-            // Recuperando o estatu de acordo com o registro do último progresso, na situação da obra ser inativada e depois voltar a ser ativada novamente.
-            $ultimo_progresso =  $obra->ultimoprogresso($obra->id);
+                // Recuperando o estatu de acordo com o registro do último progresso, na situação da obra ser inativada e depois voltar a ser ativada novamente.
+                $ultimo_progresso =  $obra->ultimoprogresso($obra->id);
 
-            foreach($estatusprogressivos as $indicador){
-                if(($ultimo_progresso >= $indicador->valormin) && ($ultimo_progresso <= $indicador->valormax)){
-                    $estatus_restaurado = $indicador->id;
+
+                foreach($estatusprogressivos as $indicador){
+                    if(($ultimo_progresso >= $indicador->valormin) && ($ultimo_progresso <= $indicador->valormax)){
+                        $estatus_restaurado = $indicador->id;
+                    }
                 }
+            }else{
+                $estatus_restaurado =  1;
             }
-            //---
 
 
             $obra->update([
@@ -138,8 +140,8 @@ class ObraController extends Controller
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
                 'municipio_id' => $idMunicipioObra,
-                //'estatu_id' => $request->ativo == 1 ? 1 : 2,   // Obra criada (padrão). Criar um campo old_status_hidden que preserve o status da obra. Só altera o valor para "parada" se inativa for acionada.
-                'estatu_id' => $request->ativo == 1 ? $estatus_restaurado : 2, // Se a obra for ativa(1), presenva o staus que possui, se for inativa(0) o estatus será 2("parada" assumindo a cor vermelha como padrão)
+                'estatu_id' => $request->ativo == 1 ? 1 : 2,   // Obra criada (padrão). Criar um campo old_status_hidden que preserve o status da obra. Só altera o valor para "parada" se inativa for acionada.
+                //'estatu_id' => $request->ativo == 1 ? $estatus_restaurado : 2, // Se a obra for ativa(1), presenva o staus que possui, se for inativa(0) o estatus será 2("parada" assumindo a cor vermelha como padrão)
                 'data_inicio' => $request->data_inicio,
                 'data_fim' => $request->data_fim,
                 'ativo' => $request->ativo,
@@ -165,7 +167,7 @@ class ObraController extends Controller
             DB::rollBack();
 
             // Redirecionar o usuário, enviar a mensagem de erro
-            return back()->withInput()->with('error', 'Obra não editada!');
+            return back()->withInput()->with('error', 'Obra não editada!'.$e->getMessage());
         }
     }
 

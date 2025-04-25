@@ -137,20 +137,22 @@
                         <legend style="text-align: center; background: #e9e5e5; margin-bottom: 30px; border-top-left-radius: 7px; border-top-right-radius: 7px;">
                             OBJETOS
                         </legend>
-                        <div class="mb-3 row">
-                                @foreach ($objetos as $objeto)
-                                    <div class="col-lg-3" style="padding-bottom: 10px;">
-                                        <div>
-                                            <input type="checkbox" id="objeto_{{$objeto->id}}" name="objetos[]" value="{{$objeto->id}}"
-                                            @if(old('objetos'))
-                                                {{ in_array($objeto->id, old('objetos')) ? 'checked' : '' }}
-                                            @endif
-                                            style="background: #ff0000;">
-                                            <label for="objeto_{{$objeto->id}}">{{$objeto->nome}}</label>
+                        <div  style="height: 300px; overflow: auto; overflow-x: hidden;">
+                            <div class="mb-3 row">
+                                    @foreach ($objetos as $objeto)
+                                        <div class="col-lg-3" style="padding-bottom: 10px;">
+                                            <div>
+                                                <input type="checkbox" id="objeto_{{$objeto->id}}" name="objetos[]" value="{{$objeto->id}}"
+                                                @if(old('objetos'))
+                                                    {{ in_array($objeto->id, old('objetos')) ? 'checked' : '' }}
+                                                @endif
+                                                style="background: #ff0000;">
+                                                <label for="objeto_{{$objeto->id}}">{{$objeto->nome}}</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
                             </div>
+                        </div>
                     </fieldset>
 
 
