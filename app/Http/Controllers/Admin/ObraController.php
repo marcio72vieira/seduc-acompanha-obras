@@ -58,7 +58,7 @@ class ObraController extends Controller
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
                 'municipio_id' => $idMunicipioObra,
-                'estatu_id' => 1,                       // Obra criada (padrão)
+                'estatu_id' => $request->ativo == 1 ? 1 : 2,       // Obra criada (padrão). Obs: Será um caso raro o administrador criar uma obra e inativá-la(ativo = 0), setando seu estatus para 2(parada). Mas o sistema contempla essa situação.
                 'data_inicio' => $request->data_inicio,
                 'data_fim' => $request->data_fim,
                 'ativo' => $request->ativo,
@@ -116,14 +116,15 @@ class ObraController extends Controller
             // Obtém o id do Municipio através do relacionamento existente entre escola e municipio
             $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
 
+            // Se a obra possui atividades, recupera o último progresso da atividade, e com base neste progresso, recupera o indicador de status pelo "id".
+            // Caso contrário, define o  estatus_restaurado com o valor seu valor atual.
+            if($obra->atividades->count() > 0){
 
-            if($request->obra_estatus_hidden != 1){
                 // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
                 $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
 
                 // Recuperando o estatu de acordo com o registro do último progresso, na situação da obra ser inativada e depois voltar a ser ativada novamente.
                 $ultimo_progresso =  $obra->ultimoprogresso($obra->id);
-
 
                 foreach($estatusprogressivos as $indicador){
                     if(($ultimo_progresso >= $indicador->valormin) && ($ultimo_progresso <= $indicador->valormax)){
@@ -131,7 +132,8 @@ class ObraController extends Controller
                     }
                 }
             }else{
-                $estatus_restaurado =  1;
+                //$estatus_restaurado = $request->obra_estatus_hidden;
+                $estatus_restaurado = 1;
             }
 
 
@@ -140,8 +142,7 @@ class ObraController extends Controller
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
                 'municipio_id' => $idMunicipioObra,
-                'estatu_id' => $request->ativo == 1 ? 1 : 2,   // Obra criada (padrão). Criar um campo old_status_hidden que preserve o status da obra. Só altera o valor para "parada" se inativa for acionada.
-                //'estatu_id' => $request->ativo == 1 ? $estatus_restaurado : 2, // Se a obra for ativa(1), presenva o staus que possui, se for inativa(0) o estatus será 2("parada" assumindo a cor vermelha como padrão)
+                'estatu_id' => $request->ativo == 1 ? $estatus_restaurado : 2, // Se a obra for ativa(1), presenva o staus que possui, se for inativa(0) o estatus será 2("parada" assumindo a cor vermelha como padrão)
                 'data_inicio' => $request->data_inicio,
                 'data_fim' => $request->data_fim,
                 'ativo' => $request->ativo,

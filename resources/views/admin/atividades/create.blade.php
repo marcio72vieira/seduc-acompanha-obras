@@ -2,16 +2,18 @@
 
 @section('content-page')
     <div class="px-4 container-fluid">
-        <div class="gap-2 mb-1 hstack">
-            <h2 class="mt-3">REGISTRO DE ATIVIDADES</h2>
+        {{-- <div class="gap-2 mb-1 hstack"> <h2 class="mt-3">REGISTRO DE ATIVIDADES</h2> </div>
+        <div class="gap-2 mb-1 hstack"> <h4 class="mt-3">{{ $obra->escola->nome }}</h4> </div> --}}
+        <div class="mb-1 d-flex align-items-center justify-content-between">
+            <h1 class="mt-3">Registro de Atividades</h1>
         </div>
-        <div class="gap-2 mb-1 hstack">
-            <h4 class="mt-3">{{ $obra->escola->nome }}</h4>
+        <div class="mb-1 d-flex align-items-center justify-content-between">
+            <h6 class="mt-1">{{ $obra->escola->nome }}</h6>
         </div>
 
         <div class="mb-4 shadow card border-light">
             <div class="gap-2 card-header hstack">
-                <span class="p-2 small text-danger"><strong>Campo marcado com * é de preenchimento obrigatório!</strong></span>
+                <span class="p-2 small text-danger"><strong>Campo com * são obrigatório!</strong></span>
             </div>
 
             <div class="card-body">
@@ -83,7 +85,7 @@
 
                     {{-- observacao --}}
                     <div class="mb-4 row">
-                        <label for="observacao" class="col-sm-2 col-form-label">Observação <span class="small text-danger">*</span></label>
+                        <label for="observacao" class="col-sm-2 col-form-label">Observação</label>
                         <div class="col-sm-5">
                         <textarea rows="3" class="form-control" id="observacao" name="observacao" > {{ old('observacao') }} </textarea>
                           @error('observacao')
@@ -95,10 +97,12 @@
 
                     <div class="mb-4 row">
                         <div class="col-sm-2"></div>
-                        <div class="col-sm-10">
+                        <div class="col-sm-5">
                             <div style="margin-top: 15px">
+                                <div class="d-flex justify-content-end">
                                 <a class="btn btn-outline-secondary" href="{{ route('atividade.index')}}" role="button">Cancelar</a>
-                                <button type="submit" class="btn btn-primary" style="width: 95px;"> Salvar </button>
+                                <button type="submit" class="btn btn-primary" style="margin-left: 10px; width: 95px;"> Salvar </button>
+                                </div>
                             </div>
                         </div>
                     </div>

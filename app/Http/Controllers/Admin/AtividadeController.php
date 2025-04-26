@@ -84,4 +84,48 @@ class AtividadeController extends Controller
             return back()->withInput()->with('error', 'Atividade não registrada!');
         }
     }
+
+    public function indexregistros(Obra $obra)
+    {
+        $atividades = Atividade::where('obra_id', '=', $obra->id)->where('user_id', '=', Auth::user()->id)->get();
+
+        return view('admin.atividades.indexregistros', ['atividades' => $atividades]);
+    }
+
+
+    // Excluir o municipio do banco de dados
+    public function destroy(Atividade $atividade)
+    {
+        // Recuperando a obra da atividade que está sendo deletada de forma indireta
+        // $atividadeatual =  Atividade::find($atividade->id);
+        // $obra = $atividadeatual->obra()->first();
+
+        // Recuperando a obra da atividade que está sendo deletada de forma direta. 
+        // Esta operação deve ser feita sempre antes da atividade ser excluida.
+        $obra = $atividade->obra()->first();
+        
+        
+        try {
+            
+            // Excluir o registro do banco de dados
+            $atividade->delete();
+
+            // Se a obra não possui mais nenhum registro de atividade cadastrada, seu estatu deve ser definido para 1(criada).
+            // Esta operação deve ser feita sempre depois da atividade ser excluida.
+            if($obra->atividades->count() == 0){
+                $obra->update([
+                    'estatu_id' => 1 // Estatu com id = 1 é a obra criada.
+                ]);
+            }
+
+            // Redirecionar o usuário, enviar a mensagem de sucesso
+            return redirect()->route('atividade.index')->with('success', 'Atividae excluída com sucesso!');
+
+        } catch (Exception $e) {
+
+            // Redirecionar o usuário, enviar a mensagem de erro
+            return redirect()->route('atividade.index')->with('error', 'Atividade não excluída!');
+        }
+    }
+
 }

@@ -73,7 +73,7 @@ class LoginController extends Controller
             }
 
             if($user->perfil == "ope"){
-                return redirect()->route('dashboard.index')->with('success', Auth::user()->nome .', Bem vindo!');
+                return redirect()->route('atividade.index')->with('success', Auth::user()->nome .', Bem vindo!');
             }
         }
 

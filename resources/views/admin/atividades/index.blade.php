@@ -17,17 +17,21 @@
                         Tipo: {{ Str::lower($obra->tipoobra->nome) }}
                         <br>
                         Prazo: de {{ \Carbon\Carbon::parse($obra->data_inicio)->format('d-m-Y') }} a {{ \Carbon\Carbon::parse($obra->data_fim)->format('d-m-Y') }}
+                        <br>
+                        Reponsável: {{ Auth::user()->nome }}
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#">Tipo: {{ Str::lower($obra->tipoobra->nome) }}</a>
-                        <a href="{{ route('atividade.create', ['obra' => $obra->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1" title="registrar atividades"> <i class="fa-solid fa-keyboard"></i> Registrar</a>
+                        <span>Nº atividades: {{ $obra->atividades->count() }}</span>
+                        {{-- <div class="card-footer d-flex align-items-center justify-content-end"> --}}
+                        {{-- <a href="{{ route('obra.relpdfobraatividade', ['obra' => $obra->id]) }}" class="mb-1 btn btn-light btn-sm me-1">pdf</a> --}}
+                        <a href="{{ route('atividade.indexregistros', ['obra' => $obra->id]) }}" class="mb-1 btn btn-light btn-sm me-1" title="listar atividades"> <i class="fa-solid fa-list"></i> Listar</a>
+                        <a href="{{ route('atividade.create', ['obra' => $obra->id]) }}" class="mb-1 btn btn-light btn-sm me-1" title="registrar atividades"> <i class="fa-solid fa-keyboard"></i> Registrar</a>
                         {{-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> --}}
                     </div>
                 </div>
             @empty
                 <div class="alert alert-danger" role="alert">Sem obras para registrar atividades!</div>
             @endforelse
-
         </div>
     </div>
 </div>
