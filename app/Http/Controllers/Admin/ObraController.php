@@ -124,10 +124,10 @@ class ObraController extends Controller
                 $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
 
                 // Recuperando o estatu de acordo com o registro do último progresso, na situação da obra ser inativada e depois voltar a ser ativada novamente.
-                $ultimo_progresso =  $obra->ultimoprogresso($obra->id);
+                $ultimo_progressocadastrado =  $obra->ultimoprogresso($obra->id);
 
                 foreach($estatusprogressivos as $indicador){
-                    if(($ultimo_progresso >= $indicador->valormin) && ($ultimo_progresso <= $indicador->valormax)){
+                    if(($ultimo_progressocadastrado >= $indicador->valormin) && ($ultimo_progressocadastrado <= $indicador->valormax)){
                         $estatus_restaurado = $indicador->id;
                     }
                 }

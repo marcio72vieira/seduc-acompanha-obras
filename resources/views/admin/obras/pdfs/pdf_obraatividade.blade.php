@@ -104,11 +104,8 @@
                 </td>
                 <td width="577px" class="dados-lista">{{ $atividade->registro }}
                     @if ($atividade->observacao != null)
-                        <br>
-                        <sup>OBS</sup>
-                        <span style="font-size: 8px;">{{ $atividade->observacao }}</span>
+                        <br><strong><sup>obs:</sup></strong>{{ $atividade->observacao }}
                     @endif
-
                 </td>
             </tr>
         @endforeach

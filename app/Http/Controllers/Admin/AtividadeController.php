@@ -87,39 +87,52 @@ class AtividadeController extends Controller
 
     public function indexregistros(Obra $obra)
     {
-        $atividades = Atividade::where('obra_id', '=', $obra->id)->where('user_id', '=', Auth::user()->id)->get();
+        // Recupera todas as atividades da obra do funcionário autenticado, evitando que um funcionário leia, edit ou exclua as atividades de outro usuário, mesmo que os dois pertençam a mesma obra.
+        $atividades = Atividade::where('obra_id', '=', $obra->id)->where('user_id', '=', Auth::user()->id)->orderByDesc('data_registro')->get();
 
-        return view('admin.atividades.indexregistros', ['atividades' => $atividades]);
+        return view('admin.atividades.indexregistros', ['obra' => $obra, 'atividades' => $atividades]);
     }
 
 
     // Excluir o municipio do banco de dados
     public function destroy(Atividade $atividade)
     {
-        // Recuperando a obra da atividade que está sendo deletada de forma indireta
-        // $atividadeatual =  Atividade::find($atividade->id);
-        // $obra = $atividadeatual->obra()->first();
+        // Recuperando de forma indireta, a obra que possui a atividade que será deletada.
+        // $atividadeatual =  Atividade::find($atividade->id); $obra = $atividadeatual->obra()->first();
 
-        // Recuperando a obra da atividade que está sendo deletada de forma direta. 
-        // Esta operação deve ser feita sempre antes da atividade ser excluida.
+        // Recuperando de forma direta, a obra que possui a atividade que será deletada. A recuperação deve ser feita antes da exclusão da atividade.
         $obra = $atividade->obra()->first();
         
         
         try {
-            
             // Excluir o registro do banco de dados
             $atividade->delete();
 
-            // Se a obra não possui mais nenhum registro de atividade cadastrada, seu estatu deve ser definido para 1(criada).
-            // Esta operação deve ser feita sempre depois da atividade ser excluida.
+            // Verifica se a obra não possui registros de atividades cadastradas, para configuar seu "status" para 1(criada)
             if($obra->atividades->count() == 0){
                 $obra->update([
-                    'estatu_id' => 1 // Estatu com id = 1 é a obra criada.
+                    'estatu_id' => 1    // Estatu 1 = criada
                 ]);
+            }else{
+                // Verifica o último progresso cadastrado após excluir a atividade para preservar o "estatus" correto.
+                // Recupera o últimom progresso da atividade anterior a atividade que foi excluída, para manter a cor do status atualizaa conforme o número do progresso.
+                $ultimo_progressocadastrado =  $obra->ultimoprogresso($obra->id);
+                
+                // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
+                $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
+
+                foreach($estatusprogressivos as $estatu){
+                    
+                    if(($ultimo_progressocadastrado >= $estatu->valormin) && ($ultimo_progressocadastrado <= $estatu->valormax)){
+                        $obra->update([
+                            'estatu_id' => $estatu->id
+                        ]);
+                    }
+                }
             }
 
             // Redirecionar o usuário, enviar a mensagem de sucesso
-            return redirect()->route('atividade.index')->with('success', 'Atividae excluída com sucesso!');
+            return redirect()->route('atividade.indexregistros', ['obra' => $obra->id])->with('success', 'Atividae excluída com sucesso!');
 
         } catch (Exception $e) {
 
