@@ -216,8 +216,11 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/indexregistros-atividade/{obra}', [AtividadeController::class, 'indexregistros'])->name('atividade.indexregistros');
         Route::get('/create-atividade/{obra}', [AtividadeController::class, 'create'])->name('atividade.create');
         Route::post('/store-atividade', [AtividadeController::class, 'store'])->name('atividade.store');
+        Route::get('/edit-atividade/{atividade}', [AtividadeController::class, 'edit'])->name('atividade.edit');
+        Route::put('/update-atividade/{atividade}', [AtividadeController::class, 'update'])->name('atividade.update');
         Route::delete('/destroy-atividade/{atividade}', [AtividadeController::class, 'destroy'])->name('atividade.destroy');
-    });// Final das rotas de acesso a usuários administradores e consultores (onlyAdmCon)
+        Route::get('pdf-atividade/relpdfatividade/{obra}', [AtividadeController::class, 'relpdfatividade'])->name('atividade.relpdfatividade');
+    });// Final das rotas de acesso a usuários administradores e operadoes (onlyAdmOpe)
 
 
 }); // Final das rotas de quem deve está autenticado

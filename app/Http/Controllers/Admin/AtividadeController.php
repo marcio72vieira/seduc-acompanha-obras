@@ -85,10 +85,21 @@ class AtividadeController extends Controller
         }
     }
 
+
+    public function edit(Atividade $atividade)
+    {
+        // Recuperando a Obra da atividade. first(), porque só existem uma obra por atividade, se fosse mais de uma seria get()
+        $obra = $atividade->obra()->first();
+
+        return view('admin.atividades.edit', ['obra' => $obra, 'atividade' => $atividade]);
+    }
+
+
     public function indexregistros(Obra $obra)
     {
         // Recupera todas as atividades da obra do funcionário autenticado, evitando que um funcionário leia, edit ou exclua as atividades de outro usuário, mesmo que os dois pertençam a mesma obra.
         $atividades = Atividade::where('obra_id', '=', $obra->id)->where('user_id', '=', Auth::user()->id)->orderByDesc('data_registro')->get();
+        //$atividades = Atividade::where('obra_id', '=', $obra->id)->where('user_id', '=', Auth::user()->id)-where('created_at', '<', )->orderByDesc('data_registro')->get();
 
         return view('admin.atividades.indexregistros', ['obra' => $obra, 'atividades' => $atividades]);
     }
@@ -140,5 +151,70 @@ class AtividadeController extends Controller
             return redirect()->route('atividade.index')->with('error', 'Atividade não excluída!');
         }
     }
+
+
+    public function relpdfatividade(Obra $obra)
+    {
+        // Obtendo os dados
+        $obra = Obra::findOrFail($obra->id);
+
+        // Definindo o nome do arquivo a ser baixado
+        $fileName = ('Atividades_lista.pdf');
+
+        // Invocando a biblioteca mpdf e definindo as margens do arquivo
+        $mpdf = new \Mpdf\Mpdf([
+            'orientation' => 'P',
+            'margin_left' => 10,
+            'margin_right' => 10,
+            'margin_top' => 25,
+            'margin_bottom' => 10,
+            'margin-header' => 10,
+            'margin_footer' => 5
+        ]);
+
+        // Configurando o cabeçalho da página
+        $mpdf->SetHTMLHeader('
+            <table style="width:717px; border-bottom: 1px solid #000000; margin-bottom: 3px;">
+                <tr>
+                    <td style="width: 140px text-align:left">
+                        <img src="images/logo_seduc2.png" width="120"/>
+                    </td>
+                    <td style="width: 200px; font-size: 10px; font-family: Arial, Helvetica, sans-serif;">
+                        Governo do Estado do Maranhão<br>
+                        Secretaria de Estado da Educação / SEDUC<br>
+                        Agência de Tecnologia da Informação / ATI<br>
+                        Acompanhamento de Execução de Obras
+                    </td>
+                    <td style="width: 377px;" class="titulo-rel">
+                        REGISTRO DE ATIVIDADES: '.$obra->tipoobra->nome.'<br>'.$obra->escola->nome.'
+                    </td>
+                </tr>
+            </table>
+        ');
+
+        // Configurando o rodapé da página
+        $mpdf->SetHTMLFooter('
+            <table style="width:717px; border-top: 1px solid #000000; font-size: 10px; font-family: Arial, Helvetica, sans-serif;">
+                <tr>
+                    <td width="200px">São Luis(MA) {DATE d/m/Y}</td>
+                    <td width="467px" align="center"></td>
+                    <td width="50px" align="right">{PAGENO}/{nbpg}</td>
+                </tr>
+            </table>
+        ');
+
+        // Definindo a view que deverá ser renderizada como arquivo .pdf e passando os dados da pesquisa
+        $html = \View::make('admin.atividades.pdfs.pdf_atividades', compact('obra'));
+        $html = $html->render();
+
+        // Definindo o arquivo .css que estilizará o arquivo blade na view ('admin.users.pdfs.pdf_users')
+        $stylesheet = file_get_contents('css/pdf/mpdf.css');
+        $mpdf->WriteHTML($stylesheet, 1);
+
+        // Transformando a view blade em arquivo .pdf e enviando a saida para o browse (I); 'D' exibe e baixa para o pc
+        $mpdf->WriteHTML($html);
+        $mpdf->Output($fileName, 'I');  // Exibe o arquivo no browse   || $mpdf->Output($fileName, 'F');  Gera o arquivo na pasta pública
+
+    }    
 
 }

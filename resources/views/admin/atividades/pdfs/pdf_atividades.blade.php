@@ -71,10 +71,12 @@
                     <br>
                 @endforeach
             </td>
+        </tr><tr>
+            <td style="width:717px;" class="close-ficha"></td>
         </tr>
     </table>
 
-    <table style="width: 717px; border-collapse: collapse;">
+    {{-- <table style="width: 717px; border-collapse: collapse;">
         <tr>
             <td style="width: 717px;" class="label-ficha">Descrição</td>
         </tr>
@@ -86,6 +88,29 @@
         <tr>
             <td colspan="4" style="width:717px;" class="close-ficha"></td>
         </tr>
-    </table>    
+    </table> --}}
+
+    <table style="width:717px; border-collapse: collapse;">
+        <tr>
+            <td width="30px" class="col-header-table">Id</td>
+            <td width="70px" class="col-header-table">Data</td>
+            <td width="40px" class="col-header-table">Progresso</td>
+            <td width="577px" class="col-header-table">Atividade</td>
+        </tr>
+        @foreach ($obra->atividades as $atividade )
+            <tr @if($loop->even) style="background-color: #e3e3e3;" @endif>
+                <td width="30px" class="dados-lista">{{ $atividade->id }}</td>
+                <td width="70px" class="dados-lista">{{ \Carbon\Carbon::parse($atividade->data_registro)->format('d/m/Y') }}</td>
+                <td width="40px" class="dados-lista" style="text-align: center">
+                    {{ $atividade->progresso }}%
+                </td>
+                <td width="577px" class="dados-lista">{{ $atividade->registro }}
+                    @if ($atividade->observacao != null)
+                        <br><strong><sup>obs:</sup></strong>{{ $atividade->observacao }}
+                    @endif
+                </td>
+            </tr>
+        @endforeach
+    </table>
 </body>
 </html>

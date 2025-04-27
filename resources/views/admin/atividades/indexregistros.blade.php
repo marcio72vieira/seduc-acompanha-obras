@@ -18,11 +18,12 @@
         <h6 class="mt-1"> {{ $obra->escola->nome }}</h6>
         <div>
             <a class="btn btn-outline-secondary" href="{{ route('atividade.index')}}" role="button"><i class="fa-solid fa-rotate-left"></i></a>
+            <a class="btn btn-outline-secondary" href="{{ route('atividade.relpdfatividade', ['obra' => $obra->id]) }}" role="button"><i class="bi bi-file-earmark-pdf"></i></a>
             <a class="btn btn-primary ms-1" href="{{ route('atividade.create', ['obra' => $obra->id]) }}" role="button"> <i class="fa-solid fa-keyboard"></i></a>
         </div>
     </div>
 
-    <div class="row mt-4 ">
+    <div class="mt-4 row ">
         <div class="col-xl-12 col-md-12">
             
             <x-alert />
@@ -46,14 +47,14 @@
                             @endif
                         </td>
                         <td>
-                            <a href="#" class="mb-1 btn btn-secondary btn-sm me-1 mb-4">
+                            <a href="{{ route('atividade.edit', ['atividade' => $atividade->id]) }}" class="mb-1 mb-4 btn btn-secondary btn-sm me-1">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
 
                             <form id="formDelete{{ $atividade->id }}" method="POST" action="{{ route('atividade.destroy', ['atividade' => $atividade->id]) }}">
                                 @csrf
                                 @method('delete')
-                                <button type="submit" class="mb-1 btn btn-danger btn-sm me-1  btnDelete" data-delete-entidade="Atividade" data-delete-id="{{ $atividade->id }}"  data-value-record="{{ $atividade->data_registro }}">
+                                <button type="submit" class="mb-1 btn btn-danger btn-sm me-1 btnDelete" data-delete-entidade="Atividade" data-delete-id="{{ $atividade->id }}"  data-value-record="{{ $atividade->data_registro }}">
                                     <i class="fa-regular fa-trash-can"></i>
                                 </button>
                             </form>
