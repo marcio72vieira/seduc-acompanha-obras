@@ -18,7 +18,7 @@
         <h6 class="mt-1"> {{ $obra->escola->nome }}</h6>
         <div>
             <a class="btn btn-outline-secondary" href="{{ route('atividade.index')}}" role="button"><i class="fa-solid fa-rotate-left"></i></a>
-            <a class="btn btn-outline-secondary" href="{{ route('atividade.relpdfatividade', ['obra' => $obra->id]) }}" role="button"><i class="bi bi-file-earmark-pdf"></i></a>
+            <a class="btn btn-outline-secondary" href="{{ route('atividade.relpdfatividade', ['obra' => $obra->id]) }}" role="button"><i class="fa-regular fa-file-pdf"></i></a>
             <a class="btn btn-primary ms-1" href="{{ route('atividade.create', ['obra' => $obra->id]) }}" role="button"> <i class="fa-solid fa-keyboard"></i></a>
         </div>
     </div>
@@ -37,7 +37,7 @@
                 </thead>
                 <tbody>
                     @forelse ($atividades as $atividade)
-                    <tr @if($loop->even) style="background-color: #e3e3e3;" @endif>
+                    <tr @if($loop->even) style="background-color: #e3e3e3;" @endif style="background-color: {{ $atividade->obraconcluida == 1 ? '#0bda51' : '' }}">
                         <td>
                             {{ \Carbon\Carbon::parse($atividade->data_registro)->format('d-m-Y') }}
                             &nbsp;({{ $atividade->progresso }}%)

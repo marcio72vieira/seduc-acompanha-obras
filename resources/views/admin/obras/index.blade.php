@@ -30,6 +30,7 @@
                         <th style="width: 15%">Datas de Inicio e Fim</th>
                         <th>Objetos</th>
                         <th>Responsáveis</th>
+                        <th>Registros</th>
                         <th>Status</th>
                         {{-- <th>Ativo</th> --}}
                         <th style="width: 15%">Ações</th>
@@ -55,17 +56,11 @@
                                     <span style="font-size: 12px;">{{ $user->nomecompleto }} </span><br>
                                 @endforeach
                             </td>
-
+                            <td style="text-align: center">{{ $obra->atividades->count() > 0 ? $obra->atividades->count() : '' }}</td>
                             <td>
-                                @if($obra->atividades->count() > 0 )
-                                    <div style="display: inline-block; background-color: {{ $obra->estatu->cor }}; width: 2.8em; height: 2.8em; line-height: 2.8em; border-radius: 50%; text-align:center; vertical-align: middle; color: white"  title="{{ $obra->estatu->nome }}">
-                                        {{ $obra->ultimoprogresso($obra->id) }}%
-                                    </div>
-                                @else
-                                    <div style="display: inline-block; background-color: {{ $obra->estatu->cor }}; width: 2.8em; height: 2.8em; line-height: 2.8em; border-radius: 50%; text-align:center; vertical-align: middle; color: white"  title="{{ $obra->estatu->nome }}">
-                                        0 %
-                                    </div>
-                                @endif
+                                <div style="display: inline-block; background-color: {{ $obra->estatu->cor }}; width: 2.8em; height: 2.8em; line-height: 2.8em; border-radius: 50%; text-align:center; vertical-align: middle; color: white"  title="{{ $obra->estatu->nome }}">
+                                    {{ $obra->progressomaximo($obra->id) }}%
+                                </div>
                             </td>
 
                             <td class="align-top">

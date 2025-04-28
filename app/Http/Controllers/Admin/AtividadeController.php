@@ -55,13 +55,17 @@ class AtividadeController extends Controller
             // $obra = Obra::where('id', '=', intval($request->obra_hidden))->first();
             $obra = Obra::where('id', '=', $request->obra_hidden)->first();
 
+            // Recupera o valor máximo do campo progresso no banco, para definir o estatu da obra com base no valor máximo.
+            $valorprogressomaximo = DB::table('atividades')->where('obra_id', '=', $request->obra_hidden)->max('progresso');
+
             // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
             $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
 
             foreach($estatusprogressivos as $estatu){
                 // Obs: intval(), transforma a string retornada em "$request->progresso" em um número inteiro, para que o mesmo seja comparado com os
                 // valores inteiros $estatu->valormin e $estatu->valormax.
-                if((intval($request->progresso) >= $estatu->valormin) && (intval($request->progresso) <= $estatu->valormax)){
+                // if((intval($request->progresso) >= $estatu->valormin) && (intval($request->progresso) <= $estatu->valormax)){
+                if(($valorprogressomaximo >= $estatu->valormin) && ($valorprogressomaximo <= $estatu->valormax)){
                     $obra->update([
                         'estatu_id' => $estatu->id
                     ]);
@@ -93,6 +97,64 @@ class AtividadeController extends Controller
 
         return view('admin.atividades.edit', ['obra' => $obra, 'atividade' => $atividade]);
     }
+
+
+    public function update(AtividadeRequest $request, Atividade $atividade)
+    {
+        // Validar o formulário
+        $request->validated();
+
+        try {
+            // Gravar dados no banco
+            $atividade->update([
+                'user_id' => $request->user_hidden,
+                'obra_id' => $request->obra_hidden,
+                'data_registro' => $request->data_registro,
+                'registro' => $request->registro,
+                'progresso' => $request->progresso,
+                'obraconcluida' => $request->obraconcluida,
+                'observacao' => $request->observacao,
+            ]);
+
+            // Recupera o valor máximo do campo progresso no banco, para definir o estatu da obra com base no valor máximo.
+            $valorprogressomaximo = DB::table('atividades')->where('obra_id', '=', $request->obra_hidden)->max('progresso');
+            
+
+            // Recuperando a Obra, cujo, "estatus" deverá ser atualizado com base no valor do campo "progresso"
+            // $obra = Obra::where('id', '=', intval($request->obra_hidden))->first();
+            $obra = Obra::where('id', '=', $request->obra_hidden)->first();
+
+            // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
+            $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
+
+            foreach($estatusprogressivos as $estatu){
+                // Obs: intval(), transforma a string retornada em "$request->progresso" em um número inteiro, para que o mesmo seja comparado com os
+                // valores inteiros $estatu->valormin e $estatu->valormax.
+                // if((intval($request->progresso) >= $estatu->valormin) && (intval($request->progresso) <= $estatu->valormax)){
+                if(($valorprogressomaximo >= $estatu->valormin) && ($valorprogressomaximo <= $estatu->valormax)){
+                    $obra->update([
+                        'estatu_id' => $estatu->id
+                    ]);
+                }
+            }
+
+            // Se o operador determinar que  obra está concluída após definir o "progresso" como sendo igual a 100, atribui o estatu de obra = 3(concluída)
+            if($request->obraconcluida == 1){
+                $obra->update([
+                    'estatu_id' => 3 // Estatu com id = 3 é a obra concluida.
+                ]);
+            }
+
+            // Redirecionar o usuário, enviar a mensagem de sucesso
+            return redirect()->route('atividade.indexregistros', ['obra' => $obra->id])->with('success', 'Atividade editada com sucesso!');
+
+        } catch (Exception $e) {
+
+            // Redirecionar o usuário, enviar a mensagem de erro
+            return back()->withInput()->with('error', 'Atividade não editada!');
+        }
+    }
+
 
 
     public function indexregistros(Obra $obra)
@@ -127,14 +189,18 @@ class AtividadeController extends Controller
             }else{
                 // Verifica o último progresso cadastrado após excluir a atividade para preservar o "estatus" correto.
                 // Recupera o últimom progresso da atividade anterior a atividade que foi excluída, para manter a cor do status atualizaa conforme o número do progresso.
-                $ultimo_progressocadastrado =  $obra->ultimoprogresso($obra->id);
+                // $ultimo_progressocadastrado =  $obra->ultimoprogresso($obra->id);
+
+                // Recupera o valor máximo do campo progresso no banco, para definir o estatu da obra com base no valor máximo.
+                $valorprogressomaximo = DB::table('atividades')->where('obra_id', '=', $obra->id)->max('progresso');
                 
                 // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
                 $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
 
                 foreach($estatusprogressivos as $estatu){
                     
-                    if(($ultimo_progressocadastrado >= $estatu->valormin) && ($ultimo_progressocadastrado <= $estatu->valormax)){
+                    // if(($ultimo_progressocadastrado >= $estatu->valormin) && ($ultimo_progressocadastrado <= $estatu->valormax)){
+                    if(($valorprogressomaximo >= $estatu->valormin) && ($valorprogressomaximo <= $estatu->valormax)){
                         $obra->update([
                             'estatu_id' => $estatu->id
                         ]);

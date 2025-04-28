@@ -127,20 +127,17 @@
             if($(this).val() == 100) {
                 $("#regiaoobraconcluida").css("visibility","visible");
                 $("#obraconcluidasim").focus();
-                //$("#obraconcluidasim").prop("checked", true);
             }else{
+                $("#obraconcluidanao").prop("checked", true);
                 $("#regiaoobraconcluida").css("visibility","hidden");
-                //$("#obraconcluidanao").prop("checked", true);
                 $("#observacao").focus();
             }
         });
 
         // Torna visível o campo "obraconcluida", caso o valor escolhido do campo progresso seja = 100.
         // Uma forma mais fácil de exibir o campo "obraconcluida" seria testar diretamente na view
-        // @if($atividade->progresso == 100){ <div class="mb-4 row" id="regiaoobraconcluida" style="visibility:visible"> }else{ <div class="mb-4 row" id="regiaoobraconcluida" style="visibility:hidden">}
-        if($("#progresso").val() == "100"){
-            $("#obraconcluida").css("visibility","visible");
-        }
+        // @if($atividade->progresso == 100){ <div class="mb-4 row" id="regiaoobraconcluida" style="visibility:visible"> }else{ <div class="mb-4 row" id="regiaoobraconcluida" style="visibility:hidden">}@endif
+        // if($("#progresso").val() == "100"){ $("#obraconcluida").css("visibility","visible"); }
 
     </script>
 @endsection

@@ -119,18 +119,34 @@ class ObraController extends Controller
             // Se a obra possui atividades, recupera o último progresso da atividade, e com base neste progresso, recupera o indicador de status pelo "id".
             // Caso contrário, define o  estatus_restaurado com o valor seu valor atual.
             if($obra->atividades->count() > 0){
+                
+                // Recuperando o estatu de acordo com o registro do último progresso, na situação da obra ser inativada e depois voltar a ser ativada novamente.
+                // $ultimo_progressocadastrado =  $obra->ultimoprogresso($obra->id);
+                //
+                // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
+                // $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
+                //
+                // foreach($estatusprogressivos as $indicador){
+                //     if(($ultimo_progressocadastrado >= $indicador->valormin) && ($ultimo_progressocadastrado <= $indicador->valormax)){
+                //         $estatus_restaurado = $indicador->id;
+                //     }
+                // }
+
+                // Recupera o valor máximo do campo progresso no banco, para definir o estatu da obra com base no valor máximo.
+                $valorprogressomaximo = DB::table('atividades')->where('obra_id', '=', $obra->id)->max('progresso');
 
                 // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
                 $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
-
-                // Recuperando o estatu de acordo com o registro do último progresso, na situação da obra ser inativada e depois voltar a ser ativada novamente.
-                $ultimo_progressocadastrado =  $obra->ultimoprogresso($obra->id);
-
-                foreach($estatusprogressivos as $indicador){
-                    if(($ultimo_progressocadastrado >= $indicador->valormin) && ($ultimo_progressocadastrado <= $indicador->valormax)){
-                        $estatus_restaurado = $indicador->id;
+                
+                foreach($estatusprogressivos as $estatu){
+                    if(($valorprogressomaximo >= $estatu->valormin) && ($valorprogressomaximo <= $estatu->valormax)){
+                        // $obra->update([
+                        //     'estatu_id' => $estatu->id
+                        // ]);
+                        $estatus_restaurado = $estatu->id;
                     }
                 }
+                
             }else{
                 //$estatus_restaurado = $request->obra_estatus_hidden;
                 $estatus_restaurado = 1;

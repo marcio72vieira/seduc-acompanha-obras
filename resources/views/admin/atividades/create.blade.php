@@ -129,8 +129,8 @@
                 $("#obraconcluidasim").focus();
                 //$("#obraconcluidasim").prop("checked", true);
             }else{
+                $("#obraconcluidanao").prop("checked", true);
                 $("#regiaoobraconcluida").css("visibility","hidden");
-                //$("#obraconcluidanao").prop("checked", true);
                 $("#observacao").focus();
             }
         });

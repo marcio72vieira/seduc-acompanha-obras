@@ -12,7 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         // Rota para a qual o usuário não autenticado deve ser redirecionado
-        $middleware->redirectGuestsTo('/'); 
+        $middleware->redirectGuestsTo('/');
+        // Registrando o middleware obrarestrita
+        $middleware->alias([
+            'obrarestrita' => \App\Http\Middleware\ObraRestrita::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

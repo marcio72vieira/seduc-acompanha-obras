@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
+
 class Obra extends Model
 {
     use HasFactory;
@@ -73,6 +75,17 @@ class Obra extends Model
 
         // Retorna o camo progresso da última atividade cadastrada
         return $ultimaatividade->progresso;
+    }
+
+    public function progressomaximo($idobra)
+    {
+        $valorprogressomaximo = DB::table('atividades')->where('obra_id', '=', $idobra)->max('progresso');
+
+        if($valorprogressomaximo != null){
+            return $valorprogressomaximo;
+        }else{
+            return 0;
+        }
     }
 
 
