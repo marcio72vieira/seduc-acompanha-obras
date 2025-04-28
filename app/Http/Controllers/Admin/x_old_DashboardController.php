@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         // Definindo mês para computo dos dados OK!
         // $mes_corrente = date('m');   // número do mês no formato 01, 02, 03, 04 ..., 09, 10, 11, 12
@@ -43,72 +43,10 @@ class DashboardController extends Controller
             $anospesquisa = array_reverse($anos);
         }
 
-        // Estatus pra exibir os cards
+        $obras = Obra::orderBy('id')->paginate(10);
         $estatus = Estatu::orderBy('id')->get();
 
-
-
-        /***** INICIO PESQUISA PARA FILTRO DO DASHBOARD */
-        // Recuperando todos os processos sem filtro
-        // $processos = Processo::orderBy('nomecompleto')->paginate(10);
-        // return view('admin.processos.index', [ 'processos' => $processos ]);
-
-        // Query com filtro
-        $obras = DB::table('obras')
-            ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
-            ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
-            ->join('municipios', 'municipios.id', '=', 'obras.municipio_id')
-            ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')
-            //->join('atividades', 'atividades.obra_id', '=', 'obras.id')
-            ->select(
-                'obras.id',
-                'tipoobras.nome AS tipo',
-                'escolas.nome AS escola',
-                'municipios.nome AS municipio',
-                'estatus.id AS estatu', 'estatus.nome AS nomeestatus',
-                //'atividades.progresso'
-            )
-            /* ->when($request->has('requerente'), function($query) use($request) {
-                $query->where('nomecompleto', 'like', '%'. $request->requerente . '%');
-            })
-            ->when($request->has('regional'), function($query) use($request) {
-                $query->where('regional', 'like', '%'. $request->regional . '%');
-            })
-            ->when($request->has('municipio'), function($query) use($request) {
-                $query->where('municipio', 'like', '%'. $request->municipio . '%');
-            })
-            ->when($request->has('tipounidade'), function($query) use($request) {
-                $query->where('tipounidade', 'like', '%'. $request->tipounidade . '%');
-            })
-            ->when($request->has('unidade'), function($query) use($request) {
-                $query->where('unidadeatendimento', 'like', '%'. $request->unidade . '%');
-            })
-            ->when($request->has('analista'), function($query) use($request) {
-                $query->where('funcionario', 'like', '%'. $request->analista . '%');
-            })
-            ->when($request->filled('data_cadastro_inicio'), function($query) use($request) {
-                $query->where('datacadastro', '>=', \Carbon\Carbon::parse($request->data_cadastro_inicio)->format('Y-m-d'));
-            })
-            ->when($request->filled('data_cadastro_fim'), function($query) use($request) {
-                $query->where('datacadastro', '<=', \Carbon\Carbon::parse($request->data_cadastro_fim)->format('Y-m-d'));
-            }) */
-
-        //->groupBy('obras.id')
-        ->orderBy('tipoobras.nome')
-        ->paginate(10);
-        //->max('atividades.progresso');
-
-
-        // Se a pesquisa foi submetida e seu valor for started, exibe o formulário de pesquisa, caso contrário esconde o formulário.
-        if($request->pesquisar == "started"){
-            $flag = '';
-        }else{
-            $flag = 'none';
-        }
-
-        /***** FINAL PESQUISA PARA FILTRO DO DASHBOARD */
-
-        return view('admin.dashboards.dashboard', compact('mes_corrente','ano_corrente','mesespesquisa', 'anospesquisa', 'estatus', 'flag', 'obras'));
+        return view('admin.dashboards.dashboard', compact('mes_corrente','ano_corrente','mesespesquisa', 'anospesquisa', 'obras', 'estatus'));
     }
 
 
@@ -260,8 +198,8 @@ class DashboardController extends Controller
 
         echo json_encode($response);
         exit;
-    }
+    }    
 
-
+    
 
 }

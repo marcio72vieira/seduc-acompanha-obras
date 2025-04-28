@@ -15,17 +15,7 @@
 
                 <x-alert />
 
-                {{--
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                --}}
+                {{-- @if ($errors->any()) <div class="alert alert-danger"><ul>@foreach($errors->all() as $error) <li>{{$error}}</li> @endforeach </ul></div> @endif --}}
 
 
                 <form action="{{ route('obra.update', ['obra' => $obra->id]) }}" method="POST" autocomplete="off">
@@ -70,7 +60,7 @@
 
 
                         {{-- escola_id --}}
-                        <div class="col-lg-3">
+                        <div class="col-2">
                             <div class="form-group focused">
                                 <label class="form-control-label" for="escola_id">Escola<span class="small text-danger">*</span></label>
 
@@ -99,24 +89,6 @@
                                 @enderror
                             </div>
                         </div>
-
-
-
-                        {{-- escola_id 
-                        <div class="col-4">
-                            <div class="form-group focused">
-                                <label class="form-control-label" for="escola_id">Escola<span class="small text-danger">*</span></label>
-                                <select name="escola_id" id="escola_id" class="form-control select2" required>
-                                    <option value="" selected disabled>Escolha...</option>
-                                    @foreach($escolas  as $escola)
-                                        <option value="{{ $escola->id }}" {{old('escola_id', $obra->escola->id) == $escola->id ? 'selected' : ''}}>{{$escola->nome}}</option>
-                                    @endforeach
-                                </select>
-                                @error('escola_id')
-                                    <small style="color: red">{{$message}}</small>
-                                @enderror
-                            </div>
-                        </div>--}}
 
                         {{-- data_inicio --}}
                         <div class="col-2">
@@ -234,7 +206,6 @@
                         </div>
                     </div>
                 </form>
-
 
             </div>
         </div>
