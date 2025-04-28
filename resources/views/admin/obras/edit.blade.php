@@ -52,7 +52,57 @@
                             </div>
                         </div>
 
+                        {{-- municipio_id --}}
+                        <div class="col-2">
+                            <div class="form-group focused">
+                                <label class="form-control-label" for="municipio_id">Município<span class="small text-danger">*</span></label>
+                                <select name="municipio_id" id="municipio_id" class="form-control" required>
+                                    <option value="" selected disabled>Escolha...</option>
+                                    @foreach($municipios  as $municipio)
+                                        <option value="{{ $municipio->id }}" {{old('municipio_id', $obra->municipio->id) == $municipio->id ? 'selected' : ''}}>{{ $municipio->nome }}</option>
+                                    @endforeach
+                                </select>
+                                @error('municipio_id')
+                                    <small style="color: red">{{$message}}</small>
+                                @enderror
+                            </div>
+                        </div>
+
+
                         {{-- escola_id --}}
+                        <div class="col-lg-3">
+                            <div class="form-group focused">
+                                <label class="form-control-label" for="escola_id">Escola<span class="small text-danger">*</span></label>
+
+                                @if(count($errors) > 0)
+                                    <select name="escola_id" id="escola_id" class="form-control" required>
+                                        <option value="" selected disabled>Escolha...</option>
+                                        @foreach($escolas  as $escola)
+                                            @if($escola->municipio_id == old('municipio_id'))
+                                                <option value="{{ $escola->id }}" {{old('escola_id') == $escola->id ? 'selected' : ''}}>{{ $escola->nome }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                @else
+                                    <select name="escola_id" id="escola_id" class="form-control" required>
+                                        <option value="" selected disabled>Escolha...</option>
+                                        @foreach($escolas  as $escola)
+                                            @if($escola->municipio_id == $obra->municipio_id)
+                                                <option value="{{ $escola->id }}" {{old('escola_id', $obra->escola->id) == $escola->id ? 'selected' : ''}}>{{ $escola->nome }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                @endif
+
+                                @error('bairro_id')
+                                    <small style="color: red">{{$message}}</small>
+                                @enderror
+                            </div>
+                        </div>
+
+
+
+                        {{-- escola_id 
                         <div class="col-4">
                             <div class="form-group focused">
                                 <label class="form-control-label" for="escola_id">Escola<span class="small text-danger">*</span></label>
@@ -66,7 +116,7 @@
                                     <small style="color: red">{{$message}}</small>
                                 @enderror
                             </div>
-                        </div>
+                        </div>--}}
 
                         {{-- data_inicio --}}
                         <div class="col-2">
@@ -189,4 +239,29 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        //Recuperação dinâmica das escolas de um município
+        $('#municipio_id').on('change', function() {
+                var municipio_id = this.value;
+                $("#escola_id").html('');
+                $.ajax({
+                    url:"{{route('obra.ajaxescolasmunicipio')}}",
+                    type: "GET",
+                    data: {
+                        municipio_id: municipio_id,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType : 'json',
+                    success: function(result){
+                        $('#escola_id').html('<option value="">Escolha ...</option>');
+                        $.each(result.escolas,function(key,value){
+                            $("#escola_id").append('<option value="'+ value.id +'">'+ value.nome +'</option>');
+                        });
+                    }
+                });
+            });
+    </script>
 @endsection

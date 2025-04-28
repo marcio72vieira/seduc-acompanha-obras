@@ -170,6 +170,7 @@ Route::group(['middleware' => 'auth'], function(){
         // OBRA
         Route::get('/index-obra', [ObraController::class, 'index'])->name('obra.index');
         Route::get('/create-obra', [ObraController::class, 'create'])->name('obra.create');
+        Route::get('/ajaxescolasmunicipio-obra', [ObraController::class, 'ajaxescolasmunicipio'])->name('obra.ajaxescolasmunicipio');
         Route::post('/store-obra', [ObraController::class, 'store'])->name('obra.store');
         Route::get('/edit-obra/{obra}', [ObraController::class, 'edit'])->name('obra.edit');
         Route::put('/update-obra/{obra}', [ObraController::class, 'update'])->name('obra.update');

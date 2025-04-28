@@ -7,6 +7,7 @@ use App\Http\Requests\ObraRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Tipoobra;
+use App\Models\Municipio;
 use App\Models\Escola;
 use App\Models\Obra;
 use App\Models\Objeto;
@@ -29,12 +30,26 @@ class ObraController extends Controller
     public function create()
     {
         $tipoobras = Tipoobra::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
+        $municipios = Municipio::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $escolas = Escola::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $objetos = Objeto::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $users = User::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
 
-        return view('admin.obras.create', ['tipoobras' => $tipoobras, 'escolas' => $escolas, 'objetos' => $objetos, 'users' => $users]);
+        return view('admin.obras.create', ['tipoobras' => $tipoobras, 'municipios' => $municipios, 'escolas' => $escolas, 'objetos' => $objetos, 'users' => $users]);
+        
     }
+
+
+    public function ajaxescolasmunicipio(Request $request)
+    {
+        $condicoes = [ 
+            ['municipio_id', '=', $request->municipio_id],
+            ['ativo', '=', 1]
+        ];
+
+        $data['escolas'] = Escola::where($condicoes)->orderBy('nome', 'ASC')->get();
+        return response()->json($data);
+    }    
 
 
     public function store(ObraRequest $request)
@@ -51,13 +66,13 @@ class ObraController extends Controller
             $idRegionalObra = Escola::find($request->escola_id)->regional->id;
 
             // Obtém o id do Municipio através do relacionamento existente entre escola e municipio
-            $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
+            // $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
 
             $obra = Obra::create([
                 'tipoobra_id' => $request->tipoobra_id,
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
-                'municipio_id' => $idMunicipioObra,
+                'municipio_id' => $request->municipio_id,          // 'municipio_id' => $idMunicipioObra,
                 'estatu_id' => $request->ativo == 1 ? 1 : 2,       // Obra criada (padrão). Obs: Será um caso raro o administrador criar uma obra e inativá-la(ativo = 0), setando seu estatus para 2(parada). Mas o sistema contempla essa situação.
                 'data_inicio' => $request->data_inicio,
                 'data_fim' => $request->data_fim,
@@ -92,11 +107,12 @@ class ObraController extends Controller
     public function edit(Obra $obra)
     {
         $tipoobras = Tipoobra::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
+        $municipios = Municipio::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $escolas = Escola::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $objetos = Objeto::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
         $users = User::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
 
-        return view('admin.obras.edit', ['tipoobras' => $tipoobras, 'obra' => $obra, 'escolas' => $escolas, 'objetos' => $objetos, 'users' => $users]);
+        return view('admin.obras.edit', ['tipoobras' => $tipoobras, 'municipios' => $municipios, 'obra' => $obra, 'escolas' => $escolas, 'objetos' => $objetos, 'users' => $users]);
     }
 
 
@@ -114,7 +130,7 @@ class ObraController extends Controller
             $idRegionalObra = Escola::find($request->escola_id)->regional->id;
 
             // Obtém o id do Municipio através do relacionamento existente entre escola e municipio
-            $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
+            // $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
 
             // Se a obra possui atividades, recupera o último progresso da atividade, e com base neste progresso, recupera o indicador de status pelo "id".
             // Caso contrário, define o  estatus_restaurado com o valor seu valor atual.
@@ -157,7 +173,7 @@ class ObraController extends Controller
                 'tipoobra_id' => $request->tipoobra_id,
                 'escola_id' => $request->escola_id,
                 'regional_id' => $idRegionalObra,
-                'municipio_id' => $idMunicipioObra,
+                'municipio_id' => $request->municipio_id,                       // 'municipio_id' => $idMunicipioObra,
                 'estatu_id' => $request->ativo == 1 ? $estatus_restaurado : 2, // Se a obra for ativa(1), presenva o staus que possui, se for inativa(0) o estatus será 2("parada" assumindo a cor vermelha como padrão)
                 'data_inicio' => $request->data_inicio,
                 'data_fim' => $request->data_fim,
