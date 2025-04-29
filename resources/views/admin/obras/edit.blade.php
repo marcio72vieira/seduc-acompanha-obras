@@ -49,7 +49,7 @@
                                 <select name="municipio_id" id="municipio_id" class="form-control" required>
                                     <option value="" selected disabled>Escolha...</option>
                                     @foreach($municipios  as $municipio)
-                                        <option value="{{ $municipio->id }}" {{old('municipio_id', $obra->municipio->id) == $municipio->id ? 'selected' : ''}}>{{ $municipio->nome }}</option>
+                                        <option value="{{ $municipio->id }}" {{old('municipio_id', $obra->escola->municipio->id) == $municipio->id ? 'selected' : ''}}>{{ $municipio->nome }}</option>
                                     @endforeach
                                 </select>
                                 @error('municipio_id')
@@ -77,7 +77,7 @@
                                     <select name="escola_id" id="escola_id" class="form-control" required>
                                         <option value="" selected disabled>Escolha...</option>
                                         @foreach($escolas  as $escola)
-                                            @if($escola->municipio_id == $obra->municipio_id)
+                                            @if($escola->municipio_id == $obra->escola->municipio_id)
                                                 <option value="{{ $escola->id }}" {{old('escola_id', $obra->escola->id) == $escola->id ? 'selected' : ''}}>{{ $escola->nome }}</option>
                                             @endif
                                         @endforeach

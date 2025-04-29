@@ -23,7 +23,7 @@ class ObraRequest extends FormRequest
     {
         $rules = [
             'tipoobra_id'       => 'bail|required',
-            'municipio_id'      => 'bail|required',
+            #_'municipio_id'      => 'bail|required',
             'escola_id'         => 'bail|required',
             'data_inicio'       => 'bail|required',
             'data_fim'          => 'bail|required|afterOrEqual:data_inicio',
@@ -51,7 +51,7 @@ class ObraRequest extends FormRequest
     {
         return[
             'tipoobra_id.required' => 'Campo tipo de obra é obrigatório',
-            'municipio_id.required' => 'Escolha um município',
+            #_'municipio_id.required' => 'Escolha um município',
             'escola_id.required' => 'Selecione uma escola',
             'data_inicio.required' => 'Campo data inicial é obrigatório!',
             'data_fim.required' => 'Campo data final é obrigatório!',

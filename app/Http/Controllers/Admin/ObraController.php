@@ -22,7 +22,8 @@ class ObraController extends Controller
     {
         //$obras = Obra::with(['regional', 'municipio', 'escola', 'objeto'])->orderBy('descricao')->paginate(10);
         //$obras = Obra::with(['regional:nome', 'municipio:nome', 'escola:nome'])->orderBy('data_inicio')->paginate(10);
-        $obras = Obra::with(['regional', 'municipio', 'escola'])->orderBy('data_inicio')->paginate(10);
+        #_$obras = Obra::with(['regional', 'municipio', 'escola'])->orderBy('data_inicio')->paginate(10);
+        $obras = Obra::with(['escola'])->orderBy('data_inicio')->paginate(10);
 
         return view('admin.obras.index', ['obras' => $obras]);
     }
@@ -36,20 +37,20 @@ class ObraController extends Controller
         $users = User::where('ativo', '=', '1')->orderBy('nome', 'ASC')->get();
 
         return view('admin.obras.create', ['tipoobras' => $tipoobras, 'municipios' => $municipios, 'escolas' => $escolas, 'objetos' => $objetos, 'users' => $users]);
-        
+
     }
 
 
     public function ajaxescolasmunicipio(Request $request)
     {
-        $condicoes = [ 
+        $condicoes = [
             ['municipio_id', '=', $request->municipio_id],
             ['ativo', '=', 1]
         ];
 
         $data['escolas'] = Escola::where($condicoes)->orderBy('nome', 'ASC')->get();
         return response()->json($data);
-    }    
+    }
 
 
     public function store(ObraRequest $request)
@@ -63,7 +64,7 @@ class ObraController extends Controller
         try {
 
             // Obtém o id da Regional através do relacionamento existente entre escola e regional
-            $idRegionalObra = Escola::find($request->escola_id)->regional->id;
+            #_$idRegionalObra = Escola::find($request->escola_id)->regional->id;
 
             // Obtém o id do Municipio através do relacionamento existente entre escola e municipio
             // $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
@@ -71,8 +72,8 @@ class ObraController extends Controller
             $obra = Obra::create([
                 'tipoobra_id' => $request->tipoobra_id,
                 'escola_id' => $request->escola_id,
-                'regional_id' => $idRegionalObra,
-                'municipio_id' => $request->municipio_id,          // 'municipio_id' => $idMunicipioObra,
+                #_'regional_id' => $idRegionalObra,
+                #_'municipio_id' => $request->municipio_id,          // 'municipio_id' => $idMunicipioObra,
                 'estatu_id' => $request->ativo == 1 ? 1 : 2,       // Obra criada (padrão). Obs: Será um caso raro o administrador criar uma obra e inativá-la(ativo = 0), setando seu estatus para 2(parada). Mas o sistema contempla essa situação.
                 'data_inicio' => $request->data_inicio,
                 'data_fim' => $request->data_fim,
@@ -127,7 +128,7 @@ class ObraController extends Controller
         try {
 
             // Obtém o id da Regional através do relacionamento existente entre escola e regional
-            $idRegionalObra = Escola::find($request->escola_id)->regional->id;
+            #_$idRegionalObra = Escola::find($request->escola_id)->regional->id;
 
             // Obtém o id do Municipio através do relacionamento existente entre escola e municipio
             // $idMunicipioObra = Escola::find($request->escola_id)->municipio->id;
@@ -135,7 +136,7 @@ class ObraController extends Controller
             // Se a obra possui atividades, recupera o último progresso da atividade, e com base neste progresso, recupera o indicador de status pelo "id".
             // Caso contrário, define o  estatus_restaurado com o valor seu valor atual.
             if($obra->atividades->count() > 0){
-                
+
                 // Recuperando o estatu de acordo com o registro do último progresso, na situação da obra ser inativada e depois voltar a ser ativada novamente.
                 // $ultimo_progressocadastrado =  $obra->ultimoprogresso($obra->id);
                 //
@@ -153,7 +154,7 @@ class ObraController extends Controller
 
                 // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
                 $estatusprogressivos = Estatu::where('tipo', '=', 'progressivo')->get();
-                
+
                 foreach($estatusprogressivos as $estatu){
                     if(($valorprogressomaximo >= $estatu->valormin) && ($valorprogressomaximo <= $estatu->valormax)){
                         // $obra->update([
@@ -162,7 +163,7 @@ class ObraController extends Controller
                         $estatus_restaurado = $estatu->id;
                     }
                 }
-                
+
             }else{
                 //$estatus_restaurado = $request->obra_estatus_hidden;
                 $estatus_restaurado = 1;
@@ -172,8 +173,8 @@ class ObraController extends Controller
             $obra->update([
                 'tipoobra_id' => $request->tipoobra_id,
                 'escola_id' => $request->escola_id,
-                'regional_id' => $idRegionalObra,
-                'municipio_id' => $request->municipio_id,                       // 'municipio_id' => $idMunicipioObra,
+                #_'regional_id' => $idRegionalObra,
+                #_'municipio_id' => $request->municipio_id,                       // 'municipio_id' => $idMunicipioObra,
                 'estatu_id' => $request->ativo == 1 ? $estatus_restaurado : 2, // Se a obra for ativa(1), presenva o staus que possui, se for inativa(0) o estatus será 2("parada" assumindo a cor vermelha como padrão)
                 'data_inicio' => $request->data_inicio,
                 'data_fim' => $request->data_fim,

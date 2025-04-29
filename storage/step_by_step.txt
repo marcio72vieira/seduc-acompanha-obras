@@ -1,3 +1,13 @@
+arquivos modificados com #_
+
+migratrion de obras
+model de obras
+model de regional
+model de municipio
+obraRequest
+DashboardController
+
+
 ************************************************
 *   QUERY DO DASHBOARD PARCIALMENTE FUNCIONANDO
 ************************************************
@@ -72,10 +82,10 @@ $obras = DB::table('obras')
         'estatus.id AS estatu', 'estatus.nome AS nomeestatus',
         //'atividades.progresso'
     )
-    
+
 ->orderBy('tipoobras.nome')
 ->paginate(10);
-        
+
 
 
 
@@ -1466,7 +1476,7 @@ error: function(XMLHttpRequest, textStatus, errorThrown) {
                     alert("Status: " + textStatus); alert("Error: " + errorThrown);
                 }
 
-OBTENDO O VALOR DAS MENSAGEM DE RETORNO DE ERRO 
+OBTENDO O VALOR DAS MENSAGEM DE RETORNO DE ERRO
 error: function(response){
         //console.log(response.responseJSON);
         //console.log(response.responseJSON.message);

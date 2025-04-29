@@ -130,7 +130,7 @@
                                 </div>
                             </div>
 
-                    
+
                             <div class="col-md-2 col-sm-12">
                                 <label class="form-label" for="role">Analista</label>
                                 <input type="text" name="analista" id="analista" class="form-control" value=""  placeholder="Analista">
@@ -191,14 +191,14 @@
                                 <td>{{ $obra->municipio }}</td>
                                 <td>
                                     <div class="progress border" style="height: 30px;" title="{{ $obra->nomeestatus }}">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
-                                          <strong>{{ $obra->progressomaximo }}%</strong>
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:{{-- $obra->progressomaximo --}}%; background-color:{{ $obra->cor }}">
+                                          <strong>{{-- $obra->progressomaximo --}}%</strong>
                                         </div>
                                     </div>
                                 </td>
                                 <td style="text-align: center">
                                     <a class="btn btn-outline-secondary" href="{{ route('atividade.relpdfatividade', ['obra' => $obra->id]) }}" role="button" title="atividades" target="_blank"><i class="fa-solid fa-list-check"></i></a>
-                                </td>                               
+                                </td>
                             </tr>
                         @empty
                             <div class="alert alert-danger" role="alert">Nenhuma OBRA encontrada!</div>
@@ -206,7 +206,7 @@
                     </tbody>
                 </table>
 
-                {{ $obras->links() }}
+                {{-- {{ $obras->links() }} --}}
 
 
             </div>

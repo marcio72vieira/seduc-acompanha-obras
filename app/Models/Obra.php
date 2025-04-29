@@ -16,8 +16,8 @@ class Obra extends Model
     protected $fillable = [
         'tipoobra_id',
         'escola_id',
-        'regional_id',
-        'municipio_id',
+        #'regional_id',
+        #'municipio_id',
         'estatu_id',       // 0 - Definida/Criada 2 - Iniciada 3 - Em andmento 4 - Parada  5 - Avançada  6 - Concluída 7 -  Inaugurada/Finalizada/ // 0 Criada / 1 Fase inicial / 2 Fase Intermediária /  3 Fase Avançada / 4 Concluída /
         'data_inicio',
         'data_fim',
@@ -26,15 +26,15 @@ class Obra extends Model
     ];
 
 
-    public function regional()
-    {
-        return $this->belongsTo(Regional::class);
-    }
-
-    public function municipio()
-    {
-        return $this->belongsTo(Municipio::class);
-    }
+    #_public function regional()
+    #_{
+    #_    return $this->belongsTo(Regional::class);
+    #_}
+    #_
+    #_public function municipio()
+    #_{
+    #_    return $this->belongsTo(Municipio::class);
+    #_}
 
     public function tipoobra()
     {

@@ -44,7 +44,7 @@
                             {{-- <td>{{ $obra->escola->nome }}<br>{{ Str::limit($obra->descricao, 40) }}</td> --}}
                             <td>{{ $obra->escola->nome }}</td>
                             {{-- <td>{{ $obra->municipio->nome }} ({{ $obra->regional->nome }})</td> --}}
-                            <td>{{ $obra->municipio->nome }}</td>
+                            <td>{{ $obra->escola->municipio->nome }}</td>
                             <td>{{ \Carbon\Carbon::parse($obra->data_inicio)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($obra->data_fim)->format('d/m/Y') }}</td>
                             <td>
                                 @foreach ($obra->objetos as $objeto)

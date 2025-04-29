@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tipoobra_id')->constrained('tipoobras')->onDelete('cascade');
             $table->foreignId('escola_id')->constrained('escolas')->onDelete('cascade');
-            #_$table->foreignId('regional_id')->constrained('regionais')->onDelete('cascade');
-            #_$table->foreignId('municipio_id')->constrained('municipios')->onDelete('cascade');
+            $table->foreignId('regional_id')->constrained('regionais')->onDelete('cascade');
+            $table->foreignId('municipio_id')->constrained('municipios')->onDelete('cascade');
             $table->foreignId('estatu_id')->constrained('estatus')->onDelete('cascade');
             $table->date('data_inicio');
             $table->date('data_fim');

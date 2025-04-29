@@ -50,8 +50,8 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($regional->obras->count() > 0)
-                                    {{ $regional->obras->count() }}
+                                @if ($regional->obrasdaregional->count() > 0)
+                                    {{ $regional->obrasdaregional->count() }}
                                     <a href="{{ route('regional.obras', ['regional' => $regional->id]) }}" class="btn btn-outline-secondary btn-sm me-1" style="margin-left: 10px"><i class="fa-solid fa-person-digging"></i></a>
                                 @endif
                             </td>
@@ -75,7 +75,7 @@
                                     <button type="button" class="btn btn-outline-secondary btn-sm me-1 mb-1"  title="há municípios vinculados!"> <i class="fa-solid fa-ban"></i> Apagar </button>
                                 @endif
 
-                                {{-- 
+                                {{--
                                 @if($regional->municipios->count() != 0)
                                     <a href="{{ route('regional.municipios', ['regional' => $regional->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
                                         <i class="fa-solid fa-location-dot"></i> Municípios
@@ -86,7 +86,7 @@
 
                                 @if($regional->escolas->count() != 0)
                                     <a href="{{ route('regional.escolas', ['regional' => $regional->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
-                                        <i class="fa-solid fa-school"></i> Escolas 
+                                        <i class="fa-solid fa-school"></i> Escolas
                                     </a>
                                 @else
                                     <a href="" class="mb-1 btn btn-outline-secondary  btn-sm me-1"><i class="fa-solid fa-ban"></i> Escolas</a>

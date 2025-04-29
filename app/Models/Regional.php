@@ -28,10 +28,10 @@ class Regional extends Model
         return $this->hasMany(Escola::class);
     }
 
-    public function obras ()
-    {
-        return $this->hasMany(Obra::class);
-    }
+    #_public function obras ()
+    #_{
+    #_    return $this->hasMany(Obra::class);
+    #_}
 
     public function users ()
     {
@@ -49,6 +49,13 @@ class Regional extends Model
     public function escolasdaregional()
     {
         return $this->hasManyThrough(Escola::class, Municipio::class);
+    }
+
+
+    // Retorna as obras da regional através da escola.
+    public function obrasdaregional()
+    {
+        return $this->hasManyThrough(Obra::class, Escola::class);
     }
 
 

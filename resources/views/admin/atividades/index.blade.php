@@ -11,7 +11,7 @@
             @forelse ($obras as $obra)
                 <div class="mb-4 text-white card bg-primary" style="background: {{ $obra->estatu->cor }}">
                     <div class="card-header">
-                        <h6>{{ $obra->escola->nome }} ({{ $obra->municipio->nome }})</h6>
+                        <h6>{{ $obra->escola->nome }} ({{ $obra->escola->municipio->nome }})</h6>
                     </div>
                     <div class="card-body">
                         Tipo: {{ Str::lower($obra->tipoobra->nome) }}
