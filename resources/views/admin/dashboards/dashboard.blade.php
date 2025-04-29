@@ -92,7 +92,7 @@
                         <div class="mb-3 row">
 
                             {{-- tipoobra_id --}}
-                            {{-- <div class="col-md-2 col-sm-12">
+                            <div class="col-md-2 col-sm-12">
                                 <div class="form-group focused">
                                     <label class="form-control-label" for="tipoobra_id">Tipo</label>
                                     <select name="tipoobra_id" id="tipoobra_id" class="form-control select2">
@@ -102,10 +102,10 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div> --}}
+                            </div>
 
                             {{-- regional_id --}}
-                            {{-- <div class="col-md-2 col-sm-12">
+                            <div class="col-md-2 col-sm-12">
                                 <div class="form-group focused">
                                     <label class="form-control-label" for="regional_id">Regional</label>
                                     <select name="regional_id" id="regional_id" class="form-control select2">
@@ -115,7 +115,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div> --}}
+                            </div>
 
                             {{-- municipio_id --}}
                             <div class="col-md-2 col-sm-12">
@@ -190,7 +190,7 @@
                                 <td>{{ $obra->regional }}</td>
                                 <td>{{ $obra->municipio }}</td>
                                 <td>
-                                    <div class="progress" style="height: 30px;">
+                                    <div class="progress border" style="height: 30px;" title="{{ $obra->nomeestatus }}">
                                         <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
                                           <strong>{{ $obra->progressomaximo }}%</strong>
                                         </div>

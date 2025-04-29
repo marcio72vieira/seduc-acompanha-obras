@@ -18,6 +18,8 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        // if($request->tipoobra_id){ dd($request->all()); }
+
         // Definindo mês para computo dos dados OK!
         // $mes_corrente = date('m');   // número do mês no formato 01, 02, 03, 04 ..., 09, 10, 11, 12
         $mes_corrente = date('n');      // número do mês no formato 1, 2, 3, 4 ..., 9, 10, 11, 12
@@ -60,8 +62,14 @@ class DashboardController extends Controller
         // Só recupera as OBRAS que possuem ATIVIDADES (->join('atividades', 'atividades.obra_id', '=', 'obras.id')), e com
         // a cláusula: DB::raw('max(atividades.progresso) AS progressomaximo'), recupera o valor máximo da coluna progresso
         // do conjunto de registros retornados pela clausula "->groupBy('atividades.obra_id')".
+        // Obs: Lembrar que a tabela "escolas" possui relacionamento tanto com obras quanto com regionais e municipios, logo
+        //      deve-se fazer a junção de escolas com obras (->join('escolas', 'escolas.id', '=', 'obras.escola_id')) e a
+        //      junção de escola com regionais (->join('escolas AS escreg', 'escreg.regional_id', '=', 'regionais.id')) e
+        //      junção de escola com municipios (->join('escolas AS escmun', 'escmun.municipio_id', '=', 'municipios.id')).
+        //      Em ambos os caso, como a table "escola" já foi utilizada para o relacionamento com obras, houve a necessidde
+        //      de apelidar( AS ) as tabelas comoo descrito: "escolas AS escreg" e "escolas AS escmun" 
 
-        // Query com filtro
+        // Query com filtro. Só está funcionando se o usuário informar obrigatoriamente os campos tipo regional e municipio
         $obras = DB::table('obras')
             ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
             ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
@@ -69,12 +77,16 @@ class DashboardController extends Controller
             ->join('municipios', 'municipios.id', '=', 'obras.municipio_id')
             ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')
             ->join('atividades', 'atividades.obra_id', '=', 'obras.id')
+            ->join('escolas AS escolreg', 'escolreg.regional_id', '=', 'regionais.id')
+            ->join('escolas AS escolmun', 'escolmun.municipio_id', '=', 'municipios.id')
             ->select(
                 'obras.id',
                 'tipoobras.nome AS tipo',
                 'escolas.nome AS escola',
                 'regionais.nome AS regional',
                 'municipios.nome AS municipio',
+                'escolreg.id AS idescolreg',
+                'escolmun.id AS idescolmun',
                 'estatus.id AS estatu', 'estatus.nome AS nomeestatus', 'estatus.cor',
                  DB::raw('max(atividades.progresso) AS progressomaximo')
             )
@@ -82,28 +94,11 @@ class DashboardController extends Controller
                 $query->where('tipoobra_id', '=', $request->tipoobra_id);
             })
             ->when($request->has('regional_id'), function($query) use($request) {
-                $query->where('regional_id', '=', $request->regional_id);
+                $query->where('escolreg.regional_id', '=', $request->regional_id);
             })
             ->when($request->has('municipio_id'), function($query) use($request) {
-                $query->where('municipio_id', '=', $request->municipio_id);
+                $query->where('escolmun.municipio_id', '=', $request->municipio_id);
             })
-            /*
-            ->when($request->has('tipounidade'), function($query) use($request) {
-                $query->where('tipounidade', 'like', '%'. $request->tipounidade . '%');
-            })
-            ->when($request->has('unidade'), function($query) use($request) {
-                $query->where('unidadeatendimento', 'like', '%'. $request->unidade . '%');
-            })
-            ->when($request->has('analista'), function($query) use($request) {
-                $query->where('funcionario', 'like', '%'. $request->analista . '%');
-            })
-            ->when($request->filled('data_cadastro_inicio'), function($query) use($request) {
-                $query->where('datacadastro', '>=', \Carbon\Carbon::parse($request->data_cadastro_inicio)->format('Y-m-d'));
-            })
-            ->when($request->filled('data_cadastro_fim'), function($query) use($request) {
-                $query->where('datacadastro', '<=', \Carbon\Carbon::parse($request->data_cadastro_fim)->format('Y-m-d'));
-            }) */
-
         ->groupBy('atividades.obra_id')
         ->orderBy('tipoobras.nome')
         ->paginate(10);

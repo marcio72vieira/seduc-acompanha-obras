@@ -1,25 +1,40 @@
 ************************************************
 *   QUERY DO DASHBOARD PARCIALMENTE FUNCIONANDO
 ************************************************
-QUERY 01 DANDO CERTO
+QUERY 03 DANDO CERTO SÓ SE INFORMAR REGIONAL E MUNICÍPIO
 // Query com filtro
 $obras = DB::table('obras')
     ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
     ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
+    ->join('regionais', 'regionais.id', '=', 'obras.regional_id')
     ->join('municipios', 'municipios.id', '=', 'obras.municipio_id')
     ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')
+    ->join('atividades', 'atividades.obra_id', '=', 'obras.id')
+    ->join('escolas AS escolreg', 'escolreg.regional_id', '=', 'regionais.id')
+    ->join('escolas AS escolmun', 'escolmun.municipio_id', '=', 'municipios.id')
     ->select(
         'obras.id',
         'tipoobras.nome AS tipo',
         'escolas.nome AS escola',
+        'regionais.nome AS regional',
         'municipios.nome AS municipio',
-        'estatus.id AS estatu', 'estatus.nome AS nomeestatus',
-        //'atividades.progresso'
+        'escolreg.id AS idescolreg',
+        'escolmun.id AS idescolmun',
+        'estatus.id AS estatu', 'estatus.nome AS nomeestatus', 'estatus.cor',
+            DB::raw('max(atividades.progresso) AS progressomaximo')
     )
-    
+    ->when($request->has('tipoobra_id'), function($query) use($request) {
+        $query->where('tipoobra_id', '=', $request->tipoobra_id);
+    })
+    ->when($request->has('regional_id'), function($query) use($request) {
+        $query->where('escolreg.regional_id', '=', $request->regional_id);
+    })
+    ->when($request->has('municipio_id'), function($query) use($request) {
+        $query->where('escolmun.municipio_id', '=', $request->municipio_id);
+    })
+->groupBy('atividades.obra_id')
 ->orderBy('tipoobras.nome')
 ->paginate(10);
-        
 
 
 QUERY 02 DANDO CERTO
@@ -41,6 +56,28 @@ $obras = DB::table('obras')
 ->groupBy('atividades.obra_id')
 ->orderBy('tipoobras.nome')
 ->paginate(10);
+
+QUERY 01 DANDO CERTO
+// Query com filtro
+$obras = DB::table('obras')
+    ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
+    ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
+    ->join('municipios', 'municipios.id', '=', 'obras.municipio_id')
+    ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')
+    ->select(
+        'obras.id',
+        'tipoobras.nome AS tipo',
+        'escolas.nome AS escola',
+        'municipios.nome AS municipio',
+        'estatus.id AS estatu', 'estatus.nome AS nomeestatus',
+        //'atividades.progresso'
+    )
+    
+->orderBy('tipoobras.nome')
+->paginate(10);
+        
+
+
 
 
 
