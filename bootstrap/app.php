@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Registrando o middleware obrarestrita
         $middleware->alias([
             'obrarestrita' => \App\Http\Middleware\ObraRestrita::class,
+            'atividaderestrita' => \App\Http\Middleware\AtividadeRestrita::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

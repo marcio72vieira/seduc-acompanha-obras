@@ -55,7 +55,7 @@
         </div>
 
         {{-- Mensagem de error a ser exibida na geração do arquivo Excel ou CSV --}}
-        <x-alert />
+        {{-- <x-alert /> --}}
 
         {{-- Área de cards de Estatus --}}
         <div class="row">
@@ -75,70 +75,62 @@
             @endforeach
         </div>
 
-        {{--
-        <div class="mb-4 card">
-            <div class="card-header">
-                <i class="fas fa-table me-1"></i>
-                Usuários
-            </div>
-            <div class="card-body">
-                <table id="datatablesSimple" class="table table-striped table-hover table-bordered display" style="width:100%">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome Completo</th>
-                            <th>CPF</th>
-                            <th>CARGO</th>
-                            <th>PERFIL</th>
-                            <th>CONTATO</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-        --}}
-
         {{-- Inicio filtro e tabela de obras --}}
         <div class="mb-4 shadow card border-light">
             <div class="gap-2 card-header hstack">
-                <span>Criar um campo na tabela obras, que registre o progresso mais alto da tabela atividades</span>
+                <span>ESTATUS DAS OBRAS</span>
                 <span class="flex-row mt-1 mb-1 ms-auto d-sm-flex">
                     <label id="ocultarExibirPaineldeFiltragem" style="cursor: pointer; font-size: 17px;"><i id="iconeVisao" class="{{ $flag != '' ? 'fa-solid fa-filter' : 'fas fa-eye-slash' }}" style=" margin-right: 5px;"></i>{{ $flag != '' ? "Filtro" : "Ocultar" }}</label>
                 </span>
             </div>
 
-            {{-- inicio painel de filtragem --}}
+            {{-- INICIO PAINEL DE FILTRAGEM --}}
             <div class="mt-1 mb-4 shadow card border-light" id="formularioFiltragem" style="display: {{ $flag }}">
 
                 <div class="card-body">
                     <form action="{{ route('dashboard.index') }}">
                         <div class="mb-3 row">
-                            {{-- Colunas, quando for dispositivos médios(md) ocupe 4 grids e quando for dispositivos pequenos(sm) ocupe 12 grids--}}
+
+                            {{-- tipoobra_id --}}
+                            {{-- <div class="col-md-2 col-sm-12">
+                                <div class="form-group focused">
+                                    <label class="form-control-label" for="tipoobra_id">Tipo</label>
+                                    <select name="tipoobra_id" id="tipoobra_id" class="form-control select2">
+                                        <option value="" selected disabled>Escolha...</option>
+                                        @foreach($tipoobras  as $tipoobra)
+                                            <option value="{{ $tipoobra->id }}">{{$tipoobra->nome}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> --}}
+
+                            {{-- regional_id --}}
+                            {{-- <div class="col-md-2 col-sm-12">
+                                <div class="form-group focused">
+                                    <label class="form-control-label" for="regional_id">Regional</label>
+                                    <select name="regional_id" id="regional_id" class="form-control select2">
+                                        <option value="" selected>Escolha...</option>
+                                        @foreach($regionais  as $regional)
+                                            <option value="{{ $regional->id }}">{{$regional->nome}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> --}}
+
+                            {{-- municipio_id --}}
                             <div class="col-md-2 col-sm-12">
-                                <label class="form-label" for="name">Requerente</label>
-                                <input type="text" name="requerente" id="requerente" class="form-control" value="" placeholder="Nome da requerente">
+                                <div class="form-group focused">
+                                    <label class="form-control-label" for="municipio_id">Município</label>
+                                    <select name="municipio_id" id="municipio_id" class="form-control select2">
+                                        <option value="" selected>Escolha...</option>
+                                        @foreach($municipios  as $municipio)
+                                            <option value="{{ $municipio->id }}">{{$municipio->nome}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="col-md-2 col-sm-12">
-                                <label class="form-label" for="role">Regional</label>
-                                <input type="text" name="regional" id="regional" class="form-control" value="" placeholder="Regional da unidade">
-                            </div>
-
-                            <div class="col-md-2 col-sm-12">
-                                <label class="form-label" for="municipio">Município</label>
-                                <input type="text" name="municipio" id="municipio" class="form-control" value="" placeholder="Município da unidade">
-                            </div>
-
-                            <div class="col-md-1 col-sm-12">
-                                <label class="form-label" for="role">Tipo</label>
-                                <input type="text" name="tipounidade" id="tipounidade" class="form-control" value="" placeholder="Tipo unidade">
-                            </div>
-
-                            <div class="col-md-2 col-sm-12">
-                                <label class="form-label" for="role">Unidade</label>
-                                <input type="text" name="unidade" id="unidade" class="form-control" value="" placeholder="Unidade de atendimento">
-                            </div>
-
+                    
                             <div class="col-md-2 col-sm-12">
                                 <label class="form-label" for="role">Analista</label>
                                 <input type="text" name="analista" id="analista" class="form-control" value=""  placeholder="Analista">
@@ -166,12 +158,12 @@
                     </form>
                 </div>
             </div>
-            {{-- fim painel de filtragem--}}
+            {{-- FIM PAINEL DE FILTRAGEM --}}
 
 
             <div class="card-body">
 
-                <x-alert />
+                {{-- <x-alert /> --}}
 
                 {{-- Este componente será acionado sempre que houver uma erro de exceção em: store, update ou delete --}}
                 <x-errorexception />
@@ -182,9 +174,10 @@
                             <th>Id</th>
                             <th>Tipo</th>
                             <th>Obra</th>
+                            <th>Regional</th>
                             <th>Município</th>
-                            <th>Status</th>
-                            <th>Progresso</th>
+                            <th style="width: 20%">Progresso</th>
+                            <th> </th>
                         </tr>
                     </thead>
 
@@ -194,15 +187,18 @@
                                 <td>{{ $obra->id }}</th>
                                 <td>{{ $obra->tipo }}</th>
                                 <td>{{ $obra->escola }}</td>
+                                <td>{{ $obra->regional }}</td>
                                 <td>{{ $obra->municipio }}</td>
-                                <td>{{ $obra->nomeestatus }}</td>
                                 <td>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                                          70%
+                                    <div class="progress" style="height: 30px;">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
+                                          <strong>{{ $obra->progressomaximo }}%</strong>
                                         </div>
                                     </div>
                                 </td>
+                                <td style="text-align: center">
+                                    <a class="btn btn-outline-secondary" href="{{ route('atividade.relpdfatividade', ['obra' => $obra->id]) }}" role="button" title="atividades" target="_blank"><i class="fa-solid fa-list-check"></i></a>
+                                </td>                               
                             </tr>
                         @empty
                             <div class="alert alert-danger" role="alert">Nenhuma OBRA encontrada!</div>
@@ -256,7 +252,7 @@
             $("#municipio").val("");
             $("#unidade").val("");
             $("#estatus").val("");
-            $("#tipounidade").val("");
+            $("#tipoobra_id").val("");
             $("#data_cadastro_inicio").val("");
             $("#data_cadastro_fim").val("");
         }

@@ -1,3 +1,55 @@
+************************************************
+*   QUERY DO DASHBOARD PARCIALMENTE FUNCIONANDO
+************************************************
+QUERY 01 DANDO CERTO
+// Query com filtro
+$obras = DB::table('obras')
+    ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
+    ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
+    ->join('municipios', 'municipios.id', '=', 'obras.municipio_id')
+    ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')
+    ->select(
+        'obras.id',
+        'tipoobras.nome AS tipo',
+        'escolas.nome AS escola',
+        'municipios.nome AS municipio',
+        'estatus.id AS estatu', 'estatus.nome AS nomeestatus',
+        //'atividades.progresso'
+    )
+    
+->orderBy('tipoobras.nome')
+->paginate(10);
+        
+
+
+QUERY 02 DANDO CERTO
+// Query com filtro
+$obras = DB::table('obras')
+    ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
+    ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
+    ->join('municipios', 'municipios.id', '=', 'obras.municipio_id')
+    ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')
+    ->join('atividades', 'atividades.obra_id', '=', 'obras.id')
+    ->select(
+        'obras.id',
+        'tipoobras.nome AS tipo',
+        'escolas.nome AS escola',
+        'municipios.nome AS municipio',
+        'estatus.id AS estatu', 'estatus.nome AS nomeestatus',
+        'atividades.progresso'
+    )
+->groupBy('atividades.obra_id')
+->orderBy('tipoobras.nome')
+->paginate(10);
+
+
+
+
+
+
+
+
+
 *********************************************
 *    CRIANDO MIDDLEWARE PERSONALIZADOS      *
 *********************************************

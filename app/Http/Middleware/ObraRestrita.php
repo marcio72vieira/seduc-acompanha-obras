@@ -27,27 +27,34 @@ class ObraRestrita
         // Recupera o id da obra vinda na URL
         $idObra = $parametros['obra']['id'];
         
-        // Recupera o id do usuário autenticado
-        $idUsuario =  Auth::user()->id;
 
-        // Retorna 1 se o usuário pertence à obra colocada na URL  ou Retorna 0 se o mesmo não pertence
-        $usuarioresponsavelpelaobra = DB::table('obra_user')->where('obra_id', '=', $idObra)->where('user_id', '=', $idUsuario)->count();
-
-        // Verifica se o usuário não é responsável pela obra
-        if ($usuarioresponsavelpelaobra == 0) {
-
-            /*
-            // Deslogar o usuário
-            Auth::logout();
-            // Redireciona o usuário enviando a mensagem de aviso
-            return redirect()->route('login.index')->with('warning', 'Operação ilegal!'); 
-            */
-
-            
-            // Redireciona o usuário para a página anterior.
-            return back()->withInput()->with('warning', 'Tentativa INAPROPRIADA!');
-           
+        // Se o usuário autenticado não é administrador, realiza as verificações
+        if(Auth::user()->perfil != 'adm'){
+        
+            // Recupera o id do usuário autenticado
+            $idUsuario =  Auth::user()->id;
+    
+            // Retorna 1 se o usuário pertence à obra colocada na URL  ou Retorna 0 se o mesmo não pertence
+            $usuarioresponsavelpelaobra = DB::table('obra_user')->where('obra_id', '=', $idObra)->where('user_id', '=', $idUsuario)->count();
+    
+            // Verifica se o usuário não é responsável pela obra
+            if ($usuarioresponsavelpelaobra == 0) {
+    
+                /*
+                // Deslogar o usuário
+                Auth::logout();
+                // Redireciona o usuário enviando a mensagem de aviso
+                return redirect()->route('login.index')->with('warning', 'Operação ilegal!'); 
+                */
+    
+                
+                // Redireciona o usuário para a página anterior.
+                return back()->withInput()->with('warning', 'Tentativa INAPROPRIADA!');
+               
+            }
+        
         }
+
 
         // Se o usuário é responsável pela obra, segue o fluxo!
         return $next($request);

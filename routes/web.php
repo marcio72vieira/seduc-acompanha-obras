@@ -217,9 +217,9 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/indexregistros-atividade/{obra}', [AtividadeController::class, 'indexregistros'])->name('atividade.indexregistros')->middleware('obrarestrita');
         Route::get('/create-atividade/{obra}', [AtividadeController::class, 'create'])->name('atividade.create')->middleware('obrarestrita');
         Route::post('/store-atividade', [AtividadeController::class, 'store'])->name('atividade.store');
-        Route::get('/edit-atividade/{atividade}', [AtividadeController::class, 'edit'])->name('atividade.edit')->middleware('obrarestrita');
+        Route::get('/edit-atividade/{atividade}', [AtividadeController::class, 'edit'])->name('atividade.edit')->middleware('atividaderestrita');
         Route::put('/update-atividade/{atividade}', [AtividadeController::class, 'update'])->name('atividade.update');
-        Route::delete('/destroy-atividade/{atividade}', [AtividadeController::class, 'destroy'])->name('atividade.destroy');
+        Route::delete('/destroy-atividade/{atividade}', [AtividadeController::class, 'destroy'])->name('atividade.destroy')->middleware('atividaderestrita');
         Route::get('pdf-atividade/relpdfatividade/{obra}', [AtividadeController::class, 'relpdfatividade'])->name('atividade.relpdfatividade')->middleware('obrarestrita');
     });// Final das rotas de acesso a usuários administradores e operadoes (onlyAdmOpe)
 

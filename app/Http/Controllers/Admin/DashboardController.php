@@ -9,6 +9,9 @@ use Spatie\SimpleExcel\SimpleExcelWriter;
 use App\Models\User;
 use App\Models\Obra;
 use App\Models\Estatu;
+use App\Models\Regional;
+use App\Models\Municipio;
+use App\Models\Tipoobra;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -46,37 +49,45 @@ class DashboardController extends Controller
         // Estatus pra exibir os cards
         $estatus = Estatu::orderBy('id')->get();
 
+        // Tipos de obras para pesquisa
+        $tipoobras = Tipoobra::orderBy('nome')->get();
+        $regionais = Regional::orderBy('nome')->get();
+        $municipios = Municipio::orderBy('nome')->get();
+
 
 
         /***** INICIO PESQUISA PARA FILTRO DO DASHBOARD */
-        // Recuperando todos os processos sem filtro
-        // $processos = Processo::orderBy('nomecompleto')->paginate(10);
-        // return view('admin.processos.index', [ 'processos' => $processos ]);
+        // Só recupera as OBRAS que possuem ATIVIDADES (->join('atividades', 'atividades.obra_id', '=', 'obras.id')), e com
+        // a cláusula: DB::raw('max(atividades.progresso) AS progressomaximo'), recupera o valor máximo da coluna progresso
+        // do conjunto de registros retornados pela clausula "->groupBy('atividades.obra_id')".
 
         // Query com filtro
         $obras = DB::table('obras')
             ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
             ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
+            ->join('regionais', 'regionais.id', '=', 'obras.regional_id')
             ->join('municipios', 'municipios.id', '=', 'obras.municipio_id')
             ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')
-            //->join('atividades', 'atividades.obra_id', '=', 'obras.id')
+            ->join('atividades', 'atividades.obra_id', '=', 'obras.id')
             ->select(
                 'obras.id',
                 'tipoobras.nome AS tipo',
                 'escolas.nome AS escola',
+                'regionais.nome AS regional',
                 'municipios.nome AS municipio',
-                'estatus.id AS estatu', 'estatus.nome AS nomeestatus',
-                //'atividades.progresso'
+                'estatus.id AS estatu', 'estatus.nome AS nomeestatus', 'estatus.cor',
+                 DB::raw('max(atividades.progresso) AS progressomaximo')
             )
-            /* ->when($request->has('requerente'), function($query) use($request) {
-                $query->where('nomecompleto', 'like', '%'. $request->requerente . '%');
+            ->when($request->has('tipoobra_id'), function($query) use($request) {
+                $query->where('tipoobra_id', '=', $request->tipoobra_id);
             })
-            ->when($request->has('regional'), function($query) use($request) {
-                $query->where('regional', 'like', '%'. $request->regional . '%');
+            ->when($request->has('regional_id'), function($query) use($request) {
+                $query->where('regional_id', '=', $request->regional_id);
             })
-            ->when($request->has('municipio'), function($query) use($request) {
-                $query->where('municipio', 'like', '%'. $request->municipio . '%');
+            ->when($request->has('municipio_id'), function($query) use($request) {
+                $query->where('municipio_id', '=', $request->municipio_id);
             })
+            /*
             ->when($request->has('tipounidade'), function($query) use($request) {
                 $query->where('tipounidade', 'like', '%'. $request->tipounidade . '%');
             })
@@ -93,10 +104,9 @@ class DashboardController extends Controller
                 $query->where('datacadastro', '<=', \Carbon\Carbon::parse($request->data_cadastro_fim)->format('Y-m-d'));
             }) */
 
-        //->groupBy('obras.id')
+        ->groupBy('atividades.obra_id')
         ->orderBy('tipoobras.nome')
         ->paginate(10);
-        //->max('atividades.progresso');
 
 
         // Se a pesquisa foi submetida e seu valor for started, exibe o formulário de pesquisa, caso contrário esconde o formulário.
@@ -108,7 +118,11 @@ class DashboardController extends Controller
 
         /***** FINAL PESQUISA PARA FILTRO DO DASHBOARD */
 
-        return view('admin.dashboards.dashboard', compact('mes_corrente','ano_corrente','mesespesquisa', 'anospesquisa', 'estatus', 'flag', 'obras'));
+        return view('admin.dashboards.dashboard', compact(
+            'mes_corrente','ano_corrente','mesespesquisa', 'anospesquisa', 
+            'estatus', 'flag', 
+            'obras', 'tipoobras', 'regionais', 'municipios'
+        ));
     }
 
 
@@ -188,80 +202,5 @@ class DashboardController extends Controller
         }
 
     }
-
-
-
-    public function ajaxgetusers(Request $request)
-    {
-        ## Read value
-        $draw = $request->get('draw');
-        $start = $request->get("start");
-        $rowperpage = $request->get("length"); // Rows display per page
-
-        $columnIndex_arr = $request->get('order');
-        $columnName_arr = $request->get('columns');
-        $order_arr = $request->get('order');
-        $search_arr = $request->get('search');
-
-        $columnIndex = $columnIndex_arr[0]['column']; // Column index
-        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-        $searchValue = $search_arr['value']; // Search value
-
-        $totalRecords = User::select('count(*) as allcount')->count();
-        $totalRecordswithFilter = DB::table('users')
-            ->select('count(*) as allcount')
-            ->where('users.nomecompleto', 'like', '%' .$searchValue . '%')
-            ->orWhere('users.cpf', 'like', '%' . $searchValue . '%' )
-            ->orWhere('users.cargo', 'like', '%' . $searchValue . '%' )
-            ->orWhere('users.perfil', 'like', '%' . $searchValue . '%' )
-            ->count();
-
-        // Fetch records (restaurantes)
-        $users = DB::table('users')
-        ->select('users.id', 'users.nomecompleto', 'users.cpf', 'users.cargo', 'users.fone', 'users.perfil', 'users.email')
-        ->where('users.nomecompleto', 'like', '%' .$searchValue . '%')
-        ->orWhere('users.cpf', 'like', '%' .$searchValue . '%')
-        ->orWhere('users.cargo', 'like', '%' . $searchValue . '%' )
-        ->orWhere('users.perfil', 'like', '%' . $searchValue . '%' )
-        ->orderBy($columnName,$columnSortOrder)
-        ->skip($start)
-        ->take($rowperpage)
-        ->get();
-
-        $data_arr = array();
-
-        foreach($users as $user){
-            // campos a serem exibidos no DataTable (Os nomes devem correspoder à propriedde Column:[] da requisição Ajax)
-            $id = $user->id;
-            $nomecompleto = $user->nomecompleto;
-            $cpf = $user->cpf;
-            $cargo = $user->cargo;
-            $perfil = ($user->perfil == 'adm' ? 'Administrador' : ($user->perfil == 'con' ? 'Consultor' : 'Operador'));
-            $contato = $user->fone." / ".$user->email;
-
-            $data_arr[] = array(
-                "id" => $id,
-                "nomecompleto" => $nomecompleto,
-                "cpf" => $cpf,
-                "cargo" => $cargo,
-                "perfil" => $perfil,
-                "contato" => $contato,
-            );
-        }
-
-        // Obs: iTotalRecordes o "i" é referente a information. aaData o "a" é referente a Ajax
-        $response = array(
-            "draw" => intval($draw),
-            "iTotalRecords" => intval($totalRecords),
-            "iTotalDisplayRecords" => intval($totalRecordswithFilter),
-            "aaData" => $data_arr
-        );
-
-        echo json_encode($response);
-        exit;
-    }
-
-
 
 }
