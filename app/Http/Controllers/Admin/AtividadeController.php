@@ -80,7 +80,7 @@ class AtividadeController extends Controller
             }
 
             // Redirecionar o usuário, enviar a mensagem de sucesso
-            return redirect()->route('atividade.index')->with('success', 'Atividade registrada com sucesso!');
+            return redirect()->route('atividade.indexregistros', ['obra' => $obra->id])->with('success', 'Atividade registrada com sucesso!');
 
         } catch (Exception $e) {
 
@@ -251,8 +251,8 @@ class AtividadeController extends Controller
                         Agência de Tecnologia da Informação / ATI<br>
                         Acompanhamento de Execução de Obras
                     </td>
-                    <td style="width: 377px;" class="titulo-rel">
-                        REGISTRO DE ATIVIDADES: '.$obra->tipoobra->nome.'<br>'.$obra->escola->nome.'
+                    <td style="width: 377px; font-size: 12px;" class="titulo-rel">
+                        REGISTRO DE ATIVIDADES <br>'.$obra->tipoobra->nome.' '.$obra->escola->nome.'
                     </td>
                 </tr>
             </table>

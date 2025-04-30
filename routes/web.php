@@ -160,11 +160,9 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/index-estatu', [EstatuController::class, 'index'])->name('estatu.index');
         Route::get('/create-estatu', [EstatuController::class, 'create'])->name('estatu.create');
         Route::post('/store-estatu', [EstatuController::class, 'store'])->name('estatu.store');
-        Route::get('/show-estatu/{estatu}', [EstatuController::class, 'show'])->name('estatu.show');
         Route::get('/edit-estatu/{estatu}', [EstatuController::class, 'edit'])->name('estatu.edit');
         Route::put('/update-estatu/{estatu}', [EstatuController::class, 'update'])->name('estatu.update');
         Route::delete('/destroy-estatu/{estatu}', [EstatuController::class, 'destroy'])->name('estatu.destroy');
-        Route::get('pdf-estatu/relpdflistestatus', [EstatuController::class, 'relpdflistestatus'])->name('estatu.pdflistestatus');
 
 
         // OBRA

@@ -57,7 +57,7 @@ class RegionalController extends Controller
     {   
         $regional = Regional::findOrFail($regional->id);
      
-        $obras = $regional->obras()->orderBy('id')->paginate(10);
+        $obras = $regional->obrasdaregional()->orderBy('id')->paginate(10);
 
         return view('admin.regionais.obrasregional', ['regional' => $regional, 'obras' => $obras]);
 
@@ -388,8 +388,8 @@ class RegionalController extends Controller
         // Obtendo os dados
         $regional =  $regional::findOrFail($regional->id);
 
-        //Obtendo as obras através do relacionamento direto
-        $obras = $regional->obras()->orderBy('id')->get();
+        //Obtendo as obras através do relacionamento indireto: hasManyThrough
+        $obras = $regional->obrasdaregional()->orderBy('id')->get();
 
 
         // Definindo o nome do arquivo a ser baixado

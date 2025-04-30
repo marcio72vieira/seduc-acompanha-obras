@@ -277,8 +277,8 @@ class ObraController extends Controller
                     <td width="40px" class="col-header-table">ID</td>
                     <td width="180px" class="col-header-table">TIPO</td>
                     <td width="250px" class="col-header-table">ESCOLA</td>
-                    <td width="150px" class="col-header-table">REGIONAL</td>
-                    <td width="150px" class="col-header-table">MUNICÍPIO</td>
+                    <td width="230px" class="col-header-table">MUNICÍPIO / REGIONAL</td>
+                    <td width="70px" class="col-header-table">PROGRESSO</td>
                     <td width="140px" class="col-header-table">DATAs DE INÍCIO E FIM</td>
                     <td width="170px" class="col-header-table">OBJETOS</td>
                 </tr>
@@ -343,7 +343,7 @@ class ObraController extends Controller
                         Agência de Tecnologia da Informação / ATI<br>
                         Acompanhamento de Execução de Obras
                     </td>
-                    <td style="width: 377px;" class="titulo-rel">
+                    <td style="width: 377px; font-size: 12px;" class="titulo-rel">
                         OBRA: '.$obra->tipoobra->nome.'<br>'.$obra->escola->nome.'
                     </td>
                 </tr>
@@ -409,8 +409,8 @@ class ObraController extends Controller
                         Agência de Tecnologia da Informação / ATI<br>
                         Acompanhamento de Execução de Obras
                     </td>
-                    <td style="width: 377px;" class="titulo-rel">
-                        REGISTRO DE ATIVIDADES: '.$obra->tipoobra->nome.'<br>'.$obra->escola->nome.'
+                    <td style="width: 377px; font-size: 12px;" class="titulo-rel">
+                        REGISTRO DE ATIVIDADES <br>'.$obra->tipoobra->nome.' '.$obra->escola->nome.'
                     </td>
                 </tr>
             </table>

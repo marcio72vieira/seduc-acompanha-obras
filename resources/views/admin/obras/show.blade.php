@@ -67,7 +67,7 @@
                 <dl class="row">
                     <dt class="col-sm-2"></dt>
                     <dd class="col-sm-10">
-                        <a class="btn btn-outline-secondary" href="{{ route('obra.index')}}" role="button">Listar</a>
+                        <a class="btn btn-outline-secondary" href="{{ route('obra.index')}}" role="button">Retornar</a>
                         <a class="btn btn-outline-secondary" href="{{ route('obra.relpdfobra', ['obra' => $obra->id]) }}" role="button" target="_blank">Descrição</a>
                         <a class="btn btn-outline-secondary" href="{{ route('obra.relpdfobraatividade', ['obra' => $obra->id]) }}" role="button" target="_blank">Atividades</a>
                     </dd>

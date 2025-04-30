@@ -10,7 +10,6 @@
         <div class="gap-2 card-header hstack">
             <span class="flex-row mt-1 mb-1 ms-auto d-sm-flex">
                 <a href="{{ route('estatu.create') }}" class="btn btn-primary btn-sm me-1"><i class="fa-regular fa-square-plus"></i> Novo </a>
-                <a href="{{ route('estatu.pdflistestatus') }}" class="btn btn-secondary btn-sm me-1" target="_blank"><i class="fa-solid fa-file-pdf"></i> pdf</a>
             </span>
         </div>
 
@@ -56,10 +55,6 @@
                             <td>{{ $estatu->ativo == 1 ? "Sim" : "Não" }}</td>
                             <td>{{ \Carbon\Carbon::parse($estatu->created_at)->format('d/m/Y') }}</td>
                             <td class="flex-row d-md-flex justify-content-start">
-                                <a href="{{ route('estatu.show', ['estatu' => $estatu->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
-                                    <i class="fa-regular fa-eye"></i> Visualizar
-                                </a>
-
                                 <a href="{{ route('estatu.edit', ['estatu' => $estatu->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
                                     <i class="fa-solid fa-pen-to-square"></i> Editar
                                 </a>

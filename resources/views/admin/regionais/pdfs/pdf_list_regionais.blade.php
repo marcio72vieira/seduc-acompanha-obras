@@ -17,7 +17,7 @@
                 <td style="width: 50px;" class="dados-lista">@if($regional->ativo == 1 ) sim @else não @endif </td>
                 <td style="width: 100px;" class="dados-lista">{{ $regional->municipios->count() > 0 ? $regional->municipios->count() : '' }}</td>
                 <td style="width: 100px;" class="dados-lista">{{ $regional->escolas->count() > 0 ? $regional->escolas->count() : '' }}</td>
-                <td style="width: 100px;" class="dados-lista">{{ $regional->obras->count() > 0 ? $regional->obras->count() : '' }}</td>
+                <td style="width: 100px;" class="dados-lista">{{ $regional->obrasdaregional->count() > 0 ? $regional->obrasdaregional->count() : '' }}</td>
                 <td style="width: 100px;" class="dados-lista">{{ \Carbon\Carbon::parse($regional->created_at)->format('d/m/Y H:i') }}</td>
             </tr>
         @endforeach

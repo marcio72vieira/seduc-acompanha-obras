@@ -16,7 +16,7 @@
                 <td style="width: 190px;" class="dados-lista">{{ $obra->tipoobra->nome }}</td>
                 <td style="width: 275px;" class="dados-lista">{{ $obra->escola->nome }}</td>
                 <td style="width: 275px;" class="dados-lista">@foreach($obra->objetos as $objeto) {{ $objeto->nome }}, @endforeach</td>
-                <td style="width: 150px;" class="dados-lista">{{ $obra->municipio->nome }}</td>
+                <td style="width: 150px;" class="dados-lista">{{ $obra->escola->municipio->nome }}</td>
                 <td style="width: 50px;" class="dados-lista">@if($obra->ativo == 1 ) sim @else não @endif </td>
                 <td style="width: 100px;" class="dados-lista">{{ \Carbon\Carbon::parse($obra->created_at)->format('d/m/Y H:i') }}</td>
             </tr>

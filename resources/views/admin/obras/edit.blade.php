@@ -46,7 +46,7 @@
                         <div class="col-2">
                             <div class="form-group focused">
                                 <label class="form-control-label" for="municipio_id">Município<span class="small text-danger">*</span></label>
-                                <select name="municipio_id" id="municipio_id" class="form-control" required>
+                                <select name="municipio_id" id="municipio_id" class="form-control select2" required>
                                     <option value="" selected disabled>Escolha...</option>
                                     @foreach($municipios  as $municipio)
                                         <option value="{{ $municipio->id }}" {{old('municipio_id', $obra->escola->municipio->id) == $municipio->id ? 'selected' : ''}}>{{ $municipio->nome }}</option>
@@ -65,7 +65,7 @@
                                 <label class="form-control-label" for="escola_id">Escola<span class="small text-danger">*</span></label>
 
                                 @if(count($errors) > 0)
-                                    <select name="escola_id" id="escola_id" class="form-control" required>
+                                    <select name="escola_id" id="escola_id" class="form-control select2" required>
                                         <option value="" selected disabled>Escolha...</option>
                                         @foreach($escolas  as $escola)
                                             @if($escola->municipio_id == old('municipio_id'))

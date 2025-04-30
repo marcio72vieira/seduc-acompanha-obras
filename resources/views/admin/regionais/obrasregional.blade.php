@@ -39,7 +39,7 @@
                             <td>{{ $obra->tipoobra->nome }}</td>
                             <td>{{ $obra->escola->nome }}</td>
                             <td>@foreach ($obra->objetos as $objeto ) <span style="font-size: 12px;">{{ $objeto->nome }}, </span>,  @endforeach</td>
-                            <td>{{ $obra->municipio->nome }}</td>
+                            <td>{{ $obra->escola->municipio->nome }}</td>
                             <td>{{ $obra->ativo == 1 ? "Sim" : "Não" }}</td>
                             {{-- <td>
                                 <div class="progress border" style="height:30px">
