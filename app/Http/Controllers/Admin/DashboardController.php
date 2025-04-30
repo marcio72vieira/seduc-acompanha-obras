@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\SimpleExcel\SimpleExcelWriter;
-use App\Models\User;
 use App\Models\Obra;
+use App\Models\Tipoobra;
+use App\Models\Objeto;
 use App\Models\Estatu;
 use App\Models\Regional;
 use App\Models\Municipio;
-use App\Models\Tipoobra;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -53,58 +54,59 @@ class DashboardController extends Controller
 
         // Tipos de obras para pesquisa
         $tipoobras = Tipoobra::orderBy('nome')->get();
+        $objetos = Objeto::orderBy('nome')->get();
         $regionais = Regional::orderBy('nome')->get();
         $municipios = Municipio::orderBy('nome')->get();
-        $obras =  Obra::orderBy('id')->get();
+        $users =  User::orderBy('nome')->get();
 
 
-        /***** INICIO PESQUISA PARA FILTRO DO DASHBOARD */
-        // Só recupera as OBRAS que possuem ATIVIDADES (->join('atividades', 'atividades.obra_id', '=', 'obras.id')), e com
-        // a cláusula: DB::raw('max(atividades.progresso) AS progressomaximo'), recupera o valor máximo da coluna progresso
-        // do conjunto de registros retornados pela clausula "->groupBy('atividades.obra_id')".
-        // Obs: Lembrar que a tabela "escolas" possui relacionamento tanto com obras quanto com regionais e municipios, logo
-        //      deve-se fazer a junção de escolas com obras (->join('escolas', 'escolas.id', '=', 'obras.escola_id')) e a
-        //      junção de escola com regionais (->join('escolas AS escreg', 'escreg.regional_id', '=', 'regionais.id')) e
-        //      junção de escola com municipios (->join('escolas AS escmun', 'escmun.municipio_id', '=', 'municipios.id')).
-        //      Em ambos os caso, como a table "escola" já foi utilizada para o relacionamento com obras, houve a necessidde
-        //      de apelidar( AS ) as tabelas comoo descrito: "escolas AS escreg" e "escolas AS escmun"
+        /***** INICIO PESQUISA PARA FILTRO DO DASHBOARD */  
+        $obras = DB::table('obras')
+            ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
+            ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
+            ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')
+            ->join('atividades', 'atividades.obra_id', '=', 'obras.id')
+            ->join('regionais', 'regionais.id', '=', 'escolas.regional_id')
+            ->join('municipios', 'municipios.id', '=', 'escolas.municipio_id')
+            ->join('municipios AS municipiodaregional', 'municipiodaregional.regional_id', '=', 'regionais.id')
+            ->join('obra_user', 'obra_user.obra_id', '=', 'obras.id')
+            ->join('users', 'users.id', '=', 'obra_user.user_id')
+            ->join('objeto_obra', 'objeto_obra.obra_id', '=', 'obras.id')
+            ->join('objetos', 'objetos.id', '=', 'objeto_obra.objeto_id')
+            
+            ->select(
+                'obras.id',
+                'tipoobras.nome AS tipo',
+                'escolas.nome AS escola',
+                'estatus.id AS estatu', 'estatus.nome AS nomeestatus', 'estatus.cor',
+                'regionais.nome AS regional',
+                'municipios.nome AS municipio',
+                DB::raw('GROUP_CONCAT(DISTINCT users.nome SEPARATOR ", ") as responsaveis'),
+                DB::raw('GROUP_CONCAT(DISTINCT objetos.nome SEPARATOR ", ") as objetos'),
+                DB::raw('max(atividades.progresso) AS progressomaximo')
+            )
 
-        // Query com filtro. Só está funcionando se o usuário informar obrigatoriamente os campos tipo regional e municipio
-        #_$obras = DB::table('obras')
-        #_    ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
-        #_    ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
-        #_    ->join('regionais', 'regionais.id', '=', 'obras.regional_id')
-        #_    ->join('municipios', 'municipios.id', '=', 'obras.municipio_id')
-        #_    ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')
-        #_    ->join('atividades', 'atividades.obra_id', '=', 'obras.id')
-        #_    ->join('escolas AS escolreg', 'escolreg.regional_id', '=', 'regionais.id')
-        #_    ->join('escolas AS escolmun', 'escolmun.municipio_id', '=', 'municipios.id')
-        #_    ->select(
-        #_        'obras.id',
-        #_        'tipoobras.nome AS tipo',
-        #_        'escolas.nome AS escola',
-        #_        'regionais.nome AS regional',
-        #_        'municipios.nome AS municipio',
-        #_        'escolreg.id AS idescolreg',
-        #_        'escolmun.id AS idescolmun',
-        #_        'estatus.id AS estatu', 'estatus.nome AS nomeestatus', 'estatus.cor',
-        #_         DB::raw('max(atividades.progresso) AS progressomaximo')
-        #_    )
-        #_    ->when($request->has('tipoobra_id'), function($query) use($request) {
-        #_        $query->where('tipoobra_id', '=', $request->tipoobra_id);
-        #_    })
-        #_    ->when($request->has('regional_id'), function($query) use($request) {
-        #_        $query->where('escolreg.regional_id', '=', $request->regional_id);
-        #_    })
-        #_    ->when($request->has('municipio_id'), function($query) use($request) {
-        #_        $query->where('escolmun.municipio_id', '=', $request->municipio_id);
-        #_    })
-        #_->groupBy('atividades.obra_id')
-        #_->orderBy('tipoobras.nome')
-        #_->paginate(10);
-
-
-        // Se a pesquisa foi submetida e seu valor for started, exibe o formulário de pesquisa, caso contrário esconde o formulário.
+            ->when($request->has('tipoobra'), function($query) use($request) {
+                $query->where('tipoobras.nome', 'like', '%'. $request->tipoobra . '%');
+            })
+            ->when($request->has('objeto'), function($query) use($request) {
+                $query->where('objetos.nome', 'like', '%'. $request->objeto . '%');
+            })               
+            ->when($request->has('regional'), function($query) use($request) {
+                $query->where('regionais.nome', 'like', '%'. $request->regional . '%');
+            })
+            ->when($request->has('municipio'), function($query) use($request) {
+                $query->where('municipios.nome', 'like', '%'. $request->municipio . '%');
+            })
+            ->when($request->has('user'), function($query) use($request) {
+                $query->where('users.nome', 'like', '%'. $request->user . '%');
+            }) 
+            
+        ->groupBy('atividades.obra_id')
+        ->orderBy('atividades.progresso', 'desc')   //->orderBy('tipoobras.nome')
+        ->paginate(10);
+        
+       // Se a pesquisa foi submetida e seu valor for started, exibe o formulário de pesquisa, caso contrário esconde o formulário.
         if($request->pesquisar == "started"){
             $flag = '';
         }else{
@@ -116,7 +118,7 @@ class DashboardController extends Controller
         return view('admin.dashboards.dashboard', compact(
             'mes_corrente','ano_corrente','mesespesquisa', 'anospesquisa',
             'estatus', 'flag',
-            'obras', 'tipoobras', 'regionais', 'municipios'
+            'obras', 'tipoobras', 'objetos', 'regionais', 'municipios', 'users'
         ));
     }
 

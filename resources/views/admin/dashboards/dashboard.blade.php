@@ -91,49 +91,70 @@
                     <form action="{{ route('dashboard.index') }}">
                         <div class="mb-3 row">
 
-                            {{-- tipoobra_id --}}
+                            {{-- tipoobra --}}
                             <div class="col-md-2 col-sm-12">
                                 <div class="form-group focused">
-                                    <label class="form-control-label" for="tipoobra_id">Tipo</label>
-                                    <select name="tipoobra_id" id="tipoobra_id" class="form-control select2">
-                                        <option value="" selected disabled>Escolha...</option>
+                                    <label class="form-control-label" for="tipoobra">Tipo</label>
+                                    <select name="tipoobra" id="tipoobra" class="form-control select2">
+                                        <option value="">Escolha...</option>
                                         @foreach($tipoobras  as $tipoobra)
-                                            <option value="{{ $tipoobra->id }}">{{$tipoobra->nome}}</option>
+                                            <option value="{{ $tipoobra->nome }}">{{$tipoobra->nome}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
 
-                            {{-- regional_id --}}
+                            {{-- objeto --}}
                             <div class="col-md-2 col-sm-12">
                                 <div class="form-group focused">
-                                    <label class="form-control-label" for="regional_id">Regional</label>
-                                    <select name="regional_id" id="regional_id" class="form-control select2">
-                                        <option value="" selected>Escolha...</option>
+                                    <label class="form-control-label" for="objeto">Objeto</label>
+                                    <select name="objeto" id="objeto" class="form-control select2">
+                                        <option value="">Escolha...</option>
+                                        @foreach($objetos  as $objeto)
+                                            <option value="{{ $objeto->nome }}">{{$objeto->nome}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            {{-- regional --}}
+                            <div class="col-md-2 col-sm-12">
+                                <div class="form-group focused">
+                                    <label class="form-control-label" for="regional">Regional</label>
+                                    <select name="regional" id="regional" class="form-control select2">
+                                        <option value="">Escolha...</option>
                                         @foreach($regionais  as $regional)
-                                            <option value="{{ $regional->id }}">{{$regional->nome}}</option>
+                                            <option value="{{ $regional->nome }}">{{$regional->nome}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
 
-                            {{-- municipio_id --}}
+                            {{-- municipio --}}
                             <div class="col-md-2 col-sm-12">
                                 <div class="form-group focused">
-                                    <label class="form-control-label" for="municipio_id">Município</label>
-                                    <select name="municipio_id" id="municipio_id" class="form-control select2">
-                                        <option value="" selected>Escolha...</option>
+                                    <label class="form-control-label" for="municipio">Município</label>
+                                    <select name="municipio" id="municipio" class="form-control select2">
+                                        <option value="">Escolha...</option>
                                         @foreach($municipios  as $municipio)
-                                            <option value="{{ $municipio->id }}">{{$municipio->nome}}</option>
+                                            <option value="{{ $municipio->nome }}">{{$municipio->nome}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
 
 
+                            {{-- user --}}
                             <div class="col-md-2 col-sm-12">
-                                <label class="form-label" for="role">Analista</label>
-                                <input type="text" name="analista" id="analista" class="form-control" value=""  placeholder="Analista">
+                                <div class="form-group focused">
+                                    <label class="form-control-label" for="user">Responsável</label>
+                                    <select name="user" id="user" class="form-control select2">
+                                        <option value="">Escolha...</option>
+                                        @foreach($users  as $user)
+                                            <option value="{{ $user->nome }}">{{$user->nome}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -174,8 +195,10 @@
                             <th>Id</th>
                             <th>Tipo</th>
                             <th>Obra</th>
+                            <th>Objetos</th>
                             <th>Regional</th>
                             <th>Município</th>
+                            <th>Responsáveis</th>
                             <th style="width: 20%">Progresso</th>
                             <th> </th>
                         </tr>
@@ -187,12 +210,14 @@
                                 <td>{{ $obra->id }}</th>
                                 <td>{{ $obra->tipo }}</th>
                                 <td>{{ $obra->escola }}</td>
+                                <td>{{ $obra->objetos }}</td>
                                 <td>{{ $obra->regional }}</td>
                                 <td>{{ $obra->municipio }}</td>
+                                <td>{{ $obra->responsaveis }}</td>
                                 <td>
                                     <div class="progress border" style="height: 30px;" title="{{ $obra->nomeestatus }}">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:{{-- $obra->progressomaximo --}}%; background-color:{{ $obra->cor }}">
-                                          <strong>{{-- $obra->progressomaximo --}}%</strong>
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ $obra->progressomaximo }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
+                                          <strong>{{ $obra->progressomaximo }}%</strong>
                                         </div>
                                     </div>
                                 </td>
@@ -206,7 +231,7 @@
                     </tbody>
                 </table>
 
-                {{-- {{ $obras->links() }} --}}
+                {{ $obras->links() }}
 
 
             </div>

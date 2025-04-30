@@ -43,7 +43,7 @@
             <td style="width: 237px" class="dados-ficha">{{ $obra->escola->municipio->nome }}</td>
             <td style="width: 280px;" class="dados-ficha">{{ $obra->escola->regional->nome }}</td>
             <td style="width: 50px;" class="dados-ficha">{{ $obra->ativo == 1 ? "Sim" : "Não" }}</td>
-            <td style="width: 150px;" class="dados-ficha">{{ $obra->estatu->nome }}</td>
+            <td style="width: 150px;" class="dados-ficha">{{ $obra->estatu->nome }} em {{ $obra->progressomaximo($obra->id) }}%</td>
         </tr>
     </table>
 

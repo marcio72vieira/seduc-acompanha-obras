@@ -1,12 +1,47 @@
-arquivos modificados com #_
+/***** INICIO PESQUISA PARA FILTRO DO DASHBOARD */
+        // Só recupera as OBRAS que possuem ATIVIDADES (->join('atividades', 'atividades.obra_id', '=', 'obras.id')), e com
+        // a cláusula: DB::raw('max(atividades.progresso) AS progressomaximo'), recupera o valor máximo da coluna progresso
+        // do conjunto de registros retornados pela clausula "->groupBy('atividades.obra_id')".
+        // Obs: Lembrar que a tabela "escolas" possui relacionamento tanto com obras quanto com regionais e municipios, logo
+        //      deve-se fazer a junção de escolas com obras (->join('escolas', 'escolas.id', '=', 'obras.escola_id')) e a
+        //      junção de escola com regionais (->join('escolas AS escreg', 'escreg.regional_id', '=', 'regionais.id')) e
+        //      junção de escola com municipios (->join('escolas AS escmun', 'escmun.municipio_id', '=', 'municipios.id')).
+        //      Em ambos os caso, como a table "escola" já foi utilizada para o relacionamento com obras, houve a necessidde
+        //      de apelidar( AS ) as tabelas comoo descrito: "escolas AS escreg" e "escolas AS escmun"
 
-migratrion de obras
-model de obras
-model de regional
-model de municipio
-obraRequest
-DashboardController
-
+        // Query com filtro. Só está funcionando se o usuário informar obrigatoriamente os campos tipo regional e municipio
+        #_$obras = DB::table('obras')
+        #_    ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
+        #_    ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
+        #_    ->join('regionais', 'regionais.id', '=', 'obras.regional_id')
+        #_    ->join('municipios', 'municipios.id', '=', 'obras.municipio_id')
+        #_    ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')
+        #_    ->join('atividades', 'atividades.obra_id', '=', 'obras.id')
+        #_    ->join('escolas AS escolreg', 'escolreg.regional_id', '=', 'regionais.id')
+        #_    ->join('escolas AS escolmun', 'escolmun.municipio_id', '=', 'municipios.id')
+        #_    ->select(
+        #_        'obras.id',
+        #_        'tipoobras.nome AS tipo',
+        #_        'escolas.nome AS escola',
+        #_        'regionais.nome AS regional',
+        #_        'municipios.nome AS municipio',
+        #_        'escolreg.id AS idescolreg',
+        #_        'escolmun.id AS idescolmun',
+        #_        'estatus.id AS estatu', 'estatus.nome AS nomeestatus', 'estatus.cor',
+        #_         DB::raw('max(atividades.progresso) AS progressomaximo')
+        #_    )
+        #_    ->when($request->has('tipoobra_id'), function($query) use($request) {
+        #_        $query->where('tipoobra_id', '=', $request->tipoobra_id);
+        #_    })
+        #_    ->when($request->has('regional_id'), function($query) use($request) {
+        #_        $query->where('escolreg.regional_id', '=', $request->regional_id);
+        #_    })
+        #_    ->when($request->has('municipio_id'), function($query) use($request) {
+        #_        $query->where('escolmun.municipio_id', '=', $request->municipio_id);
+        #_    })
+        #_->groupBy('atividades.obra_id')
+        #_->orderBy('tipoobras.nome')
+        #_->paginate(10);
 
 ************************************************
 *   QUERY DO DASHBOARD PARCIALMENTE FUNCIONANDO
