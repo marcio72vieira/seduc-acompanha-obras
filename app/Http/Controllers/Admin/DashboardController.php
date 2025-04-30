@@ -58,9 +58,10 @@ class DashboardController extends Controller
         $regionais = Regional::orderBy('nome')->get();
         $municipios = Municipio::orderBy('nome')->get();
         $users =  User::orderBy('nome')->get();
+        $estatus = Estatu::orderBy('nome')->get();
 
 
-        /***** INICIO PESQUISA PARA FILTRO DO DASHBOARD */  
+        /***** INICIO PESQUISA PARA FILTRO DO DASHBOARD */
         $obras = DB::table('obras')
             ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
             ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
@@ -73,9 +74,9 @@ class DashboardController extends Controller
             ->join('users', 'users.id', '=', 'obra_user.user_id')
             ->join('objeto_obra', 'objeto_obra.obra_id', '=', 'obras.id')
             ->join('objetos', 'objetos.id', '=', 'objeto_obra.objeto_id')
-            
+
             ->select(
-                'obras.id','obras.ativo',
+                'obras.id','obras.data_inicio AS datainicio','obras.data_fim AS datafim','obras.ativo',
                 'tipoobras.nome AS tipo',
                 'escolas.nome AS escola',
                 'estatus.id AS estatu', 'estatus.nome AS nomeestatus', 'estatus.cor',
@@ -91,7 +92,7 @@ class DashboardController extends Controller
             })
             ->when($request->has('objeto'), function($query) use($request) {
                 $query->where('objetos.nome', 'like', '%'. $request->objeto . '%');
-            })               
+            })
             ->when($request->has('regional'), function($query) use($request) {
                 $query->where('regionais.nome', 'like', '%'. $request->regional . '%');
             })
@@ -101,16 +102,25 @@ class DashboardController extends Controller
             ->when($request->has('user'), function($query) use($request) {
                 $query->where('users.nome', 'like', '%'. $request->user . '%');
             })
-            
+            ->when($request->has('estatu'), function($query) use($request) {
+                $query->where('estatus.nome', 'like', '%'. $request->estatu . '%');
+            })
+            ->when($request->filled('datainicio'), function($query) use($request) {
+                $query->where('obras.data_inicio', '>=', \Carbon\Carbon::parse($request->datainicio)->format('Y-m-d'));
+            })
+            ->when($request->filled('datafim'), function($query) use($request) {
+                $query->where('obras.data_fim', '<=', \Carbon\Carbon::parse($request->datafim)->format('Y-m-d'));
+            })
+
             /* ->when($request->has('ordenacao'), function($query) use($request) {
                 $query->where('obras.id', '>', 0)
                       ->orderBy('$ordenacao');
             }) */
-            
+
         ->groupBy('atividades.obra_id')
         ->orderBy('atividades.progresso', 'desc')   //->orderBy('tipoobras.nome')
         ->paginate(10);
-        
+
        // Se a pesquisa foi submetida e seu valor for started, exibe o formulário de pesquisa, caso contrário esconde o formulário.
         if($request->pesquisar == "started"){
             $flag = '';

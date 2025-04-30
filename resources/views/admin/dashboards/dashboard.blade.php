@@ -78,7 +78,7 @@
         {{-- Inicio filtro e tabela de obras --}}
         <div class="mb-4 shadow card border-light">
             <div class="gap-2 card-header hstack">
-                <span>ESTATUS DAS OBRAS</span>
+                <span style="font-size: 15px;"><strong><i class="fa-solid fa-person-digging"></i> OBRAS EM ANDAMENTO</strong></span>
                 <span class="flex-row mt-1 mb-1 ms-auto d-sm-flex">
                     <label id="ocultarExibirPaineldeFiltragem" style="cursor: pointer; font-size: 17px;"><i id="iconeVisao" class="{{ $flag != '' ? 'fa-solid fa-filter' : 'fas fa-eye-slash' }}" style=" margin-right: 5px;"></i>{{ $flag != '' ? "Filtro" : "Ocultar" }}</label>
                 </span>
@@ -157,7 +157,21 @@
                                 </div>
                             </div>
 
-                            {{-- ordenacao 
+
+                            {{-- estatu --}}
+                            <div class="col-md-2 col-sm-12">
+                                <div class="form-group focused">
+                                    <label class="form-control-label" for="estatu">Estatus</label>
+                                    <select name="estatu" id="estatu" class="form-control select2">
+                                        <option value="">Escolha...</option>
+                                        @foreach($estatus  as $estatu)
+                                            <option value="{{ $estatu->nome }}">{{$estatu->nome}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            {{-- ordenacao
                             <div class="col-md-2 col-sm-12">
                                 <div class="form-group focused">
                                     <label class="form-control-label" for="ordenacao">Ordenar por...</label>
@@ -175,19 +189,19 @@
 
                         <div class="mb-3 row">
                             <div class="col-md-2 col-sm-12">
-                                <label class="form-label" for="data_cadastro_inicio">Data cadastro início</label>
-                                <input type="date" name="data_cadastro_inicio" id="data_cadastro_inicio" class="form-control" value="">
+                                <label class="form-label" for="datainicio">Data início</label>
+                                <input type="date" name="datainicio" id="datainicio" class="form-control" value="">
                             </div>
 
                             <div class="col-md-2 col-sm-12">
-                                <label class="form-label" for="data_cadastro_fim">Data cadastro fim</label>
-                                <input type="date" name="data_cadastro_fim" id="data_cadastro_fim" class="form-control" value="">
+                                <label class="form-label" for="datafim">Data fim</label>
+                                <input type="date" name="datafim" id="datafim" class="form-control" value="">
                             </div>
 
-                            <div class="pt-3 col-md-2 col-sm-12">
+                            <div class="pt-3 col-md-2 offset-md-6 col-sm-12">
                                 <div style="margin-top:20px;">
-                                    <button type="submit" name="pesquisar" value="stoped" id="btnpesquisar" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar</button>
-                                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btnlimpar"><i class="fa-solid fa-trash"></i> Limpar</button>
+                                    <button type="submit" name="pesquisar" value="stoped" id="btnpesquisar" class="btn btn-outline-secondary float-end"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar</button>
+                                    {{-- <button type="button" class="btn btn-outline-secondary btn-sm" id="btnlimpar"><i class="fa-solid fa-trash"></i> Limpar</button> --}}
                                 </div>
                             </div>
                         </div>
@@ -214,6 +228,7 @@
                             <th>Regional</th>
                             <th>Município</th>
                             <th>Responsáveis</th>
+                            <th>Prazo</th>
                             <th style="width: 20%">Progresso</th>
                             <th> </th>
                         </tr>
@@ -229,6 +244,7 @@
                                 <td>{{ $obra->regional }}</td>
                                 <td>{{ $obra->municipio }}</td>
                                 <td>{{ $obra->responsaveis }}</td>
+                                <td>{{ \Carbon\Carbon::parse($obra->datainicio)->format('d-m-Y') }} a {{ \Carbon\Carbon::parse($obra->datafim)->format('d-m-Y') }}</td>
                                 <td>
                                     <div class="progress border" style="height: 30px;" title="{{ $obra->nomeestatus }}">
                                         <div class="progress-bar {{ $obra->ativo == 1 ? 'progress-bar-striped progress-bar-animated' : '' }}" role="progressbar" aria-valuenow="{{ $obra->progressomaximo }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
