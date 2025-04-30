@@ -75,7 +75,7 @@ class DashboardController extends Controller
             ->join('objetos', 'objetos.id', '=', 'objeto_obra.objeto_id')
             
             ->select(
-                'obras.id',
+                'obras.id','obras.ativo',
                 'tipoobras.nome AS tipo',
                 'escolas.nome AS escola',
                 'estatus.id AS estatu', 'estatus.nome AS nomeestatus', 'estatus.cor',
@@ -100,7 +100,12 @@ class DashboardController extends Controller
             })
             ->when($request->has('user'), function($query) use($request) {
                 $query->where('users.nome', 'like', '%'. $request->user . '%');
-            }) 
+            })
+            
+            /* ->when($request->has('ordenacao'), function($query) use($request) {
+                $query->where('obras.id', '>', 0)
+                      ->orderBy('$ordenacao');
+            }) */
             
         ->groupBy('atividades.obra_id')
         ->orderBy('atividades.progresso', 'desc')   //->orderBy('tipoobras.nome')

@@ -156,6 +156,21 @@
                                     </select>
                                 </div>
                             </div>
+
+                            {{-- ordenacao 
+                            <div class="col-md-2 col-sm-12">
+                                <div class="form-group focused">
+                                    <label class="form-control-label" for="ordenacao">Ordenar por...</label>
+                                    <select name="ordenacao" id="ordenacao" class="form-control select2">
+                                        <option value="">Escolha...</option>
+                                            <option value="tipoobras.nome">Tipo</option>
+                                            <option value="objetos.nome">Objeto</option>
+                                            <option value="regionais.nome">Regional</option>
+                                            <option value="municipios.nome">Município</option>
+                                            <option value="users.nome">Responsável</option>
+                                    </select>
+                                </div>
+                            </div>--}}
                         </div>
 
                         <div class="mb-3 row">
@@ -171,8 +186,8 @@
 
                             <div class="pt-3 col-md-2 col-sm-12">
                                 <div style="margin-top:20px;">
-                                    <button type="submit" name="pesquisar" value="stoped" id="btnpesquisar" class="btn btn-info btn-sm"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar</button>
-                                    <button type="button" class="btn btn-warning btn-sm" id="btnlimpar"><i class="fa-solid fa-trash"></i> Limpar</button>
+                                    <button type="submit" name="pesquisar" value="stoped" id="btnpesquisar" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btnlimpar"><i class="fa-solid fa-trash"></i> Limpar</button>
                                 </div>
                             </div>
                         </div>
@@ -216,7 +231,7 @@
                                 <td>{{ $obra->responsaveis }}</td>
                                 <td>
                                     <div class="progress border" style="height: 30px;" title="{{ $obra->nomeestatus }}">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ $obra->progressomaximo }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
+                                        <div class="progress-bar {{ $obra->ativo == 1 ? 'progress-bar-striped progress-bar-animated' : '' }}" role="progressbar" aria-valuenow="{{ $obra->progressomaximo }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
                                           <strong>{{ $obra->progressomaximo }}%</strong>
                                         </div>
                                     </div>
