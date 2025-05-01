@@ -19,7 +19,12 @@
         <div>
             <a class="btn btn-outline-secondary" href="{{ route('atividade.index')}}" role="button"><i class="fa-solid fa-rotate-left"></i></a>
             <a class="btn btn-outline-secondary" href="{{ route('atividade.relpdfatividade', ['obra' => $obra->id]) }}" role="button"><i class="fa-regular fa-file-pdf"></i></a>
-            <a class="btn btn-primary ms-1" href="{{ route('atividade.create', ['obra' => $obra->id]) }}" role="button"> <i class="fa-solid fa-keyboard"></i></a>
+            {{-- Se o estatu da obra for concluída, o usuário não poderá mais registrar atividades, só alterar e apagar, e alterando, poderá reverter o status da mesma --}}
+            @if($obra->estatu->id == 3)
+                <a href="" class="btn btn-secondary" title="registrar atividades"> <i class="fa-solid fa-ban"></i></a>
+            @else
+                <a class="btn btn-primary ms-1" href="{{ route('atividade.create', ['obra' => $obra->id]) }}" role="button"> <i class="fa-solid fa-keyboard"></i></a>
+            @endif
         </div>
     </div>
 

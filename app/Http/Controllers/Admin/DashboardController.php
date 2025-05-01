@@ -19,8 +19,6 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // if($request->tipoobra_id){ dd($request->all()); }
-
         // Definindo mês para computo dos dados OK!
         // $mes_corrente = date('m');   // número do mês no formato 01, 02, 03, 04 ..., 09, 10, 11, 12
         $mes_corrente = date('n');      // número do mês no formato 1, 2, 3, 4 ..., 9, 10, 11, 12
@@ -50,7 +48,7 @@ class DashboardController extends Controller
         }
 
         // Estatus pra exibir os cards
-        $estatus = Estatu::orderBy('id')->get();
+        $estatuscards = Estatu::orderBy('id')->get();
 
         // Tipos de obras para pesquisa
         $tipoobras = Tipoobra::orderBy('nome')->get();
@@ -61,7 +59,16 @@ class DashboardController extends Controller
         $estatus = Estatu::orderBy('nome')->get();
 
 
+
+
         /***** INICIO PESQUISA PARA FILTRO DO DASHBOARD */
+        // Ordem, Sentido e Paginação da Exibição dos registros. 
+        // Se a variável foi definida e não é nulla, assume o primiero operando, caso contrário assume o segundos(valores padrões)
+        $ordenacao = $request->ordenacao ?? 'atividades.progresso';
+        $sentido =  $request->sentido ?? 'desc';
+        $paginacao = $request->paginacao ?? 10;
+
+        // Query de recuperação de registros
         $obras = DB::table('obras')
             ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
             ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
@@ -75,6 +82,7 @@ class DashboardController extends Controller
             ->join('objeto_obra', 'objeto_obra.obra_id', '=', 'obras.id')
             ->join('objetos', 'objetos.id', '=', 'objeto_obra.objeto_id')
 
+            // Campos a serem recuperados
             ->select(
                 'obras.id','obras.data_inicio AS datainicio','obras.data_fim AS datafim','obras.ativo',
                 'tipoobras.nome AS tipo',
@@ -87,6 +95,7 @@ class DashboardController extends Controller
                 DB::raw('max(atividades.progresso) AS progressomaximo')
             )
 
+            // Se os campos foram preenchidos, adicione à query já existente mais condições
             ->when($request->has('tipoobra'), function($query) use($request) {
                 $query->where('tipoobras.nome', 'like', '%'. $request->tipoobra . '%');
             })
@@ -112,14 +121,9 @@ class DashboardController extends Controller
                 $query->where('obras.data_fim', '<=', \Carbon\Carbon::parse($request->datafim)->format('Y-m-d'));
             })
 
-            /* ->when($request->has('ordenacao'), function($query) use($request) {
-                $query->where('obras.id', '>', 0)
-                      ->orderBy('$ordenacao');
-            }) */
-
         ->groupBy('atividades.obra_id')
-        ->orderBy('atividades.progresso', 'desc')   //->orderBy('tipoobras.nome')
-        ->paginate(10);
+        ->orderBy($ordenacao, $sentido)     //->orderBy('tipoobras.nome')
+        ->paginate($paginacao);                     //->paginate(10);
 
        // Se a pesquisa foi submetida e seu valor for started, exibe o formulário de pesquisa, caso contrário esconde o formulário.
         if($request->pesquisar == "started"){
@@ -132,7 +136,7 @@ class DashboardController extends Controller
 
         return view('admin.dashboards.dashboard', compact(
             'mes_corrente','ano_corrente','mesespesquisa', 'anospesquisa',
-            'estatus', 'flag',
+            'estatuscards', 'estatus', 'flag',
             'obras', 'tipoobras', 'objetos', 'regionais', 'municipios', 'users'
         ));
     }

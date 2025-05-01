@@ -59,16 +59,16 @@
 
         {{-- Área de cards de Estatus --}}
         <div class="row">
-            @foreach ($estatus as $estatu )
-                {{-- Se a iteração é a primeira, (id = 1) ignora-a com a diretiva (@continue) soltando par a próxima --}}
-                @if($estatu->id == 1) @continue @endif
+            @foreach ($estatuscards as $estatucard )
+                {{-- Se a iteração é a primeira, (id = 1) ignora-a com a diretiva (@continue) "pulando" par a próxima iteração --}}
+                @if($estatucard->id == 1) @continue @endif
 
                 <div class="col-xl-2 col-md-2">
-                    <div class="mb-4 text-white card" style="background: {{ $estatu->cor }}">
+                    <div class="mb-4 text-white card" style="background: {{ $estatucard->cor }}">
                         <div class="card-body d-flex align-items-center justify-content-between">
-                            <div><i class="fa-solid fa-person-digging"></i> {{ $estatu->nome }}</div>
-                            {{-- recupera todas as obras cujo estatus seja igual ao status do "id" atual --}}
-                            <div class="text-white small"><strong>{{ $estatu->obras->count() > 0 ? $estatu->obras->count() : "" }}</strong></div>
+                            <div><i class="fa-solid fa-person-digging"></i> {{ $estatucard->nome }}</div>
+                            {{-- recupera todas as obras cujo $estatucards seja igual ao status do "id" atual --}}
+                            <div class="text-white small"><strong>{{ $estatucard->obras->count() > 0 ? $estatucard->obras->count() : "" }}</strong></div>
                         </div>
                     </div>
                 </div>
@@ -170,11 +170,25 @@
                                     </select>
                                 </div>
                             </div>
+                        </div>
 
-                            {{-- ordenacao
+                        <div class="mb-3 row">
+                            {{-- Data inicio --}}
                             <div class="col-md-2 col-sm-12">
+                                <label class="form-label" for="datainicio">Data início</label>
+                                <input type="date" name="datainicio" id="datainicio" class="form-control" value="">
+                            </div>
+
+                            {{-- Data fim --}}
+                            <div class="col-md-2 col-sm-12">
+                                <label class="form-label" for="datafim">Data fim</label>
+                                <input type="date" name="datafim" id="datafim" class="form-control" value="">
+                            </div>
+
+                            {{-- ordenacao --}}
+                            <div class="col-md-1 col-sm-12 offset-md-4">
                                 <div class="form-group focused">
-                                    <label class="form-control-label" for="ordenacao">Ordenar por...</label>
+                                    <label class="form-control-label mb-2" for="ordenacao">ordenar por</label>
                                     <select name="ordenacao" id="ordenacao" class="form-control select2">
                                         <option value="">Escolha...</option>
                                             <option value="tipoobras.nome">Tipo</option>
@@ -184,26 +198,52 @@
                                             <option value="users.nome">Responsável</option>
                                     </select>
                                 </div>
-                            </div>--}}
-                        </div>
-
-                        <div class="mb-3 row">
-                            <div class="col-md-2 col-sm-12">
-                                <label class="form-label" for="datainicio">Data início</label>
-                                <input type="date" name="datainicio" id="datainicio" class="form-control" value="">
                             </div>
 
-                            <div class="col-md-2 col-sm-12">
-                                <label class="form-label" for="datafim">Data fim</label>
-                                <input type="date" name="datafim" id="datafim" class="form-control" value="">
-                            </div>
-
-                            <div class="pt-3 col-md-2 offset-md-6 col-sm-12">
-                                <div style="margin-top:20px;">
-                                    <button type="submit" name="pesquisar" value="stoped" id="btnpesquisar" class="btn btn-outline-secondary float-end"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar</button>
-                                    {{-- <button type="button" class="btn btn-outline-secondary btn-sm" id="btnlimpar"><i class="fa-solid fa-trash"></i> Limpar</button> --}}
+                            {{-- sentido --}}
+                            <div class="col-md-1 col-sm-12">
+                                <div class="form-group focused">
+                                    <label class="form-control-label mb-2" for="sentido">sentido</label>
+                                    <select name="sentido" id="sentido" class="form-control select2">
+                                        <option value="">Escolha...</option>
+                                            <option value="asc">ascendente</option>
+                                            <option value="desc">descendente</option>
+                                    </select>
                                 </div>
                             </div>
+
+                            {{-- paginacao --}}
+                            <div class="col-md-1 col-sm-12">
+                                <div class="form-group focused">
+                                    <label class="form-control-label mb-2" for="paginacao">nº registros</label>
+                                    <select name="paginacao" id="sentido" class="form-control select2">
+                                        <option value="">Escolha...</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {{-- paginacao 
+                            <div class="col-md-1 col-sm-12">
+                                <div class="form-group focused">
+                                    <label class="form-control-label mb-2" for="paginacao">nº registros</label>
+                                    <select name="paginacao" id="sentido" class="form-control select2">
+                                        <option value="">Escolha...</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                    </select>
+                                </div>
+                            </div>--}}
+
+            
+                            <div class="pt-3 col-md-1 col-sm-12">
+                                <div style="margin-top:15px;">
+                                    <button type="submit" name="pesquisar" value="stoped" id="btnpesquisar" class="btn btn-outline-secondary float-end"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar</button>
+                                </div>
+                            </div>
+
+
                         </div>
                     </form>
                 </div>
@@ -262,7 +302,8 @@
                     </tbody>
                 </table>
 
-                {{ $obras->links() }}
+                {{-- $obras->links() --}}
+                {{ $obras->appends(request()->all())->onEachSide(0)->links() }}
 
 
             </div>

@@ -55,7 +55,7 @@ class AtividadeController extends Controller
             // $obra = Obra::where('id', '=', intval($request->obra_hidden))->first();
             $obra = Obra::where('id', '=', $request->obra_hidden)->first();
 
-            // Recupera o valor máximo do campo progresso no banco, para definir o estatu da obra com base no valor máximo.
+            // Recupera o valor máximo do campo progresso no banco, para definir o estatu da obra com base no valor máximo retornado.
             $valorprogressomaximo = DB::table('atividades')->where('obra_id', '=', $request->obra_hidden)->max('progresso');
 
             // Resgatando todos os Estatus cujo tipo seja do tipo progressivo
