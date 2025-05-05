@@ -24,15 +24,29 @@ class MunicipioController extends Controller
 
 
     public function escolasmunicipio(Municipio $municipio)
-    {   
+    {
         $municipio = Municipio::findOrFail($municipio->id);
-     
+
         //$escolas = Municipio::where('regional_id', '=', $regional->id)->paginate(10);
         $escolas = $municipio->escolas()->orderBy('nome')->paginate(10);
 
         return view('admin.municipios.escolasmunicipio', ['municipio' => $municipio, 'escolas' => $escolas]);
 
-    }    
+    }
+
+
+    public function obrasmunicipio(Municipio $municipio)
+    {
+        $municipio = Municipio::findOrFail($municipio->id);
+
+        $obras = $municipio->obrasdomunicipio()->orderBy('id')->paginate(10);
+
+        return view('admin.municipios.obrasmunicipio', ['municipio' => $municipio, 'obras' => $obras]);
+
+    }
+
+
+
 
     public function create()
     {
@@ -271,6 +285,6 @@ class MunicipioController extends Controller
         $mpdf->WriteHTML($html);
         $mpdf->Output($fileName, 'I');  // Exibe o arquivo no browse   || $mpdf->Output($fileName, 'F');  Gera o arquivo na pasta pública
 
-    }    
+    }
 
 }

@@ -26,6 +26,7 @@
                         <th>Regional</th>
                         <th>Ativo</th>
                         <th>Escolas</th>
+                        <th>Obras</th>
                         <th>Cadastrado</th>
                         <th width="18%">Ações</th>
                     </tr>
@@ -39,6 +40,7 @@
                             <td>{{ $municipio->regional->nome }}</td>
                             <td>{{ $municipio->ativo == 1 ? "Sim" : "Não" }}</td>
                             <td>{{ $municipio->escolas()->count() > 0 ? $municipio->escolas()->count() : ''  }}</td>
+                            <td>{{ $municipio->escolas()->count() > 0 ? $municipio->escolas()->count() : ''  }}</td>
                             <td>{{ \Carbon\Carbon::parse($municipio->created_at)->format('d/m/Y') }}</td>
                             <td class="flex-row d-md-flex justify-content-start">
 
@@ -46,15 +48,15 @@
                                     <i class="fa-solid fa-pen-to-square"></i> Editar
                                 </a>
 
-                                
-                                @if($municipio->escolas->count() != 0)           
+
+                                @if($municipio->escolas->count() != 0)
                                     <a href="{{ route('municipio.escolas', ['municipio' => $municipio->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
                                         <i class="fa-solid fa-school"></i> Escolas
                                     </a>
                                 @else
                                     <a href="" class="mb-1 btn btn-outline-secondary  btn-sm me-1"><i class="fa-solid fa-ban"></i> Escolas</a>
                                 @endif
-                                
+
 
                                 @if($municipio->escolas()->count() == 0)
                                     <form id="formDelete{{ $municipio->id }}" method="POST" action="{{ route('municipio.destroy', ['municipio' => $municipio->id]) }}">

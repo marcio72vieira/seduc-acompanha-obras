@@ -112,7 +112,10 @@ Route::group(['middleware' => 'auth'], function(){
         Route::delete('/destroy-municipio/{municipio}', [MunicipioController::class, 'destroy'])->name('municipio.destroy');
         Route::get('pdf-municipio/relpdflistmunicipios', [MunicipioController::class, 'relpdflistmunicipios'])->name('municipio.pdflistmunicipios');
         Route::get('/escolas-municipio/{municipio}', [MunicipioController::class, 'escolasmunicipio'])->name('municipio.escolas');
+        Route::get('/obras-municipio/{municipio}', [MunicipioController::class, 'obrasmunicipio'])->name('municipio.obras');
         Route::get('pdf-municipio/relpdflistescolasmunicipio/{municipio}', [MunicipioController::class, 'relpdflistescolasmunicipio'])->name('municipio.relpdflistescolasmunicipio');
+        Route::get('pdf-municipio/relpdflistobrasmunicipio/{municipio}', [MunicipioController::class, 'relpdflistobrasmunicipio'])->name('municipio.relpdflistobrasmunicipio');
+
 
         // ESCOLA
         Route::get('/index-escola', [EscolaController::class, 'index'])->name('escola.index');

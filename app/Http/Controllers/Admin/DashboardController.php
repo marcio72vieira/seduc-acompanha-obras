@@ -62,25 +62,26 @@ class DashboardController extends Controller
 
 
         /***** INICIO PESQUISA PARA FILTRO DO DASHBOARD */
-        // Ordem, Sentido e Paginação da Exibição dos registros. 
+        // Ordem, Sentido e Paginação da Exibição dos registros.
         // Se a variável foi definida e não é nulla, assume o primiero operando, caso contrário assume o segundos(valores padrões)
+        //
         $ordenacao = $request->ordenacao ?? 'atividades.progresso';
         $sentido =  $request->sentido ?? 'desc';
         $paginacao = $request->paginacao ?? 10;
 
         // Query de recuperação de registros
-        $obras = DB::table('obras')
-            ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
-            ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
-            ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')
-            ->join('atividades', 'atividades.obra_id', '=', 'obras.id')
-            ->join('regionais', 'regionais.id', '=', 'escolas.regional_id')
-            ->join('municipios', 'municipios.id', '=', 'escolas.municipio_id')
-            ->join('municipios AS municipiodaregional', 'municipiodaregional.regional_id', '=', 'regionais.id')
-            ->join('obra_user', 'obra_user.obra_id', '=', 'obras.id')
-            ->join('users', 'users.id', '=', 'obra_user.user_id')
-            ->join('objeto_obra', 'objeto_obra.obra_id', '=', 'obras.id')
-            ->join('objetos', 'objetos.id', '=', 'objeto_obra.objeto_id')
+        $obras = DB::table('obras')                                                                                 // RELACIONAMENTOS ENTRE
+            ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')                                           // tipoobra x obra
+            ->join('escolas', 'escolas.id', '=', 'obras.escola_id')                                                 // escolas  x obra
+            ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')                                                 // estatus x obra
+            ->join('atividades', 'atividades.obra_id', '=', 'obras.id')                                             // atividades x obra
+            ->join('regionais', 'regionais.id', '=', 'escolas.regional_id')                                         // regionais x escola (pois na escola existe id da regional)
+            ->join('municipios', 'municipios.id', '=', 'escolas.municipio_id')                                      // municipios x escola (pois na escola existe id do municipio)
+            ->join('municipios AS municipiodaregional', 'municipiodaregional.regional_id', '=', 'regionais.id')     // municpios x regional (pois no município existe o id da regionl. O aplido "AS municipiodaregional" foi utilizado, porque municpios já foi utilizado no relcionmento anterior municipios x escolas)
+            ->join('obra_user', 'obra_user.obra_id', '=', 'obras.id')                                               // obra_user x obra (pois obra_user possui o id da obra)
+            ->join('users', 'users.id', '=', 'obra_user.user_id')                                                   // obra_user x user (pois obra_user possui o id do usuário)
+            ->join('objeto_obra', 'objeto_obra.obra_id', '=', 'obras.id')                                           // objeto_obra x obra (pois objeto_obra possui o id da obra)
+            ->join('objetos', 'objetos.id', '=', 'objeto_obra.objeto_id')                                           // objeto_obra x obra (pois objeto_obra possui o id do objeto)
 
             // Campos a serem recuperados
             ->select(

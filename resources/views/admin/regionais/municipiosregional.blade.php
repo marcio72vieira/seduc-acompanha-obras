@@ -25,8 +25,9 @@
                         <th>Nome</th>
                         <th>Ativo</th>
                         <th>Escolas</th>
+                        <th>Obras</th>
                         <th>Cadastrado</th>
-                        <th width="7%">Ações</th>
+                        {{-- <th width="7%">Ações</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -35,17 +36,28 @@
                             <td>{{ $municipio->id }}</th>
                             <td>{{ $municipio->nome }}</td>
                             <td>{{ $municipio->ativo == 1 ? "Sim" : "Não" }}</td>
-                            <td>{{ $municipio->escolas()->count() > 0 ? $municipio->escolas()->count() : '' }}</td>
+                            <td>
+                                @if($municipio->escolas()->count() > 0)
+                                    {{ $municipio->escolas()->count() }}
+                                    <a href="{{ route('municipio.escolas', ['municipio' => $municipio->id]) }}" class="btn btn-outline-secondary btn-sm me-1" style="margin-left: 10px"><i class="fa-solid fa-school"></i></a>
+                                @endif
+                            </td>
+                            <td>{{--  $municipio->escolas()->count() > 0 ? $municipio->escolas()->count() : '' --}}
+                                @if($municipio->obrasdomunicipio()->count() > 0)
+                                    {{ $municipio->obrasdomunicipio()->count() }}
+                                    <a href="{{ route('municipio.obras', ['municipio' => $municipio->id]) }}" class="btn btn-outline-secondary btn-sm me-1" style="margin-left: 10px"><i class="fa-solid fa-person-digging"></i></a>
+                                @endif
+                            </td>
                             <td>{{ \Carbon\Carbon::parse($municipio->created_at)->format('d/m/Y H:i') }}</td>
-                            <td class="flex-row d-md-flex justify-content-start">
-                                @if($municipio->escolas->count() != 0)           
+                            {{-- <td class="flex-row d-md-flex justify-content-start">
+                                @if($municipio->escolas->count() != 0)
                                     <a href="{{ route('municipio.escolas', ['municipio' => $municipio->id]) }}" class="mb-1 btn btn-secondary btn-sm me-1">
                                         <i class="fa-solid fa-school"></i> Escolas
                                     </a>
                                 @else
                                     <a href="" class="mb-1 btn btn-outline-secondary  btn-sm me-1"><i class="fa-solid fa-ban"></i> Escolas</a>
                                 @endif
-                            </td>
+                            </td> --}}
                         </tr>
                     @empty
                         <div class="alert alert-danger" role="alert">Nenhum municipio encontrado!</div>
