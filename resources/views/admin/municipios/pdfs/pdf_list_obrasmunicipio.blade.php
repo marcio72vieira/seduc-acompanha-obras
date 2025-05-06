@@ -17,10 +17,10 @@
                 <td style="width: 250px;" class="dados-lista">{{ $obra->escola->nome }} </td>
                 <td style="width: 130px;" class="dados-lista">{{ $obra->escola->regional->nome }}</td>
                 <td style="width: 140px;" class="dados-lista">{{ \Carbon\Carbon::parse($obra->data_inicio)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($obra->data_fim)->format('d/m/Y') }}</td>
-                <td style="width: 170px;" class="dados-lista">@foreach($obra->objetos as $objeto) {{  $objeto->nome }}@endforeach</td>
-                <td style="width: 100px;" class="dados-lista">{{ $obra->progressomaximo($obra->id) }}%</td>
-                <td style="width: 70px;" class="dados-lista">{{ $obra->progressomaximo($obra->id) }}%</td>
-                <td style="width: 70px;" class="dados-lista">{{ $obra->progressomaximo($obra->id) }}%</td>
+                <td style="width: 170px;" class="dados-lista">@foreach($obra->objetos as $objeto) {{  $objeto->nome }}, @endforeach</td>
+                <td style="width: 100px;" class="dados-lista">@foreach($obra->users as $user) {{  $user->nome }}, @endforeach</td>
+                <td style="width: 70px;" class="dados-lista">{{ $obra->atividades->count() }}</td>
+            <td style="width: 70px;" class="dados-lista">{{ $obra->estatu->nome }} ({{ $obra->progressomaximo($obra->id) }}%)</td>
             </tr>
         @endforeach
     </table>

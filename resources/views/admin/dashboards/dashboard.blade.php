@@ -82,6 +82,9 @@
                 <span class="flex-row mt-1 mb-1 ms-auto d-sm-flex">
                     <label id="ocultarExibirPaineldeFiltragem" style="cursor: pointer; font-size: 17px;"><i id="iconeVisao" class="{{ $flag != '' ? 'fa-solid fa-filter' : 'fas fa-eye-slash' }}" style=" margin-right: 5px;"></i>{{ $flag != '' ? "Filtro" : "Ocultar" }}</label>
                 </span>
+                <span>
+                    <a href="{{ route('dashboard.gerarpdf') }}" class="btn btn-light btn-sm me-1" style="margin-left: 10px" title="relatório PDF" target="_blank"><i class="bi bi-file-earmark-pdf-fill" style="font-size: 20px;"></i> PDF</a>
+                </span>
             </div>
 
             {{-- INICIO PAINEL DE FILTRAGEM --}}
@@ -223,19 +226,6 @@
                                     </select>
                                 </div>
                             </div>
-
-                            {{-- paginacao 
-                            <div class="col-md-1 col-sm-12">
-                                <div class="form-group focused">
-                                    <label class="form-control-label mb-2" for="paginacao">nº registros</label>
-                                    <select name="paginacao" id="sentido" class="form-control select2">
-                                        <option value="">Escolha...</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                    </select>
-                                </div>
-                            </div>--}}
-
             
                             <div class="pt-3 col-md-1 col-sm-12">
                                 <div style="margin-top:15px;">
@@ -253,7 +243,7 @@
 
             <div class="card-body">
 
-                {{-- <x-alert /> --}}
+                <x-alert />
 
                 {{-- Este componente será acionado sempre que houver uma erro de exceção em: store, update ou delete --}}
                 <x-errorexception />

@@ -64,6 +64,7 @@ Route::group(['middleware' => 'auth'], function(){
     // DASHBOARD
     Route::get('/index-dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/index-dashboard/gerarexcel', [DashboardController::class, 'gerarexcel'])->name('dashboard.gerarexcel');
+    Route::get('/index-dashboard/gerarpdf', [DashboardController::class, 'gerarpdf'])->name('dashboard.gerarpdf');
 
     Route::get('/edit-profile-user', [UserController::class, 'editprofile'])->name('user.editprofile');
     Route::put('/update-profile-user/{user}', [UserController::class, 'updateprofile'])->name('user.updateprofile');

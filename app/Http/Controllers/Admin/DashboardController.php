@@ -220,4 +220,161 @@ class DashboardController extends Controller
 
     }
 
+
+
+    public function gerarpdf(Request $request)
+    {
+        $ordenacao = $request->ordenacao ?? 'atividades.progresso';
+        $sentido =  $request->sentido ?? 'desc';
+
+        // Query de recuperação de registros
+        $obras = DB::table('obras')                                                                                 
+            ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')                                           
+            ->join('escolas', 'escolas.id', '=', 'obras.escola_id')                                                 
+            ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')                                                 
+            ->join('atividades', 'atividades.obra_id', '=', 'obras.id')                                             
+            ->join('regionais', 'regionais.id', '=', 'escolas.regional_id')                                         
+            ->join('municipios', 'municipios.id', '=', 'escolas.municipio_id')                                      
+            ->join('municipios AS municipiodaregional', 'municipiodaregional.regional_id', '=', 'regionais.id')     
+            ->join('obra_user', 'obra_user.obra_id', '=', 'obras.id')                                               
+            ->join('users', 'users.id', '=', 'obra_user.user_id')                                                   
+            ->join('objeto_obra', 'objeto_obra.obra_id', '=', 'obras.id')                                           
+            ->join('objetos', 'objetos.id', '=', 'objeto_obra.objeto_id')                                           
+
+            // Campos a serem recuperados
+            ->select(
+                'obras.id','obras.data_inicio AS datainicio','obras.data_fim AS datafim','obras.ativo',
+                'tipoobras.nome AS tipo',
+                'escolas.nome AS escola',
+                'estatus.id AS estatu', 'estatus.nome AS nomeestatus', 'estatus.cor',
+                'regionais.nome AS regional',
+                'municipios.nome AS municipio',
+                DB::raw('GROUP_CONCAT(DISTINCT users.nome SEPARATOR ", ") as responsaveis'),
+                DB::raw('GROUP_CONCAT(DISTINCT objetos.nome SEPARATOR ", ") as objetos'),
+                DB::raw('max(atividades.progresso) AS progressomaximo')
+            )
+
+            // Se os campos foram preenchidos, adicione à query já existente mais condições
+            ->when($request->has('tipoobra'), function($query) use($request) {
+                $query->where('tipoobras.nome', 'like', '%'. $request->tipoobra . '%');
+            })
+            ->when($request->has('objeto'), function($query) use($request) {
+                $query->where('objetos.nome', 'like', '%'. $request->objeto . '%');
+            })
+            ->when($request->has('regional'), function($query) use($request) {
+                $query->where('regionais.nome', 'like', '%'. $request->regional . '%');
+            })
+            ->when($request->has('municipio'), function($query) use($request) {
+                $query->where('municipios.nome', 'like', '%'. $request->municipio . '%');
+            })
+            ->when($request->has('user'), function($query) use($request) {
+                $query->where('users.nome', 'like', '%'. $request->user . '%');
+            })
+            ->when($request->has('estatu'), function($query) use($request) {
+                $query->where('estatus.nome', 'like', '%'. $request->estatu . '%');
+            })
+            ->when($request->filled('datainicio'), function($query) use($request) {
+                $query->where('obras.data_inicio', '>=', \Carbon\Carbon::parse($request->datainicio)->format('Y-m-d'));
+            })
+            ->when($request->filled('datafim'), function($query) use($request) {
+                $query->where('obras.data_fim', '<=', \Carbon\Carbon::parse($request->datafim)->format('Y-m-d'));
+            })
+
+        ->groupBy('atividades.obra_id')
+        ->orderBy($ordenacao, $sentido)     
+        ->get();
+        
+        // Evita o "estouro" de memória pela quantidade de registros recuperados
+        // Conta o total de registros
+        $totalRecords =  $obras->count('id');
+
+        // Verifica se a quantidade de registros ultrapassa o limite para gerar PDF
+        if($totalRecords > 2){
+            // Redireciona o usuárioe envia a mensagem de error
+            return redirect()->route('dashboard.index')->with('error', 'Limite de registro ultrapassado para gerar PDF. Refine sua pesquisa!');
+
+        } else {
+            // Inicio carregar Rel PDF FILTRO OBRAS
+
+            // Obtendo os dados
+            // $obras = Obra::orderBy('id')->get();
+
+            // Definindo o nome do arquivo a ser baixado
+            $fileName = ('Obrasfiltradas.pdf');
+
+            // Invocando a biblioteca mpdf e definindo as margens do arquivo
+            $mpdf = new \Mpdf\Mpdf([
+                'orientation' => 'L',
+                'margin_left' => 10,
+                'margin_right' => 10,
+                'margin_top' => 30,
+                'margin_bottom' => 15,
+                'margin-header' => 10,
+                'margin_footer' => 5
+            ]);
+
+            // Configurando o cabeçalho da página
+            $mpdf->SetHTMLHeader('
+                <table style="width:1080px; border-bottom: 1px solid #000000; margin-bottom: 3px;">
+                    <tr>
+                        <td style="width: 140px">
+                            <img src="images/logo_seduc2.png" width="120"/>
+                        </td>
+                        <td style="width: 400px; font-size: 10px; font-family: Arial, Helvetica, sans-serif;">
+                            Governo do Estado do Maranhão<br>
+                            Secretaria de Estado da Educação / SEDUC<br>
+                            Agência de Tecnologia da Informação / ATI<br>
+                            Acompanhamento de Execução de Obras
+                        </td>
+                        <td style="width: 540px;" class="titulo-rel">
+                            OBRAS FILTRADAS
+                        </td>
+                    </tr>
+                </table>
+                <table style="width:1080px; border-collapse: collapse">
+                    <tr>
+                        <td width="40px" class="col-header-table">ID</td>
+                        <td width="110px" class="col-header-table">TIPO</td>
+                        <td width="250px" class="col-header-table">ESCOLA</td>
+                        <td width="170px" class="col-header-table">OBJETOS</td>
+                        <td width="100px" class="col-header-table">REGIONAL</td>
+                        <td width="100px" class="col-header-table">REGIONAL</td>
+                        <td width="100px" class="col-header-table">RESPONSÁVEIS</td>
+                        <td width="140px" class="col-header-table">DATAs DE INÍCIO E FIM</td>
+                        <td width="70px" class="col-header-table">PROGRESSO</td>
+                    </tr>
+                </table>
+            ');
+
+            // Configurando o rodapé da página
+            $mpdf->SetHTMLFooter('
+                <table style="width:1080px; border-top: 1px solid #000000; font-size: 10px; font-family: Arial, Helvetica, sans-serif;">
+                    <tr>
+                        <td width="200px">São Luis(MA) {DATE d/m/Y}</td>
+                        <td width="830px" align="center"></td>
+                        <td width="50px" align="right">{PAGENO}/{nbpg}</td>
+                    </tr>
+                </table>
+            ');
+
+            // Definindo a view que deverá ser renderizada como arquivo .pdf e passando os dados da pesquisa
+            $html = \View::make('admin.dashboards.pdfs.pdf_list_filtroobras', compact('obras'));
+            $html = $html->render();
+
+            // Definindo o arquivo .css que estilizará o arquivo blade na view ('admin.users.pdfs.pdf_users')
+            $stylesheet = file_get_contents('css/pdf/mpdf.css');
+            $mpdf->WriteHTML($stylesheet, 1);
+
+            // Transformando a view blade em arquivo .pdf e enviando a saida para o browse (I); 'D' exibe e baixa para o pc
+            $mpdf->WriteHTML($html);
+            $mpdf->Output($fileName, 'I');  // Exibe o arquivo no browse   || $mpdf->Output($fileName, 'F');  Gera o arquivo na pasta pública
+
+            // Fim carregar Rel PDF FILTRO OBRAS
+
+        }
+
+        
+    }
+
+
 }
