@@ -83,7 +83,7 @@
                     <label id="ocultarExibirPaineldeFiltragem" style="cursor: pointer; font-size: 17px;"><i id="iconeVisao" class="{{ $flag != '' ? 'fa-solid fa-filter' : 'fas fa-eye-slash' }}" style=" margin-right: 5px;"></i>{{ $flag != '' ? "Filtro" : "Ocultar" }}</label>
                 </span>
                 <span>
-                    <a href="{{ route('dashboard.gerarpdf') }}" class="btn btn-light btn-sm me-1" style="margin-left: 10px" title="relatório PDF" target="_blank"><i class="bi bi-file-earmark-pdf-fill" style="font-size: 20px;"></i> PDF</a>
+                    {{-- <a href="{{ route('dashboard.gerarpdf') }}" class="btn btn-light btn-sm me-1" style="margin-left: 10px" title="relatório PDF" target="_blank"><i class="bi bi-file-earmark-pdf-fill" style="font-size: 20px;"></i> PDF</a> --}}
                 </span>
             </div>
 
@@ -91,7 +91,7 @@
             <div class="mt-1 mb-4 shadow card border-light" id="formularioFiltragem" style="display: {{ $flag }}">
 
                 <div class="card-body">
-                    <form action="{{ route('dashboard.index') }}">
+                    <form action="{{ route('dashboard.index') }}" id="formfiltro">
                         <div class="mb-3 row">
 
                             {{-- tipoobra --}}
@@ -226,14 +226,13 @@
                                     </select>
                                 </div>
                             </div>
-            
+
                             <div class="pt-3 col-md-1 col-sm-12">
                                 <div style="margin-top:15px;">
                                     <button type="submit" name="pesquisar" value="stoped" id="btnpesquisar" class="btn btn-outline-secondary float-end"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar</button>
+                                    {{-- <button type="submit" name="pesquisar" value="stoped" id="btnpesquisarpdf" class="btn btn-outline-secondary"><i class="fa-solid fa-file-pdf"></i></button> --}}
                                 </div>
                             </div>
-
-
                         </div>
                     </form>
                 </div>
@@ -249,7 +248,7 @@
                 <x-errorexception />
 
                 <table class="table table-striped table-hover">
-                    <thead>
+                    <thead class="table-light border">
                         <tr>
                             <th>Id</th>
                             <th>Tipo</th>
@@ -260,10 +259,13 @@
                             <th>Responsáveis</th>
                             <th>Prazo</th>
                             <th style="width: 20%">Progresso</th>
-                            <th> </th>
+                            <th>
+                                <a href="{{ url('index-dashboard/gerarpdf?' . request()->getQueryString()) }}" class="btn btn-outline-secondary btn-sm ms-1" title="relatório PDF da pesquisa">
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                </a>
+                            </th>
                         </tr>
                     </thead>
-
                     <tbody>
                         @forelse ($obras as $obra)
                             <tr>
@@ -343,5 +345,11 @@
             $("#data_cadastro_inicio").val("");
             $("#data_cadastro_fim").val("");
         }
+
+        // $("#btnpesquisarpdf").click(function() {
+        //     alert("Submeter o formulario para a rota de GERAR PDF");
+        //     $("#formfiltro").prop("action", "{{ route('dashboard.gerarpdf') }}");
+        //     $("#formfiltro").submit();
+        // });
     </script>
 @endsection

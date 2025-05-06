@@ -54,4 +54,17 @@
 
 @endif
 
+{{-- Mensagens de aviso especifico para geração de relatório PDF no Dashboard --}}
+@if (session('warningpdf'))
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Swal.fire({
+                title: "Aviso!",
+                html: '{{ session('warningpdf') }}',
+                icon: 'warning'
+            });
+        })
+    </script>
+@endif
+
 

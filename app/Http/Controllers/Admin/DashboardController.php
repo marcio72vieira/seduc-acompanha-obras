@@ -221,25 +221,24 @@ class DashboardController extends Controller
     }
 
 
-
     public function gerarpdf(Request $request)
     {
         $ordenacao = $request->ordenacao ?? 'atividades.progresso';
         $sentido =  $request->sentido ?? 'desc';
 
         // Query de recuperação de registros
-        $obras = DB::table('obras')                                                                                 
-            ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')                                           
-            ->join('escolas', 'escolas.id', '=', 'obras.escola_id')                                                 
-            ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')                                                 
-            ->join('atividades', 'atividades.obra_id', '=', 'obras.id')                                             
-            ->join('regionais', 'regionais.id', '=', 'escolas.regional_id')                                         
-            ->join('municipios', 'municipios.id', '=', 'escolas.municipio_id')                                      
-            ->join('municipios AS municipiodaregional', 'municipiodaregional.regional_id', '=', 'regionais.id')     
-            ->join('obra_user', 'obra_user.obra_id', '=', 'obras.id')                                               
-            ->join('users', 'users.id', '=', 'obra_user.user_id')                                                   
-            ->join('objeto_obra', 'objeto_obra.obra_id', '=', 'obras.id')                                           
-            ->join('objetos', 'objetos.id', '=', 'objeto_obra.objeto_id')                                           
+        $obras = DB::table('obras')
+            ->join('tipoobras', 'tipoobras.id', '=', 'obras.tipoobra_id')
+            ->join('escolas', 'escolas.id', '=', 'obras.escola_id')
+            ->join('estatus', 'estatus.id', '=', 'obras.estatu_id')
+            ->join('atividades', 'atividades.obra_id', '=', 'obras.id')
+            ->join('regionais', 'regionais.id', '=', 'escolas.regional_id')
+            ->join('municipios', 'municipios.id', '=', 'escolas.municipio_id')
+            ->join('municipios AS municipiodaregional', 'municipiodaregional.regional_id', '=', 'regionais.id')
+            ->join('obra_user', 'obra_user.obra_id', '=', 'obras.id')
+            ->join('users', 'users.id', '=', 'obra_user.user_id')
+            ->join('objeto_obra', 'objeto_obra.obra_id', '=', 'obras.id')
+            ->join('objetos', 'objetos.id', '=', 'objeto_obra.objeto_id')
 
             // Campos a serem recuperados
             ->select(
@@ -281,22 +280,21 @@ class DashboardController extends Controller
             })
 
         ->groupBy('atividades.obra_id')
-        ->orderBy($ordenacao, $sentido)     
+        ->orderBy($ordenacao, $sentido)
         ->get();
-        
-        // Evita o "estouro" de memória pela quantidade de registros recuperados
-        // Conta o total de registros
+
+        // Evita o "estouro" de memória pela quantidade de registros recuperados a partir do total registros recuperados
         $totalRecords =  $obras->count('id');
 
-        // Verifica se a quantidade de registros ultrapassa o limite para gerar PDF
+        // Verifica se a quantidade de registros retorndos, ultrapassa o limite estabelecido para gerar o relatório PDF
         if($totalRecords > 2){
-            // Redireciona o usuárioe envia a mensagem de error
-            return redirect()->route('dashboard.index')->with('error', 'Limite de registro ultrapassado para gerar PDF. Refine sua pesquisa!');
+            // Redireciona o usuário e envia a mensagem de error
+            return redirect()->route('dashboard.index')->with('warningpdf', 'Limite de registro ultrapassado. Refine sua pesquisa!');
 
         } else {
             // Inicio carregar Rel PDF FILTRO OBRAS
 
-            // Obtendo os dados
+            // Obtendo os dados. Os dados já foram obtidos na Query anterior: $obras = DB::table('obras')->join...
             // $obras = Obra::orderBy('id')->get();
 
             // Definindo o nome do arquivo a ser baixado
@@ -327,7 +325,7 @@ class DashboardController extends Controller
                             Acompanhamento de Execução de Obras
                         </td>
                         <td style="width: 540px;" class="titulo-rel">
-                            OBRAS FILTRADAS
+                            OBRAS
                         </td>
                     </tr>
                 </table>
@@ -373,7 +371,7 @@ class DashboardController extends Controller
 
         }
 
-        
+
     }
 
 
