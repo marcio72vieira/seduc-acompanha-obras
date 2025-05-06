@@ -267,9 +267,10 @@ class RegionalController extends Controller
             <table style="width:1080px; border-collapse: collapse">
                 <tr>
                     <td width="40px" class="col-header-table">ID</td>
-                    <td width="790px" class="col-header-table">NOME</td>
+                    <td width="690px" class="col-header-table">NOME</td>
                     <td width="50px" class="col-header-table">ATIVO</td>
                     <td width="100px" class="col-header-table">ESCOLAS</td>
+                    <td width="100px" class="col-header-table">OBRAS</td>
                     <td width="100px" class="col-header-table">CADASTRO</td>
                 </tr>
             </table>
