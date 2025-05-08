@@ -287,7 +287,7 @@ class DashboardController extends Controller
         $totalRecords =  $obras->count('id');
 
         // Verifica se a quantidade de registros retorndos, ultrapassa o limite estabelecido para gerar o relatório PDF
-        if($totalRecords > 2){
+        if($totalRecords > 200){
             // Redireciona o usuário e envia a mensagem de error
             return redirect()->route('dashboard.index')->with('warningpdf', 'Limite de registro ultrapassado. Refine sua pesquisa!');
 

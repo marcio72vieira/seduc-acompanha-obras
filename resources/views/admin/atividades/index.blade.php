@@ -6,6 +6,8 @@
         <h1 class="mt-3">Registro de Atividades</h1>
     </div>
 
+    <x-alert />
+
     <div class="mt-4 row ">
         <div class="col-xl-3 col-md-6">
             @forelse ($obras as $obra)

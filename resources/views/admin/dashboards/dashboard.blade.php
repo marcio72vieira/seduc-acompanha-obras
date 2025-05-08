@@ -168,6 +168,7 @@
                                     <select name="estatu" id="estatu" class="form-control select2">
                                         <option value="">Escolha...</option>
                                         @foreach($estatus  as $estatu)
+                                            @if($estatu->id == 1) @continue @endif
                                             <option value="{{ $estatu->nome }}">{{$estatu->nome}}</option>
                                         @endforeach
                                     </select>
@@ -199,6 +200,7 @@
                                             <option value="regionais.nome">Regional</option>
                                             <option value="municipios.nome">Município</option>
                                             <option value="users.nome">Responsável</option>
+                                            <option value="estatus.id">Estatu</option>
                                     </select>
                                 </div>
                             </div>

@@ -1186,7 +1186,7 @@
 
         MAIL_MAILER=seatimail
         ATI_MAIL_URL="https://ext.api.email.seati.ma.gov.br/api/mensagens/enviar"
-        ATI_MAIL_API_KEY="c2VtdS5hbHVndWVsOiQyYSQxMiRaR29XZWxuaC9XazhRMUQwT1gzS0YuL0NPUFEwdDlBZFlVN3A4QnZtdjZMRHFPVmJnSlmrcFVVw=="
+        ATI_MAIL_API_KEY="b2JyYXMuc2VkdWM6JDJhJDEyJGVqaXZOdEMzWUNGMmsxYzFta0Y1NGVFb1lROEtXOGZWNGk5SXJGOXRWM2NCRmxGSndQSGV5mrc"
         MAIL_USERNAME=marcio.nonato
         MAIL_PASSWORD=mrcthlvec1@Od14PR#24c$l
         MAIL_ENCRYPTION=null

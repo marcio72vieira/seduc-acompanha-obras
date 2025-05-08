@@ -131,8 +131,13 @@
                         <div class="col-sm-2"></div>
                         <div class="col-sm-10">
                             <div style="margin-top: 15px">
-                                {{-- <a class="btn btn-outline-secondary" href="{{ url()->previous() }}" role="button">Cancelar</a> --}}
-                                <a class="btn btn-outline-secondary" href="{{ route('atividade.index') }}" role="button">Cancelar</a>
+                                {{-- <a class="btn btn-outline-secondary" href="{{ url()->previous() }}" role="button">Retornar</a> --}}
+                                @if (Auth::user()->perfil == "adm")
+                                    <a class="btn btn-outline-secondary" href="{{ route('dashboard.index') }}" role="button">Cancelar</a>
+                                @else
+                                    <a class="btn btn-outline-secondary" href="{{ route('atividade.index') }}" role="button">Cancelar</a>
+                                @endif
+
                                 <button type="submit" class="btn btn-primary" style="width: 95px;"> Salvar </button>
                             </div>
                         </div>

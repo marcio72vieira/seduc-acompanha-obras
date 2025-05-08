@@ -180,7 +180,14 @@ class UserController extends Controller
                 'primeiroacesso' => $defAcesso
             ]);
 
-            return  redirect()->route('user.editprofile', ['user' => $user->id])->with('success', 'Seus Dados foram editados com sucesso!');
+            //return  redirect()->route('user.editprofile', ['user' => $user->id])->with('success', 'Seus Dados foram editados com sucesso!');
+
+            // Se o usuário for administrador, redireciona o mesmo para o Dashboard, caso contrário(consultor ou operador), redireciona para a área de registro de atividades
+            if(Auth::user()->perfil == "adm"){
+                return  redirect()->route('dashboard.index')->with('success', 'Perfil editado com sucesso!');
+            }else{
+                return  redirect()->route('atividade.index')->with('success', 'Perfil editado com sucesso!');
+            }
 
         } catch(Exception $e) {
 
