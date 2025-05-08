@@ -1,6 +1,6 @@
 <?php
 
-namespace App\SeatiMail\Transport;
+namespace App\AtiMail\Transport;
 
 use Exception;
 use GuzzleHttp\ClientInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\Mailer\Transport\AbstractTransport;
 use Symfony\Component\Mime\MessageConverter;
 use Throwable;
 
-class SeatiMailTransport extends AbstractTransport
+class AtiMailTransport extends AbstractTransport
 {
     protected ClientInterface $client;
 
@@ -55,13 +55,14 @@ class SeatiMailTransport extends AbstractTransport
         } catch (Throwable $throwable) {
             Log::error($throwable->getMessage());
             throw new Exception(
-                sprintf('A solicitação para a API da SEATI falhou. Razão: %s.', $throwable->getMessage()),
+                sprintf('A solicitação para a API da ATI falhou. Razão: %s.', $throwable->getMessage()),
                 is_int($throwable->getCode()) ? $throwable->getCode() : 0,
                 $throwable
             );
         }
     }
 
+    /* ORIGINAL 
     protected function prepareAttachments(array $attachments): array
     {
         $anexos = [];
@@ -79,9 +80,25 @@ class SeatiMailTransport extends AbstractTransport
 
         return $anexos;
     }
+    */
+
+    // Modificado por mim em 07/05/2025
+    protected function prepareAttachments(array $attachments): array
+    {
+        $anexos = [];
+
+        foreach ($attachments as $attachment) {
+            $anexos[] = [
+                'nome' => $attachment->getName(),
+                'conteudo' => base64_encode($attachment->getBody()),
+            ];
+        }
+
+        return $anexos;
+    }
 
     public function __toString(): string
     {
-        return 'seatimail';
+        return 'atimail';
     }
 }

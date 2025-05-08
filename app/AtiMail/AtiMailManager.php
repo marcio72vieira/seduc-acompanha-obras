@@ -1,19 +1,19 @@
 <?php
 
-namespace App\SeatiMail;
+namespace App\AtiMail;
 
-use App\SeatiMail\Transport\SeatiMailTransport;
+use App\AtiMail\Transport\AtiMailTransport;
 use GuzzleHttp\Client as HttpClient;
 use Illuminate\Mail\MailManager;
 use Illuminate\Support\Arr;
 
-class SeatiMailManager extends MailManager
+class AtiMailManager extends MailManager
 {
-    protected function createSeatiMailTransport()
+    protected function createAtiMailTransport()
     {
-        $config = $this->app['config']->get('services.seatimail', []);
+        $config = $this->app['config']->get('services.atimail', []);
 
-        return new SeatiMailTransport(
+        return new AtiMailTransport(
             $this->guzzle($config),
             $config['url'],
             $config['key'],

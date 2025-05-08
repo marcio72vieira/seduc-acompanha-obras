@@ -61,19 +61,19 @@ Route::group(['middleware' => 'auth'], function(){
 
 
     // Acesso a todos que estiverem autenticados: Administradores, Consultores e Operadores. Todos poderão alterar seus respectivos perfis
-    // DASHBOARD
-    Route::get('/index-dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::get('/index-dashboard/gerarexcel', [DashboardController::class, 'gerarexcel'])->name('dashboard.gerarexcel');
-    Route::get('/index-dashboard/gerarpdf', [DashboardController::class, 'gerarpdf'])->name('dashboard.gerarpdf');
-
+    
+    // PROFILE
     Route::get('/edit-profile-user', [UserController::class, 'editprofile'])->name('user.editprofile');
     Route::put('/update-profile-user/{user}', [UserController::class, 'updateprofile'])->name('user.updateprofile');
 
-    Route::get('/ajaxgetusers-dashboard', [DashboardController::class, 'ajaxgetusers'])->name('dashboard.ajaxgetusers');
-
-
     // Acesso apenas a usuários Admnistradores (onlyAdm)
     Route::group(['middleware' => 'can:onlyAdm'], function(){
+
+        // DASHBOARD
+        Route::get('/index-dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('/index-dashboard/gerarexcel', [DashboardController::class, 'gerarexcel'])->name('dashboard.gerarexcel');
+        Route::get('/index-dashboard/gerarpdf', [DashboardController::class, 'gerarpdf'])->name('dashboard.gerarpdf');
+        Route::get('/ajaxgetusers-dashboard', [DashboardController::class, 'ajaxgetusers'])->name('dashboard.ajaxgetusers');        
 
         // USUÁRIO
         Route::get('/index-user', [UserController::class, 'index'])->name('user.index');

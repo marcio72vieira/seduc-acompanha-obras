@@ -180,7 +180,7 @@ class UserController extends Controller
                 'primeiroacesso' => $defAcesso
             ]);
 
-            return  redirect()->route('user.editprofile', ['user' => $user->id])->with('success', 'Seu Perfil foi editado com sucesso!');
+            return  redirect()->route('user.editprofile', ['user' => $user->id])->with('success', 'Seus Dados foram editados com sucesso!');
 
         } catch(Exception $e) {
 

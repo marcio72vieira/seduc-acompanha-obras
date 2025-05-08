@@ -49,9 +49,16 @@ return [
             'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
         ],
 
+        /* 
         // Acrescentado por mim em 14/03/2025
         'seatimail' => [
             'transport' => 'seatimail',
+        ], 
+        */
+
+        // Acrescentado por mim em 07/05/2025
+        'atimail' => [
+            'transport' => 'atimail',
         ],
 
 
