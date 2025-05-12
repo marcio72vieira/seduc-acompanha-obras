@@ -1,27 +1,12 @@
 <?php
 
-namespace App\Infrastructure\Providers;
+namespace App\Providers;
 
 use App\AtiMail\AtiMailManager;
 use Illuminate\Mail\MailServiceProvider;
 
 class AtiMailServiceProvider extends MailServiceProvider
 {
-    /**
-     * Register services.
-     */
-    public function register(): void
-    {
-        //
-    }
-
-    /**
-     * Bootstrap services.
-     */
-    public function boot(): void
-    {
-        //
-    }
 
     protected function registerIlluminateMailer()
     {

@@ -15,12 +15,13 @@ use App\Http\Controllers\Admin\ObraController;
 use App\Http\Controllers\Admin\AtividadeController;
 use App\Http\Controllers\Admin\ProgramaController;
 use App\Http\Controllers\Admin\DatatableController;
+use Illuminate\Support\Facades\Mail;
 
 //---------------------------------------
 //     ROTAS TESTE ENVIO DE EMAIL      //
 //---------------------------------------
 Route::get('enviaremail', function() {
-    $destinatario = 'diego.cicero@seati.ma.gov.br';
+    $destinatario = 'marcio@ati.ma.gov.br';
     $mensagem = "Olá, este é um e-mail de teste apenas em texto!";
 
     Mail::raw($mensagem, function ($message) use ($destinatario) {
@@ -61,7 +62,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 
     // Acesso a todos que estiverem autenticados: Administradores, Consultores e Operadores. Todos poderão alterar seus respectivos perfis
-    
+
     // PROFILE
     Route::get('/edit-profile-user', [UserController::class, 'editprofile'])->name('user.editprofile');
     Route::put('/update-profile-user/{user}', [UserController::class, 'updateprofile'])->name('user.updateprofile');
@@ -73,7 +74,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/index-dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
         Route::get('/index-dashboard/gerarexcel', [DashboardController::class, 'gerarexcel'])->name('dashboard.gerarexcel');
         Route::get('/index-dashboard/gerarpdf', [DashboardController::class, 'gerarpdf'])->name('dashboard.gerarpdf');
-        Route::get('/ajaxgetusers-dashboard', [DashboardController::class, 'ajaxgetusers'])->name('dashboard.ajaxgetusers');        
+        Route::get('/ajaxgetusers-dashboard', [DashboardController::class, 'ajaxgetusers'])->name('dashboard.ajaxgetusers');
 
         // USUÁRIO
         Route::get('/index-user', [UserController::class, 'index'])->name('user.index');
