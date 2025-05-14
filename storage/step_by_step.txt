@@ -1,3 +1,36 @@
+***************************************
+*   CONSTRUINDO UM HELP PERSONALIZDO  *
+***************************************
+1   -   Site de Referência: https://privatecode.com.br/blog/criando-helpers-no-laravel
+2   -   Crie um arquivo de nome Helper.php dentro de uma pasta por nome Helpers dentro de app como descrito abaixo:
+        (app/Helpers/Helper.php)
+3   -   No arquivo Helper.php coloque um código como descrito abaixo, para transformar a data no formato americano (BD) para o
+        formato brasileiro, ou seja, yyyy-mm-dd para dd/mm/aaaa. 'mrc_turn_data' é o nome do helper a ser invocado ao longo da
+        aplicação do Laravel.
+
+        <?php
+            if (!function_exists('mrc_turn_data')) {
+
+                function mrc_turn_data($dataBd)
+                {
+                    $dataTurn = implode('/', array_reverse(array_merge(explode('-', $dataBd))));
+                    return $dataTurn;
+                }
+            }
+
+4   -   Altere/Acrescente a propriedade "files" na propriedade "autoload" do arquivo composer.json indicando o caminho do Helper.php
+        criado recentemente, conforme abaixo
+        "autoload": {
+            "files": [
+                "app/Helpers/Helper.php"
+            ],
+        "psr-4": {
+
+5   -   Execute o comando: composer dump-autoload
+6   -   Faça uso do helper em qualquer arquivo blade conforme descrito abaixo:
+        {{mrc_turn_data($compra->data_ini)}}
+
+
 ****************************************************
 * ARQUIVOS MODIFIDADOS PARA FUNCIONAMENTO DE EMAIL *
 ****************************************************

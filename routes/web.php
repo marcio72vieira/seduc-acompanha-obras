@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ObraController;
 use App\Http\Controllers\Admin\AtividadeController;
 use App\Http\Controllers\Admin\ProgramaController;
 use App\Http\Controllers\Admin\DatatableController;
+use App\Http\Controllers\Admin\MonitorController;
 use Illuminate\Support\Facades\Mail;
 
 //---------------------------------------
@@ -75,6 +76,10 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/index-dashboard/gerarexcel', [DashboardController::class, 'gerarexcel'])->name('dashboard.gerarexcel');
         Route::get('/index-dashboard/gerarpdf', [DashboardController::class, 'gerarpdf'])->name('dashboard.gerarpdf');
         Route::get('/ajaxgetusers-dashboard', [DashboardController::class, 'ajaxgetusers'])->name('dashboard.ajaxgetusers');
+
+
+        // Monitor
+        Route::get('/index-monitor', [MonitorController::class, 'index'])->name('monitor.index');
 
         // USUÁRIO
         Route::get('/index-user', [UserController::class, 'index'])->name('user.index');
