@@ -12,12 +12,9 @@
         {{-- Inicio filtro e tabela de obras --}}
         <div class="mb-4 shadow card border-light">
             <div class="gap-2 card-header hstack">
-                <span style="font-size: 15px;"><strong><i class="fa-solid fa-business-time"></i> MONITORAMENTO DO REGISTRO DE ATIVIDADES</strong></span>
+                <span style="font-size: 15px;"><strong><i class="fa-solid fa-business-time"></i> MONITORAMENTO DO PERÍODO DE ATIVIDADE E INATIVIDADE REGISTRADA</strong></span>
                 <span class="flex-row mt-1 mb-1 ms-auto d-sm-flex">
                     <label id="ocultarExibirPaineldeFiltragem" style="cursor: pointer; font-size: 17px;"><i id="iconeVisao" class="{{ $flag != '' ? 'fa-solid fa-filter' : 'fas fa-eye-slash' }}" style=" margin-right: 5px;"></i>{{ $flag != '' ? "Filtro" : "Ocultar" }}</label>
-                </span>
-                <span>
-                    {{-- <a href="{{ route('dashboard.gerarpdf') }}" class="btn btn-light btn-sm me-1" style="margin-left: 10px" title="relatório PDF" target="_blank"><i class="bi bi-file-earmark-pdf-fill" style="font-size: 20px;"></i> PDF</a> --}}
                 </span>
             </div>
 
@@ -25,7 +22,7 @@
             <div class="mt-1 mb-4 shadow card border-light" id="formularioFiltragem" style="display: {{ $flag }}">
 
                 <div class="card-body">
-                    <form action="{{ route('dashboard.index') }}" id="formfiltro">
+                    <form action="{{ route('monitor.index') }}" id="formfiltro">
                         <div class="mb-3 row">
 
                             {{-- tipoobra --}}
@@ -191,8 +188,9 @@
                             <th>Obra</th>
                             <th>Município</th>
                             <th>Responsáveis</th>
-                            <th>Contato</th>
-                            <th>Última Atividade Registrada</th>
+                            <th>Contatos</th>
+                            <th>Atividade</th>
+                            <th>Inatividade</th>
                             <th style="width: 20%">Progresso</th>
                             <th>
                                 <a href="{{ url('index-dashboard/gerarpdf?' . request()->getQueryString()) }}" class="btn btn-outline-secondary btn-sm ms-1" title="relatório PDF da pesquisa">
@@ -210,7 +208,8 @@
                                 <td>{{ $obra->municipio }}</td>
                                 <td>{{ $obra->responsaveis }}</td>
                                 <td>{{ $obra->contato }}</td>
-                                <td>{{  mrc_calc_time(\Carbon\Carbon::parse($obra->datainicio)->format('Y/m/d')) }}</td>
+                                <td>{{ \Carbon\Carbon::parse($obra->registromaisrecente)->format('d/m/Y') }}</td>
+                                <td>{{ mrc_calc_time(\Carbon\Carbon::parse($obra->registromaisrecente)->format('Y/m/d')) }}</td>
                                 <td>
                                     <div class="progress border" style="height: 30px;" title="{{ $obra->nomeestatus }}">
                                         <div class="progress-bar {{ $obra->ativo == 1 ? 'progress-bar-striped progress-bar-animated' : '' }}" role="progressbar" aria-valuenow="{{ $obra->progressomaximo }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
@@ -219,7 +218,7 @@
                                     </div>
                                 </td>
                                 <td style="text-align: center">
-                                    <a class="btn btn-outline-secondary" href="{{ route('atividade.relpdfatividade', ['obra' => $obra->id]) }}" role="button" title="atividades" target="_blank"><i class="fa-solid fa-list-check"></i></a>
+                                    <a class="btn btn-outline-secondary" href="{{ route('obra.edit', ['obra' => $obra->id]) }}" role="button" title="ativar desativar obra"><i class="fa-solid fa-circle-stop"></i></a>
                                 </td>
                             </tr>
                         @empty
@@ -236,8 +235,6 @@
 
         </div>
         {{-- Fim filtro e tabela de obras --}}
-
-
 
     </div>
 @endsection

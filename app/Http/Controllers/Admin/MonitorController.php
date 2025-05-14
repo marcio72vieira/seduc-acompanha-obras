@@ -93,7 +93,8 @@ class MonitorController extends Controller
                 'municipios.nome AS municipio',
                 DB::raw('GROUP_CONCAT(DISTINCT users.nome SEPARATOR ", ") as responsaveis, GROUP_CONCAT(DISTINCT users.fone SEPARATOR ", ") as contato'),
                 DB::raw('GROUP_CONCAT(DISTINCT objetos.nome SEPARATOR ", ") as objetos'),
-                DB::raw('max(atividades.progresso) AS progressomaximo')
+                DB::raw('max(atividades.progresso) AS progressomaximo'),
+                DB::raw('max(atividades.updated_at) AS registromaisrecente')
             )
 
             // Se os campos foram preenchidos, adicione à query já existente mais condições
@@ -140,5 +141,5 @@ class MonitorController extends Controller
             'estatuscards', 'estatus', 'flag',
             'obras', 'tipoobras', 'objetos', 'regionais', 'municipios', 'users'
         ));
-    }    
+    }
 }
