@@ -20,6 +20,20 @@ if (!function_exists('mrc_calc_time')) {
     }
 }
 
+if (!function_exists('mrc_calc_time_days')) {
+
+    function mrc_calc_time_days($dataStart)
+    {
+        $dataStart = strtotime($dataStart);
+        $dateEnd = strtotime(date('Y-m-d'));
+
+        $datadiff = abs(($dateEnd) - ($dataStart));
+        $days = floor($datadiff / (60*60*24));
+
+        return $days;
+    }
+}
+
 
 if (!function_exists('mrc_turn_data')) {
 

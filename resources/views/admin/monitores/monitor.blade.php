@@ -12,7 +12,7 @@
         {{-- Inicio filtro e tabela de obras --}}
         <div class="mb-4 shadow card border-light">
             <div class="gap-2 card-header hstack">
-                <span style="font-size: 15px;"><strong><i class="fa-solid fa-business-time"></i> MONITORAMENTO DO PERÍODO DE ATIVIDADE E INATIVIDADE REGISTRADA</strong></span>
+                <span style="font-size: 15px;"><strong><i class="fa-solid fa-business-time"></i> MONITORAMENTO DO REGISTRO DE ATIVIDADE E INATIVIDADE</strong></span>
                 <span class="flex-row mt-1 mb-1 ms-auto d-sm-flex">
                     <label id="ocultarExibirPaineldeFiltragem" style="cursor: pointer; font-size: 17px;"><i id="iconeVisao" class="{{ $flag != '' ? 'fa-solid fa-filter' : 'fas fa-eye-slash' }}" style=" margin-right: 5px;"></i>{{ $flag != '' ? "Filtro" : "Ocultar" }}</label>
                 </span>
@@ -188,9 +188,9 @@
                             <th>Obra</th>
                             <th>Município</th>
                             <th>Responsáveis</th>
-                            <th>Contatos</th>
                             <th>Atividade</th>
                             <th>Inatividade</th>
+                            <th>Dias</th>
                             <th style="width: 20%">Progresso</th>
                             <th>
                                 <a href="{{ url('index-dashboard/gerarpdf?' . request()->getQueryString()) }}" class="btn btn-outline-secondary btn-sm ms-1" title="relatório PDF da pesquisa">
@@ -206,10 +206,10 @@
                                 <td>{{ $obra->tipo }}</th>
                                 <td>{{ $obra->escola }}</td>
                                 <td>{{ $obra->municipio }}</td>
-                                <td>{{ $obra->responsaveis }}</td>
-                                <td>{{ $obra->contato }}</td>
+                                <td>{{ $obra->responsaveiscontato }}</td>
                                 <td>{{ \Carbon\Carbon::parse($obra->registromaisrecente)->format('d/m/Y') }}</td>
                                 <td>{{ mrc_calc_time(\Carbon\Carbon::parse($obra->registromaisrecente)->format('Y/m/d')) }}</td>
+                                <td>{{ mrc_calc_time_days(\Carbon\Carbon::parse($obra->registromaisrecente)->format('Y/m/d')) }}</td>
                                 <td>
                                     <div class="progress border" style="height: 30px;" title="{{ $obra->nomeestatus }}">
                                         <div class="progress-bar {{ $obra->ativo == 1 ? 'progress-bar-striped progress-bar-animated' : '' }}" role="progressbar" aria-valuenow="{{ $obra->progressomaximo }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
