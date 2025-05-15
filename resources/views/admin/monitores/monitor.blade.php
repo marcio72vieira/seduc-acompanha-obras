@@ -12,7 +12,7 @@
         {{-- Inicio filtro e tabela de obras --}}
         <div class="mb-4 shadow card border-light">
             <div class="gap-2 card-header hstack">
-                <span style="font-size: 15px;"><strong><i class="fa-solid fa-business-time"></i> MONITORAMENTO DO REGISTRO DE ATIVIDADE E INATIVIDADE</strong></span>
+                <span style="font-size: 15px;"><strong><i class="fa-solid fa-business-time"></i> MONITORAMENTO DO REGISTRO DE ATIVIDADES</strong></span>
                 <span class="flex-row mt-1 mb-1 ms-auto d-sm-flex">
                     <label id="ocultarExibirPaineldeFiltragem" style="cursor: pointer; font-size: 17px;"><i id="iconeVisao" class="{{ $flag != '' ? 'fa-solid fa-filter' : 'fas fa-eye-slash' }}" style=" margin-right: 5px;"></i>{{ $flag != '' ? "Filtro" : "Ocultar" }}</label>
                 </span>
@@ -188,9 +188,10 @@
                             <th>Obra</th>
                             <th>Município</th>
                             <th>Responsáveis</th>
-                            <th>Atividade</th>
-                            <th>Inatividade</th>
-                            <th>Dias</th>
+                            {{-- <th>Atividade</th> --}}
+                            {{-- <th>Inatividade</th> --}}
+                            <th>Registro</th>
+                            <th>Signal</th>
                             <th style="width: 20%">Progresso</th>
                             <th>
                                 <a href="{{ url('index-dashboard/gerarpdf?' . request()->getQueryString()) }}" class="btn btn-outline-secondary btn-sm ms-1" title="relatório PDF da pesquisa">
@@ -207,9 +208,31 @@
                                 <td>{{ $obra->escola }}</td>
                                 <td>{{ $obra->municipio }}</td>
                                 <td>{{ $obra->responsaveiscontato }}</td>
-                                <td>{{ \Carbon\Carbon::parse($obra->registromaisrecente)->format('d/m/Y') }}</td>
-                                <td>{{ mrc_calc_time(\Carbon\Carbon::parse($obra->registromaisrecente)->format('Y/m/d')) }}</td>
-                                <td>{{ mrc_calc_time_days(\Carbon\Carbon::parse($obra->registromaisrecente)->format('Y/m/d')) }}</td>
+                                {{-- <td>{{ \Carbon\Carbon::parse($obra->registromaisrecente)->format('d/m/Y') }}</td> --}}
+                               {{--  <td>{{ mrc_calc_time(\Carbon\Carbon::parse($obra->registromaisrecente)->format('Y/m/d')) }}</td> --}}
+                                <td>
+                                    {{ \Carbon\Carbon::parse($obra->registromaisrecente)->format('d/m/Y') }}
+                                    <br>
+                                    {{ mrc_calc_time_days(\Carbon\Carbon::parse($obra->registromaisrecente)->format('Y/m/d')) }}
+                                </td>
+                                <td>
+                                    @php
+                                        $qtdias = mrc_calc_time_days($obra->registromaisrecente);
+                                        if($qtdias <= 7){
+                                            $signal = 'lightgreen.png';
+                                        }elseif(($qtdias > 7) && ($qtdias <= 11)){
+                                            $signal = 'lightyellow.png';
+                                        }elseif($qtdias >= 12){
+                                            $signal = 'lightred.png';
+                                        }
+                                    @endphp
+                                    <img src="{{ asset('images/'.$signal) }}" height="35" style="margin-left: 15px;">
+
+                                    {{-- @if($qtdias <= 7) <img src="{{ asset('images/lightgreen.png') }}" height="35" style="margin-left: 15px;"> @endif
+                                    @if (($qtdias >= 8) && ($qtdias <= 11)) <img src="{{ asset('images/lightyellow.png') }}" height="35" style="margin-left: 15px;"> @endif
+                                    @if($qtdias >= 12) <img src="{{ asset('images/lightred.png') }}" height="35" style="margin-left: 15px;"> @endif --}}
+
+                                </td>
                                 <td>
                                     <div class="progress border" style="height: 30px;" title="{{ $obra->nomeestatus }}">
                                         <div class="progress-bar {{ $obra->ativo == 1 ? 'progress-bar-striped progress-bar-animated' : '' }}" role="progressbar" aria-valuenow="{{ $obra->progressomaximo }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
@@ -229,8 +252,6 @@
 
                 {{-- $obras->links() --}}
                 {{ $obras->appends(request()->all())->onEachSide(0)->links() }}
-
-
             </div>
 
         </div>
