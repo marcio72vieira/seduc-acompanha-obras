@@ -91,15 +91,16 @@ class MonitorController extends Controller
                 'estatus.id AS estatu', 'estatus.nome AS nomeestatus', 'estatus.cor',
                 'regionais.nome AS regional',
                 'municipios.nome AS municipio',
-                // Agrupa várias linhas de forma distinta referente ao usuário e ao fone em um só campo, no caso: responsáveis e contato
+                // Agrupa várias linhas referente ao usuário e ao fone em um só campo, no caso: responsáveis e contato, de forma distinta, ou seja, sem repetir o registro
                 //DB::raw('GROUP_CONCAT(DISTINCT users.nome SEPARATOR ", ") as responsaveis, GROUP_CONCAT(DISTINCT users.fone SEPARATOR ", ") as contato'),
                 // Concatena dois campos da tabela em um só e o nomeia para responsáveis
                 //DB::raw('CONCAT(users.nome, " ", users.fone) responsaveis'),
                 // Concatena nome e fone separados por "espaço em branco" e agrupa os vários registro de forma distinta seprados por "vírgula"
                 DB::raw('GROUP_CONCAT(DISTINCT CONCAT(users.nome, " ", users.fone) SEPARATOR ", " ) as responsaveiscontato'),
+                // Agrupa várias linhas do campo objeto referente ao registro da obra corrente, de forma distinta.
                 DB::raw('GROUP_CONCAT(DISTINCT objetos.nome SEPARATOR ", ") as objetos'),
                 DB::raw('max(atividades.progresso) AS progressomaximo'),
-                DB::raw('max(atividades.updated_at) AS registromaisrecente')
+                DB::raw('max(DATE(atividades.updated_at)) AS registromaisrecente')                                  // DATE(), obtém só a data da coluna "updated_at" que é do tipo "timestamp", desprezado o tempo.
             )
 
             // Se os campos foram preenchidos, adicione à query já existente mais condições
