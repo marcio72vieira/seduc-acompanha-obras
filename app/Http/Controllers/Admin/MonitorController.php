@@ -103,6 +103,7 @@ class MonitorController extends Controller
                 DB::raw('max(DATE(atividades.updated_at)) AS registromaisrecente')                                  // DATE(), obtém só a data da coluna "updated_at" que é do tipo "timestamp", desprezado o tempo.
             )
 
+
             // Se os campos foram preenchidos, adicione à query já existente mais condições
             ->when($request->has('tipoobra'), function($query) use($request) {
                 $query->where('tipoobras.nome', 'like', '%'. $request->tipoobra . '%');

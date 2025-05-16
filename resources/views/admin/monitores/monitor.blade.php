@@ -245,6 +245,7 @@
 @endsection
 
 
+
 @section('scripts')
     <script>
         // Esconde/Exibe painel de filtragem
