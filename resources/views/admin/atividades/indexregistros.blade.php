@@ -1,8 +1,8 @@
 @extends('layouts.restrito.admin')
 
-{{-- 
-    Acessando modelos relacionados sem a necessidade de foreach. 
-    Obs, Como o relacionamento de obra, escola são do tipo tem um, não há a necessidade de colocarmos 
+{{--
+    Acessando modelos relacionados sem a necessidade de foreach.
+    Obs, Como o relacionamento de obra, escola são do tipo tem um, não há a necessidade de colocarmos
     ['obra'][0]['escola']['nome'], pois para o conjunto de atividades[0] exite apenas uma obra e para
     cada obra existe apenas uma escola.
     <h6 class="mt-1"> {{ $atividades[0]['obra']['escola']['nome'] }}</h6>
@@ -30,9 +30,9 @@
 
     <div class="mt-4 row ">
         <div class="col-xl-12 col-md-12">
-            
+
             <x-alert />
-            
+
             <table class="table" style="width: 100%">
                 <thead>
                   <tr>
