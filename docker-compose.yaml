@@ -1,0 +1,55 @@
+services:
+  app:
+    container_name: obras-app
+    hostname: obras-app
+    build:
+      context: .
+      dockerfile: ./docker/common/php-fpm/Dockerfile
+      target: production
+    image: ati/obras-app:1.0
+    restart: unless-stopped
+    volumes:
+      - obras-storage-production:/var/www/storage
+      - ./.env:/var/www/.env:ro
+    env_file:
+      - .env
+    environment:
+        TZ: America/Fortaleza
+        SERVICE_NAME: obras-app
+        SERVICE_TAGS: production
+    networks:
+      - obras
+
+  web:
+    container_name: obras-nginx
+    domainname: ${APP_DOMAIN_NAME:-obras.seduc.ma.gov.br}
+    build:
+      context: .
+      dockerfile: ./docker/production/nginx/Dockerfile
+    image: ati/obras-nginx:1.0
+    restart: unless-stopped # Reiniciar automaticamente, a menos que o serviço seja explicitamente interrompido
+    environment:
+        TZ: America/Fortaleza
+        VIRTUAL_HOST: obras.seduc.ma.gov.br
+    ports:
+      - "${APP_PORT:-9001}:80"
+    volumes:
+      # Monte o volume 'obras-storage-production' em '/var/www/storage' dentro do contêiner.
+      # -----------------------------------------------------------
+      # Este volume armazena dados persistentes, como arquivos enviados e cache.
+      # A opção ':ro' o monta como somente leitura no serviço 'web', pois o Nginx só precisa ler esses arquivos.
+      # O serviço 'php-fpm' monta o mesmo volume sem ':ro' para permitir operações de gravação.
+      # -----------------------------------------------------------
+      - obras-storage-production:/var/www/storage:ro
+    networks:
+      - obras
+    depends_on:
+      - app
+
+networks:
+  obras:
+    name: obras
+    driver: bridge
+
+volumes:
+  obras-storage-production:
