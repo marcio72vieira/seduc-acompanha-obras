@@ -22,7 +22,7 @@ services:
 
   web:
     container_name: obras-nginx
-    domainname: ${APP_DOMAIN_NAME:-obras.seduc.ma.gov.br}
+    domainname: ${APP_DOMAIN_NAME:-obras.ma.gov.br}
     build:
       context: .
       dockerfile: ./docker/production/nginx/Dockerfile
@@ -30,7 +30,7 @@ services:
     restart: unless-stopped # Reiniciar automaticamente, a menos que o serviço seja explicitamente interrompido
     environment:
         TZ: America/Fortaleza
-        VIRTUAL_HOST: obras.seduc.ma.gov.br
+        VIRTUAL_HOST: obras.ma.gov.br
     ports:
       - "${APP_PORT:-9001}:80"
     volumes:
