@@ -18,7 +18,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng-dev \
     libxpm-dev
 
-RUN docker-php-ext-install -j$(nproc) \
+RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-xpm \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install -j$(nproc) \
+    gd \
     pdo_mysql \
     pdo_pgsql \
     pgsql \
@@ -26,10 +29,7 @@ RUN docker-php-ext-install -j$(nproc) \
     intl \
     zip \
     bcmath \
-    soap \
-    # && pecl install redis
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-configure gd --with-jpeg --with-webp --with-xpm
+    soap
 
 # RUN docker-php-ext-enable redis \
 #     && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -56,8 +56,8 @@ WORKDIR /var/www
 COPY . /var/www
 
 # Instalar o Composer e dependências
-# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-#     && composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
 
 # RUN rm /var/www/composer.json \
 #     /var/www/composer.lock
@@ -79,6 +79,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libfcgi-bin \
     procps \
     supervisor \
+    libjpeg62-turbo \
+    libpng-dev \
+    libwebp-dev \
+    libxpm-dev \
     && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Copie o script de inicialização
