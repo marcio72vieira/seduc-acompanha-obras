@@ -260,6 +260,7 @@
                             <th>Município</th>
                             <th>Responsáveis</th>
                             <th>Prazo</th>
+                            <th>Atrasada</th>
                             <th style="width: 20%">Progresso</th>
                             <th>
                                 <a href="{{ url('index-dashboard/gerarpdf?' . request()->getQueryString()) }}" class="btn btn-outline-secondary btn-sm ms-1" title="relatório PDF da pesquisa">
@@ -279,6 +280,16 @@
                                 <td>{{ $obra->municipio }}</td>
                                 <td>{{ $obra->responsaveis }}</td>
                                 <td>{{ \Carbon\Carbon::parse($obra->datainicio)->format('d-m-Y') }} a {{ \Carbon\Carbon::parse($obra->datafim)->format('d-m-Y') }}</td>
+                                <td>{{--
+                                    Quando uma obra está atrasada: Quando não há nenhum registro de atividade maior ou igual a data de início da obra ou
+                                    Qunado o status é diferente de concluída(3) e a data atual é maior que a data de fim da obra
+                                    --}}
+                                    @if ($obra->estatu != 3 && (\Carbon\Carbon::now()->format('Y-m-d') > \Carbon\Carbon::parse($obra->datafim)->format('Y-m-d')))
+                                        sim
+                                    @else
+                                        não
+                                    @endif
+                                 </td>
                                 <td>
                                     <div class="progress border" style="height: 30px;" title="{{ $obra->nomeestatus }}">
                                         <div class="progress-bar {{ $obra->ativo == 1 ? 'progress-bar-striped progress-bar-animated' : '' }}" role="progressbar" aria-valuenow="{{ $obra->progressomaximo }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
