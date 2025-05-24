@@ -100,7 +100,7 @@ class MonitorController extends Controller
                 // Agrupa várias linhas do campo objeto referente ao registro da obra corrente, de forma distinta.
                 DB::raw('GROUP_CONCAT(DISTINCT objetos.nome SEPARATOR ", ") as objetos'),
                 DB::raw('max(atividades.progresso) AS progressomaximo'),
-                DB::raw('max(DATE(atividades.updated_at)) AS registromaisrecente')                                  // DATE(), obtém só a data da coluna "updated_at" que é do tipo "timestamp", desprezado o tempo.
+                DB::raw('max(DATE(atividades.updated_at)) AS registromaisrecente')    // DATE(), obtém só a data da coluna "updated_at" que é do tipo "timestamp", desprezado o tempo.
             )
 
 
@@ -130,6 +130,7 @@ class MonitorController extends Controller
                 $query->where('obras.data_fim', '<=', \Carbon\Carbon::parse($request->datafim)->format('Y-m-d'));
             })
 
+        ->where('obras.estatu_id', '!=', 3) // Só recupera as obras que não estão concluídas.
         ->groupBy('atividades.obra_id')
         ->orderBy($ordenacao, $sentido)     //->orderBy('tipoobras.nome')
         ->paginate($paginacao);                     //->paginate(10);

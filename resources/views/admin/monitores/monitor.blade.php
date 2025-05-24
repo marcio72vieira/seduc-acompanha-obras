@@ -219,7 +219,12 @@
                                 </td>
                                 <td>
                                     <div class="progress border" style="height: 30px;" title="{{ $obra->nomeestatus }}">
-                                        <div class="progress-bar {{ $obra->ativo == 1 ? 'progress-bar-striped progress-bar-animated' : '' }}" role="progressbar" aria-valuenow="{{ $obra->progressomaximo }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
+                                        {{-- 
+                                            Se a obra estiver ativa e seu status for diferente de 3(concluída), as classes "striped" e "aninmated" não são aplicadas.
+                                            "animated" é para indicar que a obra está em andamento(com registro de atividade). 
+                                            Se a obra está inativa(ativo == 0), ou seja PARADA e concluida (estatu == 3), não há porque manter atividade, portanto as classes "striped e animated" são suprimidas.
+                                         --}}
+                                        <div class="progress-bar {{ ($obra->ativo == 1 &&  $obra->estatu != 3)  ? 'progress-bar-striped progress-bar-animated' : '' }}" role="progressbar" aria-valuenow="{{ $obra->progressomaximo }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $obra->progressomaximo }}%; background-color:{{ $obra->cor }}">
                                           <strong>{{ $obra->progressomaximo }}%</strong>
                                         </div>
                                     </div>
