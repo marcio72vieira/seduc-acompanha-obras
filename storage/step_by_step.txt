@@ -1381,6 +1381,19 @@ composer dump-autoload
 
 
 
+****************************************************************
+ATUALIZANDO O SISTEMA PARA FUNCIONAR COM O NOVO UBUNTU 22.04
+****************************************************************
+1 - Atualizei o sistema com composer update
+2 - No arquivo .env, comentei o trecho de código que funcionava com "docker"
+3 - No arquivo .env criei um novo trecho de código para conectar diretamente ao meu servidor MySQL com as devidas credenciais
+4 - Executei o comando composer dump-autoload
+5 - Executei a migrate para referenciar o banco configurado no arquivo .env (php artisan migrate)
+6 - Executei as seed para popular o banco referenciado no arquivo .env (php artisan db:seed)
+
+// Correção de possível erro:
+1 - Erro: "deprecated: voku\helper\ASCII::to_ascii(): Implicitly marking parameter $replace_single_chars_only as nullable is deprecated,"
+2 - Solução: composeer update OU composer update voku/portable-ascii
 
 
 ***********************************
